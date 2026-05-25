@@ -5,18 +5,18 @@ import { supabase } from '@/lib/supabase'
 import { AgentRun } from '@/lib/types'
 
 const VORA_AGENTS = [
-  { id: 'finance-intel',     label: 'Market Intelligence', tag: 'finance', machine: 'mac_studio', model: 'qwen3:14b', color: '#00E676' },
-  { id: 'finance-portfolio', label: 'Portfolio Strategist', tag: 'finance', machine: 'mac_studio', model: 'qwen3:14b', color: '#00E676' },
-  { id: 'finance-savings',   label: 'Savings Optimizer',   tag: 'finance', machine: 'mac_studio', model: 'qwen3:14b', color: '#00E676' },
-  { id: 'finance-crypto',    label: 'Crypto & Alt Assets', tag: 'finance', machine: 'mac_studio', model: 'qwen3:14b', color: '#00E676' },
-  { id: 'speech-coach',      label: 'Speech Coach',        tag: 'speech',  machine: 'mac_studio', model: 'qwen3:14b', color: '#FFB800' },
+  { id: 'finance-market',    label: 'Market Intelligence', tag: 'FINANCE', machine: 'mac_studio', model: 'claude-api',    color: '#00E676' },
+  { id: 'finance-portfolio', label: 'Portfolio Strategist', tag: 'FINANCE', machine: 'mac_studio', model: 'claude-api',    color: '#00E676' },
+  { id: 'finance-savings',   label: 'Savings Optimizer',   tag: 'FINANCE', machine: 'mac_studio', model: 'qwen3:latest',  color: '#00E676' },
+  { id: 'finance-crypto',    label: 'Crypto & Alt Assets', tag: 'FINANCE', machine: 'mac_studio', model: 'claude-api',    color: '#00E676' },
+  { id: 'speech-coach',      label: 'Speech Coach',        tag: 'PERSONAL', machine: 'mac_studio', model: 'qwen3:latest', color: '#FFB800' },
 ]
 const ORALIVA_AGENTS = [
-  { id: 'oraliva-1', label: 'OraLiva Core',     tag: 'speech', machine: 'macbook', model: 'oraliva-v2', color: '#FFB800' },
-  { id: 'oraliva-2', label: 'OraLiva Phoneme',  tag: 'speech', machine: 'macbook', model: 'oraliva-v2', color: '#FFB800' },
-  { id: 'oraliva-3', label: 'OraLiva Prosody',  tag: 'speech', machine: 'macbook', model: 'oraliva-v2', color: '#FFB800' },
-  { id: 'oraliva-4', label: 'OraLiva Fluency',  tag: 'speech', machine: 'macbook', model: 'oraliva-v2', color: '#FFB800' },
-  { id: 'oraliva-5', label: 'OraLiva Coach',    tag: 'speech', machine: 'macbook', model: 'oraliva-v2', color: '#FFB800' },
+  { id: 'email',    label: 'Email Agent',            tag: 'COMMUNICATIONS', machine: 'macbook', model: 'qwen3:latest', color: '#9C6FFF' },
+  { id: 'tasks',    label: 'Task & Assignment Agent', tag: 'OPERATIONS',    machine: 'macbook', model: 'qwen3:latest', color: '#9C6FFF' },
+  { id: 'social',   label: 'OraLiva Social Agent',   tag: 'SOCIAL MEDIA',   machine: 'macbook', model: 'qwen3:latest', color: '#9C6FFF' },
+  { id: 'cap',      label: 'CAP Inspection Agent',   tag: 'COMPLIANCE',     machine: 'macbook', model: 'claude_code',  color: '#9C6FFF' },
+  { id: 'research', label: 'Research Agent',          tag: 'RESEARCH',       machine: 'macbook', model: 'claude_code',  color: '#9C6FFF' },
 ]
 
 type Filter = 'all' | 'vora' | 'oraliva' | 'mac_studio' | 'macbook'
