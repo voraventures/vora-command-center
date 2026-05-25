@@ -62,7 +62,7 @@ export function RevenueChart({ snapshots }: Props) {
               fontSize: 11,
               fontFamily: 'IBM Plex Mono',
             }}
-            formatter={(v: number) => [`$${v}`, '']}
+            formatter={(v) => [`$${v ?? 0}`, '']}
           />
           <Legend
             wrapperStyle={{ fontSize: 10, fontFamily: 'IBM Plex Mono' }}

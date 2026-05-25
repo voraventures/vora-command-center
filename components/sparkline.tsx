@@ -22,7 +22,7 @@ export function Sparkline({ data, color }: Props) {
           />
           <Tooltip
             contentStyle={{ background: '#0F0F0F', border: '1px solid #1E1E1E', fontSize: 10 }}
-            formatter={(v: number) => [`$${v}`, 'MRR']}
+            formatter={(v) => [`$${v ?? 0}`, 'MRR']}
             labelFormatter={() => ''}
           />
         </LineChart>

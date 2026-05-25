@@ -1,4 +1,4 @@
-import { ExternalLink, Github, Circle } from 'lucide-react'
+import { ExternalLink, GitFork, Circle } from 'lucide-react'
 import { Product } from '@/lib/types'
 
 const ACCENT: Record<string, string> = {
@@ -58,7 +58,7 @@ export function ProductCard({ product }: { product: Product }) {
           rel="noopener noreferrer"
           className="flex items-center gap-1.5 font-mono text-[11px] text-zinc-400 hover:text-white transition-colors"
         >
-          <Github className="w-3 h-3" />
+          <GitFork className="w-3 h-3" />
           Repo
         </a>
       </div>
