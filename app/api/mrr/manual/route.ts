@@ -29,26 +29,3 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({ ok: true, id: data.id })
 }
-
-export async function GET() {
-  const supabase = createServerClient()
-
-  const { data: snapshots, error } = await supabase
-    .from('mrr_snapshots')
-    .select('*')
-    .order('recorded_at', { ascending: false })
-
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
-  }
-
-  const products = ['sparkcheck', 'twitter_growth_optimizer']
-  const result = products.map((p) => {
-    const row = (snapshots ?? []).find((s) => s.product === p)
-    return row
-      ? { product: row.product, mrr_usd: row.mrr_usd, subscriber_count: row.subscriber_count, recorded_at: row.recorded_at }
-      : { product: p, mrr_usd: 0, subscriber_count: 0, recorded_at: null }
-  })
-
-  return NextResponse.json(result)
-}

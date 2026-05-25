@@ -19,7 +19,20 @@ const ORALIVA_AGENTS = [
   { id: 'research', label: 'Research Agent',          tag: 'RESEARCH',       machine: 'macbook', model: 'claude_code',  color: '#9C6FFF' },
 ]
 
-type Filter = 'all' | 'vora' | 'oraliva' | 'mac_studio' | 'macbook'
+function SectionHeader({ n, title, subtitle }: { n: string; title: string; subtitle: string }) {
+  return (
+    <div style={{ marginBottom: 20 }}>
+      <div className="flex items-center justify-between" style={{ paddingBottom: 14 }}>
+        <div className="flex items-center gap-3">
+          <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 10, color: '#9C6FFF', letterSpacing: '0.15em' }}>{n}</span>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 20, color: 'var(--vtext)', margin: 0, lineHeight: 1 }}>{title}</h2>
+        </div>
+        <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}>{subtitle}</span>
+      </div>
+      <div style={{ borderBottom: '1px solid var(--vborder)' }} />
+    </div>
+  )
+}
 
 function AgentCard({
   agent,
@@ -92,7 +105,6 @@ function MachinePill({ machine }: { machine: string }) {
 export default function AgentsPage() {
   const [runs, setRuns] = useState<(AgentRun & { _isNew?: boolean })[]>([])
   const [loading, setLoading] = useState(true)
-  const [filter, setFilter] = useState<Filter>('all')
   const [statusFilter, setStatusFilter] = useState<'all' | 'success' | 'error'>('all')
 
   useEffect(() => {
@@ -111,81 +123,30 @@ export default function AgentsPage() {
     return () => { supabase.removeChannel(ch) }
   }, [])
 
-  const showVora    = filter === 'all' || filter === 'vora'    || filter === 'mac_studio'
-  const showOraLiva = filter === 'all' || filter === 'oraliva' || filter === 'macbook'
-
-  const filteredRuns = runs.filter((r) => {
-    if (filter === 'mac_studio' && r.machine !== 'mac_studio') return false
-    if (filter === 'macbook'    && r.machine !== 'macbook')    return false
-    if (statusFilter !== 'all'  && r.status  !== statusFilter) return false
-    return true
-  })
-
-  const FILTERS: { key: Filter; label: string }[] = [
-    { key: 'all',        label: 'All' },
-    { key: 'vora',       label: 'Vora Ventures' },
-    { key: 'oraliva',    label: 'OraLiva' },
-    { key: 'mac_studio', label: 'Mac Studio' },
-    { key: 'macbook',    label: 'MacBook' },
-  ]
+  const filteredRuns = runs.filter(r => statusFilter === 'all' || r.status === statusFilter)
 
   return (
-    <div className="space-y-7 max-w-6xl">
-      {/* Filter bar */}
-      <div className="flex items-center gap-2 flex-wrap">
-        {FILTERS.map(({ key, label }) => (
-          <button
-            key={key}
-            onClick={() => setFilter(key)}
-            className="px-3 py-1.5 rounded-full transition-all duration-100 outline-none"
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontWeight: 400,
-              fontSize: 11,
-              background: filter === key ? 'var(--vgreen)' : 'transparent',
-              color: filter === key ? 'var(--vbg)' : 'var(--vmuted)',
-              border: `1px solid ${filter === key ? 'var(--vgreen)' : 'var(--vborder)'}`,
-            }}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
+    <div className="space-y-10 max-w-6xl">
 
-      {/* Vora Ventures agents */}
-      {showVora && (
-        <section>
-          <div
-            className="flex items-center gap-2 mb-3"
-            style={{ fontFamily: 'var(--font-mono)', fontWeight: 500, fontSize: 11, color: '#00E676', letterSpacing: '0.15em' }}
-          >
-            <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#00E676' }} />
-            VORA VENTURES — MAC STUDIO M4 MAX — {VORA_AGENTS.length} AGENTS
-          </div>
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-            {VORA_AGENTS.map((a, i) => <AgentCard key={a.id} agent={a} delay={i * 40} />)}
-          </div>
-        </section>
-      )}
+      {/* SECTION 01 — MAC STUDIO AGENTS */}
+      <section className="space-y-4">
+        <SectionHeader n="01" title="Mac Studio Agents" subtitle="Vora Ventures · 5 agents · port 8001" />
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+          {VORA_AGENTS.map((a, i) => <AgentCard key={a.id} agent={a} delay={i * 40} />)}
+        </div>
+      </section>
 
-      {/* OraLiva agents */}
-      {showOraLiva && (
-        <section>
-          <div
-            className="flex items-center gap-2 mb-3"
-            style={{ fontFamily: 'var(--font-mono)', fontWeight: 500, fontSize: 11, color: '#9C6FFF', letterSpacing: '0.15em' }}
-          >
-            <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#9C6FFF' }} />
-            ORALIVA — MACBOOK — REMOTE — {ORALIVA_AGENTS.length} AGENTS
-          </div>
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-            {ORALIVA_AGENTS.map((a, i) => <AgentCard key={a.id} agent={a} remote delay={i * 40} />)}
-          </div>
-        </section>
-      )}
+      {/* SECTION 02 — ORALIVA AGENTS */}
+      <section className="space-y-4">
+        <SectionHeader n="02" title="OraLiva Agents" subtitle="Remote · MacBook · 5 agents" />
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+          {ORALIVA_AGENTS.map((a, i) => <AgentCard key={a.id} agent={a} remote delay={i * 40} />)}
+        </div>
+      </section>
 
-      {/* Run log */}
-      <section>
+      {/* SECTION 03 — RUN LOG */}
+      <section className="space-y-4">
+        <SectionHeader n="03" title="Run Log" subtitle="Real-time · all machines" />
         <div className="flex items-center justify-between mb-3">
           <div
             style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 10, color: 'var(--vmuted)', letterSpacing: '0.2em' }}

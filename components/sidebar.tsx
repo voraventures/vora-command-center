@@ -2,15 +2,15 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, TrendingUp, Bot, Activity, Landmark, Mic } from 'lucide-react'
+import { LayoutDashboard, TrendingUp, Boxes, Bot, Activity, Settings } from 'lucide-react'
 
 const NAV = [
-  { href: '/overview',  label: 'Overview', icon: LayoutDashboard, accent: '#00E676', accentDim: 'rgba(0,230,118,0.12)' },
-  { href: '/revenue',   label: 'Revenue',  icon: TrendingUp,      accent: '#9C6FFF', accentDim: 'rgba(156,111,255,0.12)' },
-  { href: '/agents',    label: 'Agents',   icon: Bot,             accent: '#9C6FFF', accentDim: 'rgba(156,111,255,0.12)' },
-  { href: '/hermes',    label: 'Hermes',   icon: Activity,        accent: '#9C6FFF', accentDim: 'rgba(156,111,255,0.12)' },
-  { href: '/finance',   label: 'Finance',  icon: Landmark,        accent: '#00E676', accentDim: 'rgba(0,230,118,0.12)' },
-  { href: '/speech',    label: 'Speech',   icon: Mic,             accent: '#FFB800', accentDim: 'rgba(255,184,0,0.12)' },
+  { href: '/overview',  label: 'Overview',      icon: LayoutDashboard, accent: '#00E676', accentDim: 'rgba(0,230,118,0.12)' },
+  { href: '/revenue',   label: 'Revenue',        icon: TrendingUp,      accent: '#9C6FFF', accentDim: 'rgba(156,111,255,0.12)' },
+  { href: '/projects',  label: 'Projects',       icon: Boxes,           accent: '#9C6FFF', accentDim: 'rgba(156,111,255,0.12)' },
+  { href: '/agents',    label: 'Agents',         icon: Bot,             accent: '#9C6FFF', accentDim: 'rgba(156,111,255,0.12)' },
+  { href: '/hermes',    label: 'Intelligence',   icon: Activity,        accent: '#9C6FFF', accentDim: 'rgba(156,111,255,0.12)' },
+  { href: '/system',    label: 'System',         icon: Settings,        accent: '#00E676', accentDim: 'rgba(0,230,118,0.12)' },
 ]
 
 export function Sidebar() {
