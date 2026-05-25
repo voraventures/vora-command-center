@@ -75,7 +75,7 @@ export function ProductCard({ product, snapshots = [], latestMrr = 0, latestSubs
             </span>
           </div>
           {product.notes && (
-            <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 12, color: 'var(--vmuted)' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 12, color: '#A78BFA' }}>
               {product.notes}
             </div>
           )}
@@ -102,7 +102,7 @@ export function ProductCard({ product, snapshots = [], latestMrr = 0, latestSubs
               fontFamily: 'var(--font-mono)',
               fontWeight: 400,
               fontSize: 11,
-              color: 'var(--vmuted)',
+              color: '#A78BFA',
               letterSpacing: '0.08em',
             }}
           >
@@ -111,7 +111,7 @@ export function ProductCard({ product, snapshots = [], latestMrr = 0, latestSubs
         </div>
         <div
           className="mt-1"
-          style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}
+          style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: '#A78BFA' }}
         >
           {latestSubs.toLocaleString()} subscribers
         </div>
@@ -155,9 +155,9 @@ export function ProductCard({ product, snapshots = [], latestMrr = 0, latestSubs
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-1.5 transition-colors duration-100"
-          style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}
+          style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: '#A78BFA' }}
           onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = accent)}
-          onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--vmuted)')}
+          onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = '#A78BFA')}
         >
           <ExternalLink className="w-3.5 h-3.5" />
           Live site
@@ -167,9 +167,9 @@ export function ProductCard({ product, snapshots = [], latestMrr = 0, latestSubs
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-1.5 transition-colors duration-100"
-          style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}
+          style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: '#A78BFA' }}
           onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = accent)}
-          onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--vmuted)')}
+          onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = '#A78BFA')}
         >
           <GitFork className="w-3.5 h-3.5" />
           GitHub

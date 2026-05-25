@@ -37,7 +37,7 @@ export function SubscriberDonut({ sparkSubs, twitterSubs }: Props) {
           fontFamily: 'var(--font-mono)',
           fontWeight: 400,
           fontSize: 10,
-          color: '#5A6A8A',
+          color: '#A78BFA',
           letterSpacing: '0.25em',
           marginBottom: 8,
         }}
@@ -92,7 +92,7 @@ export function SubscriberDonut({ sparkSubs, twitterSubs }: Props) {
             style={{
               fontFamily: 'var(--font-mono)',
               fontSize: 9,
-              color: '#5A6A8A',
+              color: '#A78BFA',
               letterSpacing: '0.15em',
               marginTop: 4,
             }}
@@ -120,7 +120,7 @@ export function SubscriberDonut({ sparkSubs, twitterSubs }: Props) {
                   display: 'inline-block',
                 }}
               />
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#5A6A8A' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#A78BFA' }}>
                 {name}
               </span>
             </div>

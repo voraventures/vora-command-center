@@ -40,7 +40,7 @@ export function Sidebar() {
             fontFamily: 'var(--font-mono)',
             fontWeight: 400,
             fontSize: 10,
-            color: 'var(--vmuted)',
+            color: '#A78BFA',
             letterSpacing: '0.3em',
           }}
         >
@@ -52,7 +52,7 @@ export function Sidebar() {
             fontFamily: 'var(--font-mono)',
             fontWeight: 400,
             fontSize: 8,
-            color: 'var(--vdim)',
+            color: '#A78BFA',
             letterSpacing: '0.4em',
           }}
         >
@@ -75,7 +75,7 @@ export function Sidebar() {
                 fontSize: 12,
                 padding: active ? '8px 12px 8px 9px' : '8px 12px',
                 background: active ? accentDim : 'transparent',
-                color: active ? accent : 'var(--vtext2)',
+                color: active ? accent : '#A78BFA',
                 borderLeft: active ? `3px solid ${accent}` : '3px solid transparent',
                 textDecoration: 'none',
               }}
@@ -88,7 +88,7 @@ export function Sidebar() {
               onMouseLeave={(e) => {
                 if (!active) {
                   (e.currentTarget as HTMLElement).style.background = 'transparent'
-                  ;(e.currentTarget as HTMLElement).style.color = 'var(--vtext2)'
+                  ;(e.currentTarget as HTMLElement).style.color = '#A78BFA'
                 }
               }}
             >
@@ -127,7 +127,7 @@ export function Sidebar() {
                 fontFamily: 'var(--font-mono)',
                 fontWeight: 400,
                 fontSize: 10,
-                color: 'var(--vmuted)',
+                color: '#A78BFA',
               }}
             >
               MAC STUDIO M4 MAX

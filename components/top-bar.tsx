@@ -30,7 +30,7 @@ function LiveClock() {
   return (
     <span
       className="tabular-nums"
-      style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 13, color: 'var(--vmuted)' }}
+      style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 13, color: '#A78BFA' }}
     >
       {day} {date} &nbsp; {clock}
     </span>

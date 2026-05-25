@@ -78,7 +78,7 @@ function Row({ run, isNew, delay }: { run: AgentRun; isNew?: boolean; delay?: nu
             <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 500, fontSize: 13, color: 'var(--vtext)' }}>
               {run.agent_label}
             </div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: '#A78BFA' }}>
               {run.agent_id}
             </div>
           </div>
@@ -91,7 +91,7 @@ function Row({ run, isNew, delay }: { run: AgentRun; isNew?: boolean; delay?: nu
           style={{
             fontFamily: 'var(--font-mono)',
             fontWeight: 400,
-            color: 'var(--vmuted)',
+            color: '#A78BFA',
             borderColor: 'var(--vborder)',
             background: 'var(--vsurface2)',
           }}
@@ -99,11 +99,11 @@ function Row({ run, isNew, delay }: { run: AgentRun; isNew?: boolean; delay?: nu
           {run.model}
         </span>
       </td>
-      <td className="px-3 py-3" style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}>
+      <td className="px-3 py-3" style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: '#A78BFA' }}>
         {run.duration_ms != null ? `${run.duration_ms}ms` : '—'}
       </td>
       <td className="px-3 py-3"><StatusPill status={run.status} /></td>
-      <td className="px-3 py-3" style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: 'var(--vdim)' }}>
+      <td className="px-3 py-3" style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: '#A78BFA' }}>
         {timeAgo(run.ran_at)}
       </td>
     </tr>
@@ -143,7 +143,7 @@ export function AgentLog({ initial, limit = 5, realtime = false }: Props) {
             fontFamily: 'var(--font-mono)',
             fontWeight: 500,
             fontSize: 10,
-            color: 'var(--vmuted)',
+            color: '#A78BFA',
             letterSpacing: '0.3em',
           }}
         >
@@ -168,7 +168,7 @@ export function AgentLog({ initial, limit = 5, realtime = false }: Props) {
           <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, color: 'var(--vtext2)' }}>
             No agent runs yet
           </div>
-          <div className="mt-1" style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}>
+          <div className="mt-1" style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: '#A78BFA' }}>
             Start your local Hermes server to begin
           </div>
         </div>
@@ -180,7 +180,7 @@ export function AgentLog({ initial, limit = 5, realtime = false }: Props) {
                 <th
                   key={h}
                   className="px-4 py-2 text-left"
-                  style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 10, color: 'var(--vmuted)', letterSpacing: '0.1em' }}
+                  style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 10, color: '#A78BFA', letterSpacing: '0.1em' }}
                 >
                   {h.toUpperCase()}
                 </th>

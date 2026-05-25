@@ -86,7 +86,7 @@ function StatCard({
           fontFamily: 'var(--font-mono)',
           fontWeight: 400,
           fontSize: 10,
-          color: '#5A6A8A',
+          color: '#A78BFA',
           letterSpacing: '0.25em',
           textTransform: 'uppercase',
         }}
@@ -181,7 +181,7 @@ export function StatStrip({
         accent="#00E676"
         sparkline={agentSparkline}
         gradId="sg-agents"
-        sublabelColor="#5A6A8A"
+        sublabelColor="#A78BFA"
         sublabel="Hermes · Ollama stack"
         delay={120}
       />
@@ -191,7 +191,7 @@ export function StatStrip({
         accent="#9C6FFF"
         sparkline={hermesSparkline}
         gradId="sg-hermes"
-        sublabelColor="#5A6A8A"
+        sublabelColor="#A78BFA"
         sublabel="across all products"
         delay={180}
       />

@@ -177,7 +177,7 @@ export function TokenUsage({ initialRuns }: { initialRuns: AgentRun[] }) {
           style={{
             fontFamily: 'var(--font-mono)',
             fontSize: 10,
-            color: '#3D4F70',
+            color: '#A78BFA',
           }}
         >
           Claude Sonnet: $0.003/1K in · $0.015/1K out · Qwen3: free
@@ -265,7 +265,7 @@ export function TokenUsage({ initialRuns }: { initialRuns: AgentRun[] }) {
                         fontFamily: 'var(--font-mono)',
                         fontSize: 9,
                         letterSpacing: '0.15em',
-                        color: '#3D4F70',
+                        color: '#A78BFA',
                         textTransform: 'uppercase',
                         textAlign: 'left',
                         paddingBottom: 8,
@@ -315,7 +315,7 @@ export function TokenUsage({ initialRuns }: { initialRuns: AgentRun[] }) {
                         style={{
                           fontFamily: 'var(--font-mono)',
                           fontSize: 12,
-                          color: '#5A6A8A',
+                          color: '#A78BFA',
                           paddingRight: 16,
                         }}
                       >
@@ -372,7 +372,7 @@ export function TokenUsage({ initialRuns }: { initialRuns: AgentRun[] }) {
             style={{
               fontFamily: 'var(--font-mono)',
               fontSize: 12,
-              color: '#5A6A8A',
+              color: '#A78BFA',
             }}
           >
             At current daily rate, projected monthly cost:{' '}
@@ -387,7 +387,7 @@ export function TokenUsage({ initialRuns }: { initialRuns: AgentRun[] }) {
             style={{
               fontFamily: 'var(--font-mono)',
               fontSize: 10,
-              color: '#3D4F70',
+              color: '#A78BFA',
               textDecoration: 'none',
               borderBottom: '1px solid #252D45',
               paddingBottom: 1,

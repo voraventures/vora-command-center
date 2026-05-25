@@ -53,7 +53,7 @@ function FeedItem({ log, isNew, delay }: { log: HermesLog; isNew?: boolean; dela
           <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 500, fontSize: 13, color: 'var(--vtext2)' }}>
             {log.action}
           </div>
-          <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: 'var(--vdim)', flexShrink: 0 }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: '#A78BFA', flexShrink: 0 }}>
             {timeAgo(log.logged_at)}
           </span>
         </div>
@@ -61,7 +61,7 @@ function FeedItem({ log, isNew, delay }: { log: HermesLog; isNew?: boolean; dela
         {log.detail && (
           <div
             className="mt-0.5"
-            style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}
+            style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: '#A78BFA' }}
           >
             {log.detail}
           </div>
@@ -117,7 +117,7 @@ export function HermesFeed({ initial, limit = 5, realtime = false }: Props) {
             fontFamily: 'var(--font-mono)',
             fontWeight: 500,
             fontSize: 10,
-            color: 'var(--vmuted)',
+            color: '#A78BFA',
             letterSpacing: '0.3em',
           }}
         >
@@ -139,7 +139,7 @@ export function HermesFeed({ initial, limit = 5, realtime = false }: Props) {
           <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, color: 'var(--vtext2)' }}>
             Hermes is quiet
           </div>
-          <div className="mt-1" style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}>
+          <div className="mt-1" style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: '#A78BFA' }}>
             No activity logged yet
           </div>
         </div>

@@ -47,7 +47,7 @@ export function OverviewRevenueChart({ snapshots }: Props) {
           fontFamily: 'var(--font-mono)',
           fontWeight: 400,
           fontSize: 10,
-          color: '#5A6A8A',
+          color: '#A78BFA',
           letterSpacing: '0.2em',
           marginBottom: 20,
         }}
@@ -71,13 +71,13 @@ export function OverviewRevenueChart({ snapshots }: Props) {
           <CartesianGrid strokeDasharray="0" stroke="#252D45" vertical={false} />
           <XAxis
             dataKey="date"
-            tick={{ fontSize: 10, fontFamily: 'var(--font-mono)', fill: '#5A6A8A' }}
+            tick={{ fontSize: 10, fontFamily: 'var(--font-mono)', fill: '#A78BFA' }}
             axisLine={false}
             tickLine={false}
             interval="preserveStartEnd"
           />
           <YAxis
-            tick={{ fontSize: 10, fontFamily: 'var(--font-mono)', fill: '#5A6A8A' }}
+            tick={{ fontSize: 10, fontFamily: 'var(--font-mono)', fill: '#A78BFA' }}
             axisLine={false}
             tickLine={false}
             tickFormatter={(v) => `$${v}`}
@@ -93,7 +93,7 @@ export function OverviewRevenueChart({ snapshots }: Props) {
               color: '#F0F4FF',
               boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
             }}
-            labelStyle={{ color: '#5A6A8A', marginBottom: 4, fontSize: 10 }}
+            labelStyle={{ color: '#A78BFA', marginBottom: 4, fontSize: 10 }}
             formatter={(v) => [`$${Number(v ?? 0).toLocaleString()}`, '']}
           />
           <ReferenceLine
@@ -160,7 +160,7 @@ export function OverviewRevenueChart({ snapshots }: Props) {
                 display: 'inline-block',
               }}
             />
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#5A6A8A' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#A78BFA' }}>
               {label}
             </span>
           </div>

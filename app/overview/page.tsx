@@ -77,7 +77,7 @@ function LocalCard({
             fontFamily: 'var(--font-mono)',
             fontWeight: 400,
             fontSize: 11,
-            color: '#5A6A8A',
+            color: '#A78BFA',
             border: '1px solid #252D45',
             background: 'transparent',
           }}
@@ -96,7 +96,7 @@ function LocalCard({
           fontFamily: 'var(--font-mono)',
           fontWeight: 400,
           fontSize: 11,
-          color: '#5A6A8A',
+          color: '#A78BFA',
         }}
       >
         {footer}
@@ -129,7 +129,7 @@ function MrrProgressBar({ current, target = 5000 }: { current: number; target?: 
             fontFamily: 'var(--font-mono)',
             fontWeight: 400,
             fontSize: 10,
-            color: '#5A6A8A',
+            color: '#A78BFA',
             letterSpacing: '0.25em',
           }}
         >
@@ -149,7 +149,7 @@ function MrrProgressBar({ current, target = 5000 }: { current: number; target?: 
           >
             ${current.toLocaleString()}
           </span>
-          <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 14, color: '#5A6A8A' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 14, color: '#A78BFA' }}>
             / $5,000 MRR
           </span>
         </div>
@@ -208,7 +208,7 @@ function MrrProgressBar({ current, target = 5000 }: { current: number; target?: 
                     fontFamily: 'var(--font-mono)',
                     fontWeight: 400,
                     fontSize: 10,
-                    color: current >= m.value ? '#00E676' : '#5A6A8A',
+                    color: current >= m.value ? '#00E676' : '#A78BFA',
                   }}
                 >
                   {m.label}
@@ -219,7 +219,7 @@ function MrrProgressBar({ current, target = 5000 }: { current: number; target?: 
         </div>
 
         <div
-          style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 12, color: '#5A6A8A', marginTop: 20 }}
+          style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 12, color: '#A78BFA', marginTop: 20 }}
         >
           {pct.toFixed(1)}% to Florida.{' '}
           <span style={{ color: '#A8B4D0' }}>
@@ -378,7 +378,7 @@ export default async function OverviewPage() {
                     fontFamily: 'var(--font-mono)',
                     fontWeight: 400,
                     fontSize: 9,
-                    color: '#5A6A8A',
+                    color: '#A78BFA',
                     border: '1px solid #252D45',
                     background: '#1E2540',
                   }}
@@ -415,7 +415,7 @@ export default async function OverviewPage() {
                 fontFamily: 'var(--font-mono)',
                 fontWeight: 400,
                 fontSize: 13,
-                color: '#5A6A8A',
+                color: '#A78BFA',
               }}
             >
               Spanish native &rarr; American English
@@ -426,7 +426,7 @@ export default async function OverviewPage() {
                 fontFamily: 'var(--font-mono)',
                 fontWeight: 400,
                 fontSize: 11,
-                color: '#5A6A8A',
+                color: '#A78BFA',
               }}
             >
               Phoneme analysis &middot; Prosody training &middot; Domain drilling
