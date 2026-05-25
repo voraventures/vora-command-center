@@ -45,7 +45,8 @@ export default async function RevenuePage() {
         <div>
           <div
             style={{
-              fontFamily: 'var(--font-dm-mono)',
+              fontFamily: 'var(--font-syne)',
+              fontWeight: 400,
               fontSize: 10,
               color: 'var(--vmuted)',
               letterSpacing: '0.2em',
@@ -67,7 +68,7 @@ export default async function RevenuePage() {
             >
               ${totalMrr.toLocaleString()}
             </span>
-            <span style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 13, color: 'var(--vmuted)' }}>
+            <span style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 13, color: 'var(--vmuted)' }}>
               {totalSubs.toLocaleString()} subscribers
             </span>
           </div>
@@ -88,7 +89,7 @@ export default async function RevenuePage() {
           </div>
           <div
             className="mt-1"
-            style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vmuted)' }}
+            style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}
           >
             to $5K Florida trigger
           </div>
@@ -129,8 +130,8 @@ export default async function RevenuePage() {
         >
           <span
             style={{
-              fontFamily: 'var(--font-dm-mono)',
-              fontWeight: 500,
+              fontFamily: 'var(--font-syne)',
+              fontWeight: 400,
               fontSize: 10,
               color: 'var(--vmuted)',
               letterSpacing: '0.2em',
@@ -148,7 +149,8 @@ export default async function RevenuePage() {
                   key={h}
                   className="px-5 py-2.5 text-left"
                   style={{
-                    fontFamily: 'var(--font-dm-mono)',
+                    fontFamily: 'var(--font-syne)',
+                    fontWeight: 400,
                     fontSize: 10,
                     color: 'var(--vdim)',
                     letterSpacing: '0.1em',
@@ -165,7 +167,7 @@ export default async function RevenuePage() {
                 <td
                   colSpan={5}
                   className="px-5 py-10 text-center"
-                  style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 12, color: 'var(--vdim)' }}
+                  style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 12, color: 'var(--vdim)' }}
                 >
                   No MRR snapshots yet. POST to /api/mrr to add one.
                 </td>
@@ -181,15 +183,15 @@ export default async function RevenuePage() {
                     borderBottom: '1px solid var(--vborder)',
                     transition: 'background 0.1s',
                   }}
-                  onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = 'var(--vbg)')}
+                  onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = 'var(--vsurface2)')}
                   onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
                 >
                   <td className="px-5 py-3">
                     <span
                       style={{
-                        fontFamily: 'var(--font-dm-mono)',
-                        fontSize: 12,
+                        fontFamily: 'var(--font-syne)',
                         fontWeight: 500,
+                        fontSize: 12,
                         color: PRODUCT_COLOR[s.product] ?? 'var(--vtext)',
                       }}
                     >
@@ -198,20 +200,21 @@ export default async function RevenuePage() {
                   </td>
                   <td
                     className="px-5 py-3 tabular-nums"
-                    style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 13, fontWeight: 500, color: 'var(--vtext)' }}
+                    style={{ fontFamily: 'var(--font-syne)', fontWeight: 500, fontSize: 13, color: 'var(--vtext)' }}
                   >
                     ${s.mrr_usd.toLocaleString()}
                   </td>
                   <td
                     className="px-5 py-3 tabular-nums"
-                    style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 12, color: 'var(--vmuted)' }}
+                    style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 12, color: 'var(--vmuted)' }}
                   >
                     {s.subscriber_count.toLocaleString()}
                   </td>
                   <td
                     className="px-5 py-3 tabular-nums"
                     style={{
-                      fontFamily: 'var(--font-dm-mono)',
+                      fontFamily: 'var(--font-syne)',
+                      fontWeight: 400,
                       fontSize: 12,
                       color: delta === null ? 'var(--vdim)' : delta > 0 ? 'var(--vgreen)' : delta < 0 ? 'var(--vred)' : 'var(--vdim)',
                     }}
@@ -220,7 +223,7 @@ export default async function RevenuePage() {
                   </td>
                   <td
                     className="px-5 py-3"
-                    style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vdim)' }}
+                    style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 11, color: 'var(--vdim)' }}
                   >
                     {new Date(s.recorded_at).toLocaleString()}
                   </td>

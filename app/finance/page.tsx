@@ -37,13 +37,13 @@ export default function FinancePage() {
       {/* Banner */}
       <div
         className="rounded-lg border animate-fade-up"
-        style={{ background: 'var(--vsurface)', borderColor: 'var(--vborder)', borderLeft: '4px solid #059669' }}
+        style={{ background: 'var(--vsurface)', borderColor: 'var(--vborder)', borderTop: '3px solid #059669' }}
       >
         <div className="px-6 py-5">
           <div
             style={{
-              fontFamily: 'var(--font-dm-mono)',
-              fontWeight: 500,
+              fontFamily: 'var(--font-syne)',
+              fontWeight: 400,
               fontSize: 10,
               color: '#059669',
               letterSpacing: '0.2em',
@@ -59,7 +59,7 @@ export default function FinancePage() {
           </div>
           <div
             className="mt-2"
-            style={{ fontFamily: 'var(--font-inter)', fontSize: 13, color: 'var(--vmuted)' }}
+            style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 13, color: 'var(--vmuted)' }}
           >
             4 specialized agents &middot; Mac Studio M4 Max &middot; qwen3:14b via Ollama
           </div>
@@ -75,7 +75,7 @@ export default function FinancePage() {
             style={{
               background: 'var(--vsurface)',
               borderColor: 'var(--vborder)',
-              borderLeft: '4px solid #059669',
+              borderTop: '3px solid #059669',
               animationDelay: `${i * 60}ms`,
             }}
           >
@@ -83,7 +83,7 @@ export default function FinancePage() {
               <div className="flex items-start gap-3 mb-3">
                 <span
                   className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0"
-                  style={{ background: '#F0FDF4' }}
+                  style={{ background: 'rgba(5,150,105,0.12)' }}
                 >
                   <Icon className="w-4 h-4" style={{ color: '#059669' }} />
                 </span>
@@ -91,12 +91,12 @@ export default function FinancePage() {
                   <div style={{ fontFamily: 'var(--font-syne)', fontWeight: 700, fontSize: 14, color: 'var(--vtext)' }}>
                     {label}
                   </div>
-                  <div style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 10, color: 'var(--vmuted)', marginTop: 2 }}>
+                  <div style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 10, color: 'var(--vmuted)', marginTop: 2 }}>
                     mac_studio &middot; {model}
                   </div>
                 </div>
               </div>
-              <div style={{ fontFamily: 'var(--font-inter)', fontSize: 12, color: 'var(--vmuted)', lineHeight: 1.6 }}>
+              <div style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 12, color: 'var(--vmuted)', lineHeight: 1.6 }}>
                 {desc}
               </div>
             </div>

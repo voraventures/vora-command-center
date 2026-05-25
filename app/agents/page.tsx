@@ -32,33 +32,34 @@ function AgentCard({
 }) {
   return (
     <div
-      className="card-hover rounded-lg border bg-vsurface animate-fade-up flex items-start gap-3 p-4"
+      className="card-hover rounded-lg border animate-fade-up flex items-start gap-3 p-4"
       style={{
+        background: 'var(--vsurface)',
         borderColor: 'var(--vborder)',
-        borderLeft: `4px solid ${agent.color}`,
+        borderTop: `3px solid ${agent.color}`,
         opacity: remote ? 0.65 : 1,
         animationDelay: `${delay}ms`,
       }}
     >
       <span className="w-2 h-2 rounded-full mt-1 flex-shrink-0" style={{ background: agent.color }} />
       <div className="flex-1 min-w-0">
-        <div style={{ fontFamily: 'var(--font-dm-mono)', fontWeight: 500, fontSize: 12, color: 'var(--vtext)' }}>
+        <div style={{ fontFamily: 'var(--font-syne)', fontWeight: 500, fontSize: 12, color: 'var(--vtext)' }}>
           {agent.label}
         </div>
-        <div className="mt-0.5" style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 10, color: 'var(--vmuted)' }}>
+        <div className="mt-0.5" style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 10, color: 'var(--vmuted)' }}>
           {agent.machine} &middot; {agent.model}
         </div>
         <div className="flex items-center gap-1.5 mt-2">
           <span
             className="px-1.5 py-0.5 rounded text-[9px]"
-            style={{ fontFamily: 'var(--font-dm-mono)', background: `${agent.color}18`, color: agent.color, letterSpacing: '0.05em' }}
+            style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, background: `${agent.color}18`, color: agent.color, letterSpacing: '0.05em' }}
           >
             {agent.tag}
           </span>
           {remote && (
             <span
               className="px-1.5 py-0.5 rounded border text-[9px]"
-              style={{ fontFamily: 'var(--font-dm-mono)', color: 'var(--vdim)', borderColor: 'var(--vborder)' }}
+              style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, color: 'var(--vdim)', borderColor: 'var(--vborder)' }}
             >
               REMOTE
             </span>
@@ -74,9 +75,9 @@ function MachinePill({ machine }: { machine: string }) {
   return (
     <span className="inline-block px-2 py-0.5 rounded text-[10px]"
       style={{
-        fontFamily: 'var(--font-dm-mono)', fontWeight: 500, letterSpacing: '0.05em',
+        fontFamily: 'var(--font-syne)', fontWeight: 400, letterSpacing: '0.05em',
         background: isStudio ? 'var(--vtext)' : 'transparent',
-        color: isStudio ? '#FFF' : 'var(--vtext)',
+        color: isStudio ? '#0D1117' : 'var(--vtext2)',
         border: isStudio ? 'none' : '1px solid var(--vborder2)',
       }}
     >
@@ -135,11 +136,11 @@ export default function AgentsPage() {
             onClick={() => setFilter(key)}
             className="px-3 py-1.5 rounded-full text-[11px] transition-all duration-100 outline-none"
             style={{
-              fontFamily: 'var(--font-dm-mono)',
-              fontWeight: 500,
-              background: filter === key ? 'var(--vtext)' : 'transparent',
-              color: filter === key ? '#FFF' : 'var(--vmuted)',
-              border: `1px solid ${filter === key ? 'var(--vtext)' : 'var(--vborder)'}`,
+              fontFamily: 'var(--font-syne)',
+              fontWeight: 400,
+              background: filter === key ? 'var(--vsurface2)' : 'transparent',
+              color: filter === key ? 'var(--vtext)' : 'var(--vmuted)',
+              border: `1px solid ${filter === key ? 'var(--vborder2)' : 'var(--vborder)'}`,
             }}
           >
             {label}
@@ -152,7 +153,7 @@ export default function AgentsPage() {
         <section>
           <div
             className="flex items-center gap-2 mb-3"
-            style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 10, color: 'var(--vmuted)', letterSpacing: '0.2em' }}
+            style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 10, color: 'var(--vmuted)', letterSpacing: '0.2em' }}
           >
             <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#059669' }} />
             VORA VENTURES &mdash; MAC STUDIO M4 MAX &mdash; {VORA_AGENTS.length} AGENTS
@@ -168,7 +169,7 @@ export default function AgentsPage() {
         <section>
           <div
             className="flex items-center gap-2 mb-3"
-            style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 10, color: 'var(--vmuted)', letterSpacing: '0.2em' }}
+            style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 10, color: 'var(--vmuted)', letterSpacing: '0.2em' }}
           >
             <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#D97706' }} />
             ORALIVA &mdash; MACBOOK &mdash; REMOTE &mdash; {ORALIVA_AGENTS.length} AGENTS
@@ -183,7 +184,7 @@ export default function AgentsPage() {
       <section>
         <div className="flex items-center justify-between mb-3">
           <div
-            style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 10, color: 'var(--vmuted)', letterSpacing: '0.2em' }}
+            style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 10, color: 'var(--vmuted)', letterSpacing: '0.2em' }}
           >
             RUN LOG &mdash; REAL-TIME
           </div>
@@ -194,10 +195,11 @@ export default function AgentsPage() {
                 onClick={() => setStatusFilter(v)}
                 className="px-2.5 py-1 rounded-full text-[11px] transition-all duration-100"
                 style={{
-                  fontFamily: 'var(--font-dm-mono)',
-                  background: statusFilter === v ? 'var(--vtext)' : 'transparent',
-                  color: statusFilter === v ? '#FFF' : 'var(--vmuted)',
-                  border: `1px solid ${statusFilter === v ? 'var(--vtext)' : 'var(--vborder)'}`,
+                  fontFamily: 'var(--font-syne)',
+                  fontWeight: 400,
+                  background: statusFilter === v ? 'var(--vsurface2)' : 'transparent',
+                  color: statusFilter === v ? 'var(--vtext)' : 'var(--vmuted)',
+                  border: `1px solid ${statusFilter === v ? 'var(--vborder2)' : 'var(--vborder)'}`,
                 }}
               >
                 {v}
@@ -212,7 +214,7 @@ export default function AgentsPage() {
               <tr style={{ borderBottom: '1px solid var(--vborder)', background: 'var(--vbg)' }}>
                 {['Status', 'Agent', 'Machine', 'Model', 'Duration', 'Time'].map((h) => (
                   <th key={h} className="px-4 py-2.5 text-left"
-                    style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 10, color: 'var(--vdim)', letterSpacing: '0.1em' }}
+                    style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 10, color: 'var(--vdim)', letterSpacing: '0.1em' }}
                   >
                     {h.toUpperCase()}
                   </th>
@@ -234,7 +236,7 @@ export default function AgentsPage() {
               {!loading && filteredRuns.length === 0 && (
                 <tr>
                   <td colSpan={6} className="px-4 py-10 text-center"
-                    style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 12, color: 'var(--vdim)' }}
+                    style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 12, color: 'var(--vdim)' }}
                   >
                     No runs match the current filters.
                   </td>
@@ -249,14 +251,14 @@ export default function AgentsPage() {
                     transition: 'background 0.1s',
                     animationDelay: run._isNew ? undefined : `${i * 30}ms`,
                   }}
-                  onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = 'var(--vbg)')}
+                  onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = 'var(--vsurface2)')}
                   onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
                 >
                   <td className="px-4 py-3">
                     <span className="inline-block px-2 py-0.5 rounded text-[10px]"
                       style={{
-                        fontFamily: 'var(--font-dm-mono)', fontWeight: 500, letterSpacing: '0.08em',
-                        background: run.status === 'success' ? '#DCFCE7' : '#FEE2E2',
+                        fontFamily: 'var(--font-syne)', fontWeight: 400, letterSpacing: '0.08em',
+                        background: run.status === 'success' ? 'rgba(5,150,105,0.15)' : 'rgba(220,38,38,0.15)',
                         color: run.status === 'success' ? '#059669' : '#DC2626',
                       }}
                     >
@@ -264,21 +266,21 @@ export default function AgentsPage() {
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <div style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 12, fontWeight: 500, color: 'var(--vtext)' }}>{run.agent_label}</div>
-                    <div style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 10, color: 'var(--vmuted)' }}>{run.agent_id}</div>
+                    <div style={{ fontFamily: 'var(--font-syne)', fontSize: 12, fontWeight: 500, color: 'var(--vtext)' }}>{run.agent_label}</div>
+                    <div style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 10, color: 'var(--vmuted)' }}>{run.agent_id}</div>
                   </td>
                   <td className="px-4 py-3"><MachinePill machine={run.machine} /></td>
                   <td className="px-4 py-3">
                     <span className="px-1.5 py-0.5 rounded border text-[10px]"
-                      style={{ fontFamily: 'var(--font-dm-mono)', color: 'var(--vmuted)', borderColor: 'var(--vborder)', background: 'var(--vbg)' }}
+                      style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, color: 'var(--vmuted)', borderColor: 'var(--vborder)', background: 'var(--vbg)' }}
                     >
                       {run.model}
                     </span>
                   </td>
-                  <td className="px-4 py-3" style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vmuted)' }}>
+                  <td className="px-4 py-3" style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}>
                     {run.duration_ms != null ? `${run.duration_ms}ms` : '—'}
                   </td>
-                  <td className="px-4 py-3" style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vdim)' }}>
+                  <td className="px-4 py-3" style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 11, color: 'var(--vdim)' }}>
                     {new Date(run.ran_at).toLocaleString()}
                   </td>
                 </tr>

@@ -16,7 +16,6 @@ const FINANCE_AGENTS = [
 
 function LocalCard({
   accentColor,
-  accentBg,
   label,
   pill,
   pillBg,
@@ -26,7 +25,6 @@ function LocalCard({
   animDelay = 0,
 }: {
   accentColor: string
-  accentBg: string
   label: string
   pill: string
   pillBg: string
@@ -37,8 +35,13 @@ function LocalCard({
 }) {
   return (
     <div
-      className="product-card rounded-lg border bg-vsurface flex flex-col animate-fade-up"
-      style={{ borderColor: 'var(--vborder)', borderLeft: `4px solid ${accentColor}`, animationDelay: `${animDelay}ms` }}
+      className="product-card rounded-lg border flex flex-col animate-fade-up"
+      style={{
+        background: 'var(--vsurface)',
+        borderColor: 'var(--vborder)',
+        borderTop: `3px solid ${accentColor}`,
+        animationDelay: `${animDelay}ms`,
+      }}
     >
       <div className="px-5 pt-5 pb-4 flex items-start justify-between">
         <div>
@@ -56,8 +59,8 @@ function LocalCard({
             <span
               className="px-1.5 py-0.5 rounded text-[8px]"
               style={{
-                fontFamily: 'var(--font-dm-mono)',
-                fontWeight: 500,
+                fontFamily: 'var(--font-syne)',
+                fontWeight: 400,
                 letterSpacing: '0.1em',
                 background: pillBg,
                 color: pillColor,
@@ -70,7 +73,8 @@ function LocalCard({
         <button
           className="flex items-center gap-1.5 px-2.5 py-1.5 rounded border text-[11px] transition-colors duration-100"
           style={{
-            fontFamily: 'var(--font-dm-mono)',
+            fontFamily: 'var(--font-syne)',
+            fontWeight: 400,
             color: 'var(--vmuted)',
             borderColor: 'var(--vborder)',
             background: 'transparent',
@@ -87,7 +91,8 @@ function LocalCard({
         className="px-5 py-3 border-t mt-4"
         style={{
           borderColor: 'var(--vborder)',
-          fontFamily: 'var(--font-dm-mono)',
+          fontFamily: 'var(--font-syne)',
+          fontWeight: 400,
           fontSize: 11,
           color: 'var(--vmuted)',
         }}
@@ -114,8 +119,8 @@ function MrrProgressBar({ current, target = 5000 }: { current: number; target?: 
       <div className="px-6 py-5">
         <div
           style={{
-            fontFamily: 'var(--font-dm-mono)',
-            fontWeight: 500,
+            fontFamily: 'var(--font-syne)',
+            fontWeight: 400,
             fontSize: 10,
             color: 'var(--vmuted)',
             letterSpacing: '0.2em',
@@ -131,7 +136,7 @@ function MrrProgressBar({ current, target = 5000 }: { current: number; target?: 
           >
             ${current.toLocaleString()}
           </span>
-          <span style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 14, color: 'var(--vmuted)' }}>
+          <span style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 14, color: 'var(--vmuted)' }}>
             / $5,000 MRR
           </span>
         </div>
@@ -170,7 +175,8 @@ function MrrProgressBar({ current, target = 5000 }: { current: number; target?: 
                 <span
                   className="mt-0.5 text-[10px] tabular-nums"
                   style={{
-                    fontFamily: 'var(--font-dm-mono)',
+                    fontFamily: 'var(--font-syne)',
+                    fontWeight: 400,
                     color: current >= m.value ? 'var(--vgreen)' : 'var(--vdim)',
                   }}
                 >
@@ -183,7 +189,7 @@ function MrrProgressBar({ current, target = 5000 }: { current: number; target?: 
 
         <div
           className="mt-6"
-          style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 12, color: 'var(--vmuted)' }}
+          style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 12, color: 'var(--vmuted)' }}
         >
           {pct.toFixed(1)}% to Florida.{' '}
           <span style={{ color: 'var(--vtext2)' }}>
@@ -260,10 +266,9 @@ export default async function OverviewPage() {
         {/* Finance agents */}
         <LocalCard
           accentColor="#059669"
-          accentBg="#059669"
           label="FINANCE AGENTS"
           pill="LOCAL"
-          pillBg="#DCFCE7"
+          pillBg="rgba(5,150,105,0.15)"
           pillColor="#059669"
           footer="4 agents configured · Mac Studio M4 Max"
           animDelay={120}
@@ -273,14 +278,15 @@ export default async function OverviewPage() {
               <div key={a.id} className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#059669' }} />
-                  <span style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 12, color: 'var(--vtext)' }}>
+                  <span style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 12, color: 'var(--vtext)' }}>
                     {a.label}
                   </span>
                 </div>
                 <span
                   className="px-1.5 py-0.5 rounded border text-[9px]"
                   style={{
-                    fontFamily: 'var(--font-dm-mono)',
+                    fontFamily: 'var(--font-syne)',
+                    fontWeight: 400,
                     color: 'var(--vmuted)',
                     borderColor: 'var(--vborder)',
                     background: 'var(--vbg)',
@@ -296,10 +302,9 @@ export default async function OverviewPage() {
         {/* Speech coach */}
         <LocalCard
           accentColor="#D97706"
-          accentBg="#D97706"
           label="SPEECH COACH"
           pill="LOCAL"
-          pillBg="#FEF3C7"
+          pillBg="rgba(217,119,6,0.15)"
           pillColor="#D97706"
           footer="1 agent configured · Mac Studio M4 Max"
           animDelay={180}
@@ -308,12 +313,12 @@ export default async function OverviewPage() {
             <div style={{ fontFamily: 'var(--font-syne)', fontWeight: 700, fontSize: 15, color: 'var(--vtext)' }}>
               Advanced accent refinement
             </div>
-            <div className="mt-1" style={{ fontFamily: 'var(--font-inter)', fontSize: 12, color: 'var(--vmuted)' }}>
+            <div className="mt-1" style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 12, color: 'var(--vmuted)' }}>
               Spanish native &rarr; American English
             </div>
             <div
               className="mt-3"
-              style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vmuted)' }}
+              style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}
             >
               Phoneme analysis &middot; Prosody training &middot; Domain drilling
             </div>

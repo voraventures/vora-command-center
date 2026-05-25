@@ -29,15 +29,15 @@ export function MrrCard({ product, snapshots, animDelay = 0 }: Props) {
       style={{
         background: 'var(--vsurface)',
         borderColor: 'var(--vborder)',
-        borderLeft: `4px solid ${accent}`,
+        borderTop: `3px solid ${accent}`,
         animationDelay: `${animDelay}ms`,
       }}
     >
       <div className="px-5 pt-5 pb-4">
         <div
           style={{
-            fontFamily: 'var(--font-dm-mono)',
-            fontWeight: 500,
+            fontFamily: 'var(--font-syne)',
+            fontWeight: 400,
             fontSize: 10,
             color: accent,
             letterSpacing: '0.15em',
@@ -56,7 +56,7 @@ export function MrrCard({ product, snapshots, animDelay = 0 }: Props) {
                   fontFamily: 'var(--font-syne)',
                   fontWeight: 800,
                   fontSize: 32,
-                  color: 'var(--vtext)',
+                  color: accent,
                   lineHeight: 1,
                 }}
               >
@@ -64,7 +64,8 @@ export function MrrCard({ product, snapshots, animDelay = 0 }: Props) {
               </span>
               <span
                 style={{
-                  fontFamily: 'var(--font-dm-mono)',
+                  fontFamily: 'var(--font-syne)',
+                  fontWeight: 400,
                   fontSize: 11,
                   color: 'var(--vmuted)',
                   letterSpacing: '0.08em',
@@ -75,7 +76,7 @@ export function MrrCard({ product, snapshots, animDelay = 0 }: Props) {
             </div>
             <div
               className="mt-1.5"
-              style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vmuted)' }}
+              style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}
             >
               {subs.toLocaleString()} subscribers
             </div>
@@ -83,7 +84,8 @@ export function MrrCard({ product, snapshots, animDelay = 0 }: Props) {
               <div
                 className="mt-1 tabular-nums"
                 style={{
-                  fontFamily: 'var(--font-dm-mono)',
+                  fontFamily: 'var(--font-syne)',
+                  fontWeight: 400,
                   fontSize: 11,
                   color: delta > 0 ? 'var(--vgreen)' : 'var(--vred)',
                 }}

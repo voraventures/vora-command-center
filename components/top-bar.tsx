@@ -30,7 +30,7 @@ function LiveClock() {
   return (
     <span
       className="tabular-nums"
-      style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 12, color: 'var(--vmuted)' }}
+      style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 12, color: 'var(--vmuted)' }}
     >
       {day} {date} &nbsp; {clock}
     </span>
@@ -42,9 +42,9 @@ function StatusPill({ color, label }: { color: string; label: string }) {
     <span
       className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border"
       style={{
-        fontFamily: 'var(--font-dm-mono)',
+        fontFamily: 'var(--font-syne)',
         fontSize: 10,
-        fontWeight: 500,
+        fontWeight: 400,
         color: 'var(--vmuted)',
         borderColor: 'var(--vborder)',
         background: 'var(--vsurface)',

@@ -38,7 +38,10 @@ function FeedItem({ log, isNew, delay }: { log: HermesLog; isNew?: boolean; dela
       style={{
         borderBottom: '1px solid var(--vborder)',
         animationDelay: delay != null ? `${delay}ms` : undefined,
+        transition: 'background 0.1s',
       }}
+      onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = 'var(--vsurface2)')}
+      onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
     >
       {/* Timeline dot + line */}
       <div className="flex flex-col items-center flex-shrink-0 mt-1" style={{ width: 16 }}>
@@ -52,12 +55,13 @@ function FeedItem({ log, isNew, delay }: { log: HermesLog; isNew?: boolean; dela
       {/* Content */}
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-4">
-          <div style={{ fontFamily: 'var(--font-inter)', fontWeight: 500, fontSize: 13, color: 'var(--vtext)' }}>
+          <div style={{ fontFamily: 'var(--font-syne)', fontWeight: 500, fontSize: 13, color: 'var(--vtext)' }}>
             {log.action}
           </div>
           <span
             style={{
-              fontFamily: 'var(--font-dm-mono)',
+              fontFamily: 'var(--font-syne)',
+              fontWeight: 400,
               fontSize: 11,
               color: 'var(--vdim)',
               flexShrink: 0,
@@ -70,7 +74,7 @@ function FeedItem({ log, isNew, delay }: { log: HermesLog; isNew?: boolean; dela
         {log.detail && (
           <div
             className="mt-0.5"
-            style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vmuted)' }}
+            style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}
           >
             {log.detail}
           </div>
@@ -80,8 +84,8 @@ function FeedItem({ log, isNew, delay }: { log: HermesLog; isNew?: boolean; dela
           <span
             className="inline-block mt-1.5 px-2 py-0.5 rounded text-[10px]"
             style={{
-              fontFamily: 'var(--font-dm-mono)',
-              fontWeight: 500,
+              fontFamily: 'var(--font-syne)',
+              fontWeight: 400,
               color,
               background: `${color}18`,
               letterSpacing: '0.05em',
@@ -119,12 +123,12 @@ export function HermesFeed({ initial, limit = 5, realtime = false }: Props) {
       {/* Header */}
       <div
         className="flex items-center justify-between px-4 py-3 border-b"
-        style={{ borderColor: 'var(--vborder)', background: 'var(--vsurface)' }}
+        style={{ borderColor: 'var(--vborder)', background: 'var(--vbg)' }}
       >
         <span
           style={{
-            fontFamily: 'var(--font-dm-mono)',
-            fontWeight: 500,
+            fontFamily: 'var(--font-syne)',
+            fontWeight: 400,
             fontSize: 10,
             color: 'var(--vmuted)',
             letterSpacing: '0.3em',
@@ -135,7 +139,7 @@ export function HermesFeed({ initial, limit = 5, realtime = false }: Props) {
         {realtime && (
           <span className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full animate-pulse-dot" style={{ background: 'var(--hermes)' }} />
-            <span style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 10, color: 'var(--vmuted)', letterSpacing: '0.05em' }}>
+            <span style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 10, color: 'var(--vmuted)', letterSpacing: '0.05em' }}>
               LIVE
             </span>
           </span>
@@ -148,7 +152,7 @@ export function HermesFeed({ initial, limit = 5, realtime = false }: Props) {
           <div style={{ fontFamily: 'var(--font-syne)', fontWeight: 700, fontSize: 14, color: 'var(--vmuted)' }}>
             Hermes is quiet
           </div>
-          <div className="mt-1" style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vdim)' }}>
+          <div className="mt-1" style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 11, color: 'var(--vdim)' }}>
             No activity logged yet
           </div>
         </div>

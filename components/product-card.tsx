@@ -5,9 +5,9 @@ import { ExternalLink, GitFork } from 'lucide-react'
 import { Product, MrrSnapshot } from '@/lib/types'
 import { LineChart, Line, ResponsiveContainer } from 'recharts'
 
-const CONFIG: Record<string, { accent: string; label: string }> = {
-  sparkcheck:               { accent: '#E8194B', label: 'SparkCheck' },
-  twitter_growth_optimizer: { accent: '#0066FF', label: 'Twitter Growth Opt.' },
+const CONFIG: Record<string, { accent: string; accentBg: string; label: string }> = {
+  sparkcheck:               { accent: '#E8194B', accentBg: 'var(--spark-bg)',   label: 'SparkCheck' },
+  twitter_growth_optimizer: { accent: '#0066FF', accentBg: 'var(--twitter-bg)', label: 'Twitter Growth Opt.' },
 }
 
 interface Props {
@@ -19,20 +19,22 @@ interface Props {
 }
 
 export function ProductCard({ product, snapshots = [], latestMrr = 0, latestSubs = 0, animDelay = 0 }: Props) {
-  const { accent } = CONFIG[product.id] ?? { accent: '#7C3AED', label: product.label }
+  const { accent, accentBg } = CONFIG[product.id] ?? { accent: '#7C3AED', accentBg: 'var(--hermes-bg)', label: product.label }
   const sparkData = snapshots.slice(-8).map((s, i) => ({ v: s.mrr_usd, i }))
-
   const [sparkKey, setSparkKey] = useState(0)
+  const [hovered, setHovered] = useState(false)
 
   return (
     <div
-      className="product-card rounded-lg border bg-vsurface animate-fade-up"
+      className="product-card rounded-lg border animate-fade-up"
       style={{
+        background: hovered ? accentBg : 'var(--vsurface)',
         borderColor: 'var(--vborder)',
-        borderLeft: `4px solid ${accent}`,
+        borderTop: `3px solid ${accent}`,
         animationDelay: `${animDelay}ms`,
       }}
-      onMouseEnter={() => setSparkKey((k) => k + 1)}
+      onMouseEnter={() => { setSparkKey((k) => k + 1); setHovered(true) }}
+      onMouseLeave={() => setHovered(false)}
     >
       {/* Header */}
       <div className="px-5 pt-5 pb-4 flex items-start justify-between">
@@ -52,23 +54,23 @@ export function ProductCard({ product, snapshots = [], latestMrr = 0, latestSubs
             <span
               className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded"
               style={{
-                fontFamily: 'var(--font-dm-mono)',
-                fontWeight: 500,
+                fontFamily: 'var(--font-syne)',
+                fontWeight: 400,
                 fontSize: 8,
                 letterSpacing: '0.1em',
-                background: product.status === 'live' ? '#DCFCE7' : '#F3F4F6',
-                color: product.status === 'live' ? '#059669' : '#6B7280',
+                background: product.status === 'live' ? 'rgba(5,150,105,0.15)' : 'rgba(110,119,129,0.15)',
+                color: product.status === 'live' ? '#059669' : '#6E7781',
               }}
             >
               <span
                 className="w-1.5 h-1.5 rounded-full"
-                style={{ background: product.status === 'live' ? '#059669' : '#9CA3AF' }}
+                style={{ background: product.status === 'live' ? '#059669' : '#6E7781' }}
               />
               {product.status.toUpperCase()}
             </span>
           </div>
           {product.notes && (
-            <div style={{ fontFamily: 'var(--font-inter)', fontSize: 12, color: 'var(--vmuted)' }}>
+            <div style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 12, color: 'var(--vmuted)' }}>
               {product.notes}
             </div>
           )}
@@ -85,7 +87,7 @@ export function ProductCard({ product, snapshots = [], latestMrr = 0, latestSubs
                 fontFamily: 'var(--font-syne)',
                 fontWeight: 800,
                 fontSize: 36,
-                color: 'var(--vtext)',
+                color: accent,
                 lineHeight: 1,
               }}
             >
@@ -93,8 +95,8 @@ export function ProductCard({ product, snapshots = [], latestMrr = 0, latestSubs
             </span>
             <span
               style={{
-                fontFamily: 'var(--font-dm-mono)',
-                fontWeight: 500,
+                fontFamily: 'var(--font-syne)',
+                fontWeight: 400,
                 fontSize: 11,
                 color: 'var(--vmuted)',
                 letterSpacing: '0.08em',
@@ -106,7 +108,8 @@ export function ProductCard({ product, snapshots = [], latestMrr = 0, latestSubs
           <div
             className="mt-1"
             style={{
-              fontFamily: 'var(--font-dm-mono)',
+              fontFamily: 'var(--font-syne)',
+              fontWeight: 400,
               fontSize: 11,
               color: 'var(--vmuted)',
             }}
@@ -145,7 +148,7 @@ export function ProductCard({ product, snapshots = [], latestMrr = 0, latestSubs
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-1.5 transition-colors duration-100"
-          style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vmuted)' }}
+          style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}
           onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = accent)}
           onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--vmuted)')}
         >
@@ -157,7 +160,7 @@ export function ProductCard({ product, snapshots = [], latestMrr = 0, latestSubs
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-1.5 transition-colors duration-100"
-          style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vmuted)' }}
+          style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}
           onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = accent)}
           onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--vmuted)')}
         >

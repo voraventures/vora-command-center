@@ -49,8 +49,8 @@ export function RevenueChart({ snapshots }: Props) {
       >
         <span
           style={{
-            fontFamily: 'var(--font-dm-mono)',
-            fontWeight: 500,
+            fontFamily: 'var(--font-syne)',
+            fontWeight: 400,
             fontSize: 10,
             color: 'var(--vmuted)',
             letterSpacing: '0.2em',
@@ -65,11 +65,11 @@ export function RevenueChart({ snapshots }: Props) {
               onClick={() => setRange(days)}
               className="px-3 py-1 rounded-full text-[11px] transition-all duration-100 outline-none"
               style={{
-                fontFamily: 'var(--font-dm-mono)',
-                fontWeight: 500,
-                background: range === days ? 'var(--vtext)' : 'transparent',
-                color: range === days ? '#FFFFFF' : 'var(--vmuted)',
-                border: `1px solid ${range === days ? 'var(--vtext)' : 'var(--vborder)'}`,
+                fontFamily: 'var(--font-syne)',
+                fontWeight: 400,
+                background: range === days ? 'var(--vsurface2)' : 'transparent',
+                color: range === days ? 'var(--vtext)' : 'var(--vmuted)',
+                border: `1px solid ${range === days ? 'var(--vborder2)' : 'var(--vborder)'}`,
               }}
             >
               {label}
@@ -84,26 +84,26 @@ export function RevenueChart({ snapshots }: Props) {
             <CartesianGrid strokeDasharray="2 4" stroke="var(--vborder)" vertical={false} />
             <XAxis
               dataKey="date"
-              tick={{ fontSize: 10, fontFamily: 'var(--font-dm-mono)', fill: 'var(--vdim)' }}
+              tick={{ fontSize: 10, fontFamily: 'var(--font-syne)', fill: 'var(--vdim)' }}
               axisLine={false}
               tickLine={false}
               interval="preserveStartEnd"
             />
             <YAxis
-              tick={{ fontSize: 10, fontFamily: 'var(--font-dm-mono)', fill: 'var(--vdim)' }}
+              tick={{ fontSize: 10, fontFamily: 'var(--font-syne)', fill: 'var(--vdim)' }}
               axisLine={false}
               tickLine={false}
               tickFormatter={(v) => `$${v}`}
             />
             <Tooltip
               contentStyle={{
-                background: '#FFFFFF',
-                border: '1px solid var(--vborder)',
+                background: '#1C2333',
+                border: '1px solid #21262D',
                 borderRadius: 8,
                 fontSize: 12,
-                fontFamily: 'var(--font-dm-mono)',
+                fontFamily: 'var(--font-syne)',
                 padding: '8px 12px',
-                boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
+                boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
               }}
               formatter={(v) => [`$${Number(v ?? 0).toLocaleString()}`, '']}
             />
@@ -115,7 +115,7 @@ export function RevenueChart({ snapshots }: Props) {
                 value: '$5K FL TRIGGER',
                 fill: 'var(--vgreen)',
                 fontSize: 9,
-                fontFamily: 'var(--font-dm-mono)',
+                fontFamily: 'var(--font-syne)',
                 position: 'insideTopRight',
                 dy: -6,
               }}
@@ -152,7 +152,7 @@ export function RevenueChart({ snapshots }: Props) {
           ].map(({ label, color, dashed }) => (
             <div key={label} className="flex items-center gap-2">
               <svg width="20" height="2"><line x1="0" y1="1" x2="20" y2="1" stroke={color} strokeWidth="2" strokeDasharray={dashed ? '3 3' : undefined} /></svg>
-              <span style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vmuted)' }}>{label}</span>
+              <span style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}>{label}</span>
             </div>
           ))}
         </div>

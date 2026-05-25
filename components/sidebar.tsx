@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 import { LayoutDashboard, TrendingUp, Bot, Activity, Landmark, Mic } from 'lucide-react'
 
 const NAV = [
-  { href: '/overview',  label: 'Overview', icon: LayoutDashboard, accent: '#0A0A08' },
+  { href: '/overview',  label: 'Overview', icon: LayoutDashboard, accent: '#E6EDF3' },
   { href: '/revenue',   label: 'Revenue',  icon: TrendingUp,      accent: '#059669' },
   { href: '/agents',    label: 'Agents',   icon: Bot,             accent: '#7C3AED' },
   { href: '/hermes',    label: 'Hermes',   icon: Activity,        accent: '#7C3AED' },
@@ -19,7 +19,7 @@ export function Sidebar() {
   return (
     <aside
       className="w-60 flex-shrink-0 flex flex-col border-r"
-      style={{ background: 'var(--vsurface)', borderColor: 'var(--vborder)' }}
+      style={{ background: 'var(--vbg)', borderColor: 'var(--vborder)' }}
     >
       {/* Logo */}
       <div className="px-5 pt-6 pb-5 border-b" style={{ borderColor: 'var(--vborder)' }}>
@@ -37,8 +37,8 @@ export function Sidebar() {
         <div
           className="mt-1"
           style={{
-            fontFamily: 'var(--font-dm-mono)',
-            fontWeight: 500,
+            fontFamily: 'var(--font-syne)',
+            fontWeight: 400,
             fontSize: 10,
             color: 'var(--vmuted)',
             letterSpacing: '0.3em',
@@ -49,7 +49,7 @@ export function Sidebar() {
         <div
           className="mt-0.5"
           style={{
-            fontFamily: 'var(--font-dm-mono)',
+            fontFamily: 'var(--font-syne)',
             fontWeight: 400,
             fontSize: 8,
             color: 'var(--vdim)',
@@ -68,22 +68,28 @@ export function Sidebar() {
             <Link
               key={href}
               href={href}
-              className="flex items-center gap-2.5 rounded-md text-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-1 transition-colors duration-100"
+              className="flex items-center gap-2.5 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-offset-1 transition-colors duration-100"
               style={{
-                fontFamily: 'var(--font-dm-mono)',
-                fontWeight: 500,
+                fontFamily: 'var(--font-syne)',
+                fontWeight: active ? 700 : 400,
                 fontSize: 13,
-                padding: active ? '8px 12px 8px 8px' : '8px 12px',
-                background: active ? 'var(--vtext)' : 'transparent',
-                color: active ? '#FFFFFF' : 'var(--vtext)',
-                borderLeft: active ? `4px solid ${accent}` : '4px solid transparent',
+                padding: active ? '8px 12px 8px 9px' : '8px 12px',
+                background: active ? 'var(--vsurface2)' : 'transparent',
+                color: active ? 'var(--vtext)' : 'var(--vmuted)',
+                borderLeft: active ? `3px solid ${accent}` : '3px solid transparent',
                 textDecoration: 'none',
               }}
               onMouseEnter={(e) => {
-                if (!active) (e.currentTarget as HTMLElement).style.background = 'var(--vsurface2)'
+                if (!active) {
+                  (e.currentTarget as HTMLElement).style.background = 'var(--vsurface)'
+                  ;(e.currentTarget as HTMLElement).style.color = 'var(--vtext2)'
+                }
               }}
               onMouseLeave={(e) => {
-                if (!active) (e.currentTarget as HTMLElement).style.background = 'transparent'
+                if (!active) {
+                  (e.currentTarget as HTMLElement).style.background = 'transparent'
+                  ;(e.currentTarget as HTMLElement).style.color = 'var(--vmuted)'
+                }
               }}
             >
               <Icon className="w-4 h-4 flex-shrink-0" />
@@ -94,17 +100,12 @@ export function Sidebar() {
       </nav>
 
       {/* User block */}
-      <div
-        className="px-5 py-4 border-t"
-        style={{ borderColor: 'var(--vborder)' }}
-      >
+      <div className="px-5 py-4 border-t" style={{ borderColor: 'var(--vborder)' }}>
         <div className="flex items-center gap-2.5">
-          <div className="relative flex-shrink-0">
-            <span
-              className="block w-2 h-2 rounded-full animate-pulse-dot"
-              style={{ background: 'var(--vgreen)' }}
-            />
-          </div>
+          <span
+            className="block w-2 h-2 rounded-full animate-pulse-dot flex-shrink-0"
+            style={{ background: 'var(--vgreen)' }}
+          />
           <div>
             <div
               style={{
@@ -120,7 +121,7 @@ export function Sidebar() {
             <div
               className="mt-0.5"
               style={{
-                fontFamily: 'var(--font-dm-mono)',
+                fontFamily: 'var(--font-syne)',
                 fontWeight: 400,
                 fontSize: 9,
                 color: 'var(--vmuted)',

@@ -99,7 +99,7 @@ export default function HermesPage() {
                 fontFamily: 'var(--font-syne)',
                 fontWeight: 800,
                 fontSize: isNum ? 40 : 20,
-                color: 'var(--vtext)',
+                color: 'var(--hermes)',
                 lineHeight: 1,
               }}
             >
@@ -107,11 +107,11 @@ export default function HermesPage() {
             </div>
             <div
               className="mt-2"
-              style={{ fontFamily: 'var(--font-dm-mono)', fontWeight: 500, fontSize: 11, color: 'var(--vmuted)', letterSpacing: '0.08em', textTransform: 'uppercase' }}
+              style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)', letterSpacing: '0.08em', textTransform: 'uppercase' }}
             >
               {label}
             </div>
-            <div className="mt-0.5" style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vdim)' }}>
+            <div className="mt-0.5" style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 11, color: 'var(--vdim)' }}>
               {sub}
             </div>
           </div>
@@ -128,13 +128,13 @@ export default function HermesPage() {
           style={{ borderColor: 'var(--vborder)', background: 'var(--vbg)' }}
         >
           <span
-            style={{ fontFamily: 'var(--font-dm-mono)', fontWeight: 500, fontSize: 10, color: 'var(--vmuted)', letterSpacing: '0.2em' }}
+            style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 10, color: 'var(--vmuted)', letterSpacing: '0.2em' }}
           >
             ACTIVITY FEED
           </span>
           <span className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full animate-pulse-dot" style={{ background: 'var(--hermes)' }} />
-            <span style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 10, color: 'var(--vmuted)', letterSpacing: '0.05em' }}>LIVE</span>
+            <span style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 10, color: 'var(--vmuted)', letterSpacing: '0.05em' }}>LIVE</span>
           </span>
         </div>
 
@@ -158,7 +158,7 @@ export default function HermesPage() {
             <div style={{ fontFamily: 'var(--font-syne)', fontWeight: 700, fontSize: 16, color: 'var(--vmuted)' }}>
               Hermes is quiet
             </div>
-            <div className="mt-1" style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 12, color: 'var(--vdim)' }}>
+            <div className="mt-1" style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 12, color: 'var(--vdim)' }}>
               POST to /api/hermes-log to log activity
             </div>
           </div>
@@ -178,7 +178,7 @@ export default function HermesPage() {
                   animationDelay: log._isNew ? undefined : `${i * 30}ms`,
                   transition: 'background 0.1s',
                 }}
-                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = 'var(--vbg)')}
+                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = 'var(--vsurface2)')}
                 onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
               >
                 {/* Timeline */}
@@ -193,22 +193,22 @@ export default function HermesPage() {
                 {/* Content */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-4">
-                    <div style={{ fontFamily: 'var(--font-inter)', fontWeight: 500, fontSize: 13, color: 'var(--vtext)' }}>
+                    <div style={{ fontFamily: 'var(--font-syne)', fontWeight: 500, fontSize: 13, color: 'var(--vtext)' }}>
                       {log.action}
                     </div>
-                    <span style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vdim)', flexShrink: 0 }}>
+                    <span style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 11, color: 'var(--vdim)', flexShrink: 0 }}>
                       {timeAgo(log.logged_at)}
                     </span>
                   </div>
                   {log.detail && (
-                    <div className="mt-0.5" style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vmuted)' }}>
+                    <div className="mt-0.5" style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}>
                       {log.detail}
                     </div>
                   )}
                   {productLabel && (
                     <span
                       className="inline-block mt-1.5 px-2 py-0.5 rounded text-[10px]"
-                      style={{ fontFamily: 'var(--font-dm-mono)', fontWeight: 500, color, background: `${color}18`, letterSpacing: '0.05em' }}
+                      style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, color, background: `${color}18`, letterSpacing: '0.05em' }}
                     >
                       {productLabel}
                     </span>

@@ -27,13 +27,13 @@ export function Sparkline({ data, color, height = 40, animate = false }: Props) 
         />
         <Tooltip
           contentStyle={{
-            background: '#FFFFFF',
-            border: '1px solid #E5E4E0',
+            background: '#1C2333',
+            border: '1px solid #21262D',
             borderRadius: 6,
             fontSize: 11,
-            fontFamily: 'var(--font-dm-mono)',
+            fontFamily: 'var(--font-syne)',
             padding: '4px 8px',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
           }}
           formatter={(v) => [`$${Number(v ?? 0).toLocaleString()}`, '']}
           labelFormatter={() => ''}
