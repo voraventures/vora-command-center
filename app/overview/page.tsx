@@ -5,6 +5,7 @@ import { HermesFeed } from '@/components/hermes-feed'
 import { StatStrip } from '@/components/stat-strip'
 import { OverviewRevenueChart } from '@/components/overview-revenue-chart'
 import { SubscriberDonut } from '@/components/subscriber-donut'
+import { TokenUsage } from '@/components/token-usage'
 import { Settings } from 'lucide-react'
 
 export const revalidate = 30
@@ -239,6 +240,7 @@ export default async function OverviewPage() {
     { data: snapshots },
     { data: agentRuns },
     { data: hermesLogs },
+    { data: tokenRuns },
     { count: agentCount },
     { count: hermesCount },
   ] = await Promise.all([
@@ -246,6 +248,11 @@ export default async function OverviewPage() {
     supabase.from('mrr_snapshots').select('*').order('recorded_at', { ascending: true }),
     supabase.from('agent_runs').select('*').order('ran_at', { ascending: false }).limit(5),
     supabase.from('hermes_log').select('*').order('logged_at', { ascending: false }).limit(5),
+    supabase
+      .from('agent_runs')
+      .select('id,agent_id,agent_label,model,input_tokens,output_tokens,estimated_cost_usd,ran_at')
+      .order('ran_at', { ascending: false })
+      .limit(500),
     supabase.from('agent_runs').select('*', { count: 'exact', head: true }).gte('ran_at', since24h),
     supabase.from('hermes_log').select('*', { count: 'exact', head: true }).gte('logged_at', since24h),
   ])
@@ -292,6 +299,9 @@ export default async function OverviewPage() {
         mrrSparkline={mrrSparkline}
         subsSparkline={subsSparkline}
       />
+
+      {/* 1b. Token usage + cost tracker */}
+      <TokenUsage initialRuns={(tokenRuns ?? []) as any} />
 
       {/* 2. Key KPI heading */}
       <div style={{ paddingTop: 8 }}>

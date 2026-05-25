@@ -8,7 +8,11 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json()
-  const { agent_id, agent_label, machine, model, input_summary, output_summary, duration_ms, status } = body
+  const {
+    agent_id, agent_label, machine, model,
+    input_summary, output_summary, duration_ms, status,
+    input_tokens, output_tokens, estimated_cost_usd,
+  } = body
 
   if (!agent_id || !agent_label || !machine || !model) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
@@ -24,6 +28,9 @@ export async function POST(req: NextRequest) {
     output_summary: output_summary ?? null,
     duration_ms: duration_ms ?? null,
     status: status ?? 'success',
+    input_tokens: input_tokens ?? 0,
+    output_tokens: output_tokens ?? 0,
+    estimated_cost_usd: estimated_cost_usd ?? 0,
   }).select().single()
 
   if (error) {
