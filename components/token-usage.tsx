@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { createBrowserClient } from '@/lib/supabase'
+import { supabase } from '@/lib/supabase'
 
 interface AgentRun {
   id: string
@@ -79,7 +79,6 @@ export function TokenUsage({ initialRuns }: { initialRuns: AgentRun[] }) {
   const [runs, setRuns] = useState<AgentRun[]>(initialRuns)
 
   useEffect(() => {
-    const supabase = createBrowserClient()
     const channel = supabase
       .channel('token-usage-realtime')
       .on(
