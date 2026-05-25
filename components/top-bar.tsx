@@ -70,7 +70,9 @@ export function TopBar() {
       className="flex items-center justify-between px-6 lg:px-8 border-b flex-shrink-0"
       style={{
         height: 56,
-        background: '#0D1120',
+        background: 'rgba(13, 17, 32, 0.90)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
         borderColor: 'var(--vborder)',
       }}
     >

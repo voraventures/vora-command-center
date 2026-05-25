@@ -63,10 +63,10 @@
    * Never alias through shadcn-reserved names (--muted, --accent, --border, etc.)
    */
 
-  /* Surfaces */
-  --vbg:       #0F1117;
-  --vsurface:  #161B2E;
-  --vsurface2: #1E2540;
+  /* Surfaces — semi-transparent so ambient canvas shows through */
+  --vbg:       rgba(15, 17, 23, 0.95);
+  --vsurface:  rgba(22, 27, 46, 0.85);
+  --vsurface2: rgba(30, 37, 64, 0.85);
 
   /* Borders */
   --vborder:  #252D45;
@@ -118,11 +118,11 @@
   --dim:      #2A3450;
 
   /* shadcn compat — dark theme, self-contained */
-  --background:           #0F1117;
+  --background:           rgba(15, 17, 23, 0.95);
   --foreground:           #F0F4FF;
-  --card:                 #161B2E;
+  --card:                 rgba(22, 27, 46, 0.85);
   --card-foreground:      #F0F4FF;
-  --popover:              #1E2540;
+  --popover:              rgba(30, 37, 64, 0.92);
   --popover-foreground:   #F0F4FF;
   --primary:              #00E676;
   --primary-foreground:   #0F1117;
@@ -142,7 +142,7 @@
   --chart-4:              #9C6FFF;
   --chart-5:              #FFB800;
   --radius:               0.5rem;
-  --sidebar:              #0D1120;
+  --sidebar:              rgba(13, 17, 32, 0.92);
   --sidebar-foreground:   #F0F4FF;
   --sidebar-primary:      #00E676;
   --sidebar-primary-foreground: #0F1117;
@@ -157,10 +157,10 @@
     @apply border-border outline-ring/50;
   }
   html {
-    background-color: var(--vbg);
+    background-color: #0F1117;
   }
   body {
-    background-color: var(--vbg);
+    background-color: #0F1117;
     color: var(--vtext);
     font-family: var(--font-mono), monospace;
     -webkit-font-smoothing: antialiased;
@@ -317,6 +317,15 @@
 /* Button micro-interaction */
 .btn-press { transition: transform 100ms ease-out; }
 .btn-press:active { transform: scale(0.97); }
+
+/* Backdrop blur — ambient canvas shows through card surfaces */
+[data-card],
+.product-card,
+.card-hover,
+.stat-card-hover {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
 
 /* Reduced motion — accessibility */
 @media (prefers-reduced-motion: reduce) {
