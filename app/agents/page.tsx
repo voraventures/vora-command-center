@@ -5,19 +5,44 @@ import { supabase } from '@/lib/supabase'
 import { AgentRun } from '@/lib/types'
 
 const VORA_AGENTS = [
-  { id: 'finance-market',    label: 'Market Intelligence', tag: 'FINANCE', machine: 'mac_studio', model: 'claude-api',    color: '#00E676' },
-  { id: 'finance-portfolio', label: 'Portfolio Strategist', tag: 'FINANCE', machine: 'mac_studio', model: 'claude-api',    color: '#00E676' },
-  { id: 'finance-savings',   label: 'Savings Optimizer',   tag: 'FINANCE', machine: 'mac_studio', model: 'qwen3:latest',  color: '#00E676' },
-  { id: 'finance-crypto',    label: 'Crypto & Alt Assets', tag: 'FINANCE', machine: 'mac_studio', model: 'claude-api',    color: '#00E676' },
-  { id: 'speech-coach',      label: 'Speech Coach',        tag: 'PERSONAL', machine: 'mac_studio', model: 'qwen3:latest', color: '#FFB800' },
+  { id: 'finance-market',    label: 'Market Intelligence', tag: 'FINANCE',  machine: 'mac_studio', model: 'claude-api',    color: '#00FF87' },
+  { id: 'finance-portfolio', label: 'Portfolio Strategist', tag: 'FINANCE', machine: 'mac_studio', model: 'claude-api',    color: '#00D4FF' },
+  { id: 'finance-savings',   label: 'Savings Optimizer',   tag: 'FINANCE',  machine: 'mac_studio', model: 'qwen3:latest',  color: '#FFD000' },
+  { id: 'finance-crypto',    label: 'Crypto & Alt Assets', tag: 'FINANCE',  machine: 'mac_studio', model: 'claude-api',    color: '#FF6B00' },
+  { id: 'speech-coach',      label: 'Speech Coach',        tag: 'PERSONAL', machine: 'mac_studio', model: 'qwen3:latest',  color: '#FF2D78' },
 ]
 const ORALIVA_AGENTS = [
-  { id: 'email',    label: 'Email Agent',            tag: 'COMMUNICATIONS', machine: 'macbook', model: 'qwen3:latest', color: '#9C6FFF' },
-  { id: 'tasks',    label: 'Task & Assignment Agent', tag: 'OPERATIONS',    machine: 'macbook', model: 'qwen3:latest', color: '#9C6FFF' },
-  { id: 'social',   label: 'OraLiva Social Agent',   tag: 'SOCIAL MEDIA',   machine: 'macbook', model: 'qwen3:latest', color: '#9C6FFF' },
-  { id: 'cap',      label: 'CAP Inspection Agent',   tag: 'COMPLIANCE',     machine: 'macbook', model: 'claude_code',  color: '#9C6FFF' },
-  { id: 'research', label: 'Research Agent',          tag: 'RESEARCH',       machine: 'macbook', model: 'claude_code',  color: '#9C6FFF' },
+  { id: 'email',    label: 'Email Agent',             tag: 'COMMUNICATIONS', machine: 'macbook', model: 'qwen3:latest', color: '#BF7FFF' },
+  { id: 'tasks',    label: 'Task & Assignment Agent', tag: 'OPERATIONS',     machine: 'macbook', model: 'qwen3:latest', color: '#7B7FFF' },
+  { id: 'social',   label: 'OraLiva Social Agent',   tag: 'SOCIAL MEDIA',   machine: 'macbook', model: 'qwen3:latest', color: '#00AEFF' },
+  { id: 'cap',      label: 'CAP Inspection Agent',   tag: 'COMPLIANCE',     machine: 'macbook', model: 'claude_code',  color: '#FF3333' },
+  { id: 'research', label: 'Research Agent',          tag: 'RESEARCH',       machine: 'macbook', model: 'claude_code',  color: '#00FFD4' },
 ]
+
+function PacmanAgent({ color, running }: { color: string; running: boolean }) {
+  return (
+    <div style={{ position: 'relative', width: 28, height: 28, flexShrink: 0, marginTop: 2 }}>
+      <div style={{
+        position: 'absolute', width: 28, height: 14,
+        background: color, borderRadius: '14px 14px 0 0', top: 0,
+        transformOrigin: '50% 100%',
+        transform: running ? undefined : 'rotate(20deg)',
+        animation: running ? 'pacChompTop 0.2s ease-in-out infinite' : 'none',
+      }} />
+      <div style={{
+        position: 'absolute', width: 28, height: 14,
+        background: color, borderRadius: '0 0 14px 14px', bottom: 0,
+        transformOrigin: '50% 0%',
+        transform: running ? undefined : 'rotate(-20deg)',
+        animation: running ? 'pacChompBottom 0.2s ease-in-out infinite' : 'none',
+      }} />
+      <div style={{
+        position: 'absolute', width: 4, height: 4, borderRadius: '50%',
+        background: 'rgba(0,0,0,0.65)', top: 5, left: 6, zIndex: 2,
+      }} />
+    </div>
+  )
+}
 
 function SectionHeader({ n, title, subtitle }: { n: string; title: string; subtitle: string }) {
   return (
@@ -38,10 +63,12 @@ function AgentCard({
   agent,
   remote = false,
   delay = 0,
+  running = false,
 }: {
   agent: typeof VORA_AGENTS[0]
   remote?: boolean
   delay?: number
+  running?: boolean
 }) {
   return (
     <div
@@ -57,7 +84,7 @@ function AgentCard({
       onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = 'var(--vsurface2)')}
       onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = 'var(--vsurface)')}
     >
-      <span className="w-2 h-2 rounded-full mt-1 flex-shrink-0 animate-pulse-dot" style={{ background: agent.color }} />
+      <PacmanAgent color={agent.color} running={running} />
       <div className="flex-1 min-w-0">
         <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 16, color: 'var(--vtext)' }}>
           {agent.label}
@@ -106,6 +133,7 @@ export default function AgentsPage() {
   const [runs, setRuns] = useState<(AgentRun & { _isNew?: boolean })[]>([])
   const [loading, setLoading] = useState(true)
   const [statusFilter, setStatusFilter] = useState<'all' | 'success' | 'error'>('all')
+  const [agentStatuses, setAgentStatuses] = useState<Record<string, string>>({})
 
   useEffect(() => {
     async function load() {
@@ -123,6 +151,23 @@ export default function AgentsPage() {
     return () => { supabase.removeChannel(ch) }
   }, [])
 
+  useEffect(() => {
+    const poll = async () => {
+      try {
+        const res = await fetch('http://localhost:8001/api/agents')
+        if (res.ok) {
+          const agents = await res.json()
+          const statuses: Record<string, string> = {}
+          agents.forEach((a: any) => { statuses[a.id] = a.status })
+          setAgentStatuses(statuses)
+        }
+      } catch {}
+    }
+    poll()
+    const interval = setInterval(poll, 3000)
+    return () => clearInterval(interval)
+  }, [])
+
   const filteredRuns = runs.filter(r => statusFilter === 'all' || r.status === statusFilter)
 
   return (
@@ -132,7 +177,7 @@ export default function AgentsPage() {
       <section className="space-y-4 animate-fade-up" style={{ animationDelay: '0ms' }}>
         <SectionHeader n="01" title="Mac Studio Agents" subtitle="Vora Ventures · 5 agents · port 8001" />
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-          {VORA_AGENTS.map((a, i) => <AgentCard key={a.id} agent={a} delay={i * 40} />)}
+          {VORA_AGENTS.map((a, i) => <AgentCard key={a.id} agent={a} delay={i * 40} running={agentStatuses[a.id] === 'running'} />)}
         </div>
       </section>
 
@@ -140,7 +185,7 @@ export default function AgentsPage() {
       <section className="space-y-4 animate-fade-up" style={{ animationDelay: '100ms' }}>
         <SectionHeader n="02" title="OraLiva Agents" subtitle="Remote · MacBook · 5 agents" />
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-          {ORALIVA_AGENTS.map((a, i) => <AgentCard key={a.id} agent={a} remote delay={i * 40} />)}
+          {ORALIVA_AGENTS.map((a, i) => <AgentCard key={a.id} agent={a} remote delay={i * 40} running={agentStatuses[a.id] === 'running'} />)}
         </div>
       </section>
 

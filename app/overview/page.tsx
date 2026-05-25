@@ -31,32 +31,22 @@ function timeAgo(iso: string): string {
   return `${Math.floor(diff / 86400)}d ago`
 }
 
-function activityLevel(lastRun: string | undefined): 'hot' | 'warm' | 'idle' {
-  if (!lastRun) return 'idle'
-  const age = Date.now() - new Date(lastRun).getTime()
-  if (age < 3_600_000)  return 'hot'
-  if (age < 86_400_000) return 'warm'
-  return 'idle'
-}
-
-function PacmanAgent({ color, level }: { color: string; level: 'hot' | 'warm' | 'idle' }) {
-  const isActive = level !== 'idle'
-  const speed = level === 'hot' ? '0.2s' : '0.6s'
+function PacmanAgent({ color, running }: { color: string; running: boolean }) {
   return (
-    <div style={{ position: 'relative', width: 28, height: 28, flexShrink: 0, opacity: level === 'idle' ? 0.5 : 1 }}>
+    <div style={{ position: 'relative', width: 28, height: 28, flexShrink: 0 }}>
       <div style={{
         position: 'absolute', width: 28, height: 14,
         background: color, borderRadius: '14px 14px 0 0', top: 0,
         transformOrigin: '50% 100%',
-        transform: isActive ? undefined : 'rotate(20deg)',
-        animation: isActive ? `pacChompTop ${speed} ease-in-out infinite` : 'none',
+        transform: running ? undefined : 'rotate(20deg)',
+        animation: running ? 'pacChompTop 0.2s ease-in-out infinite' : 'none',
       }} />
       <div style={{
         position: 'absolute', width: 28, height: 14,
         background: color, borderRadius: '0 0 14px 14px', bottom: 0,
         transformOrigin: '50% 0%',
-        transform: isActive ? undefined : 'rotate(-20deg)',
-        animation: isActive ? `pacChompBottom ${speed} ease-in-out infinite` : 'none',
+        transform: running ? undefined : 'rotate(-20deg)',
+        animation: running ? 'pacChompBottom 0.2s ease-in-out infinite' : 'none',
       }} />
       <div style={{
         position: 'absolute', width: 4, height: 4, borderRadius: '50%',
@@ -188,6 +178,7 @@ export default function OverviewPage() {
   const [tickerRun,   setTickerRun]   = useState<any>(null)
   const [projectsExpanded, setProjectsExpanded] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [agentStatuses, setAgentStatuses] = useState<Record<string, string>>({})
 
   useEffect(() => {
     async function load() {
@@ -230,6 +221,23 @@ export default function OverviewPage() {
       })
       .subscribe()
     return () => { supabase.removeChannel(ch) }
+  }, [])
+
+  useEffect(() => {
+    const poll = async () => {
+      try {
+        const res = await fetch('http://localhost:8001/api/agents')
+        if (res.ok) {
+          const agents = await res.json()
+          const statuses: Record<string, string> = {}
+          agents.forEach((a: any) => { statuses[a.id] = a.status })
+          setAgentStatuses(statuses)
+        }
+      } catch {}
+    }
+    poll()
+    const interval = setInterval(poll, 3000)
+    return () => clearInterval(interval)
   }, [])
 
   // Derived data
@@ -448,7 +456,6 @@ export default function OverviewPage() {
             </div>
             {VORA_AGENTS.map((a, i) => {
               const lastRun = lastRunByAgent[a.id]
-              const level = activityLevel(lastRun)
               return (
                 <div
                   key={a.id}
@@ -461,7 +468,7 @@ export default function OverviewPage() {
                   }}
                 >
                   <div className="flex items-center gap-2.5">
-                    <PacmanAgent color={a.color} level={level} />
+                    <PacmanAgent color={a.color} running={agentStatuses[a.id] === 'running'} />
                     <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 12, color: 'var(--vtext)' }}>{a.label}</span>
                   </div>
                   <div className="flex items-center gap-3">
@@ -487,7 +494,6 @@ export default function OverviewPage() {
             </div>
             {ORALIVA_AGENTS.map((a, i) => {
               const lastRun = lastRunByAgent[a.id]
-              const level = activityLevel(lastRun)
               return (
                 <div
                   key={a.id}
@@ -500,7 +506,7 @@ export default function OverviewPage() {
                   }}
                 >
                   <div className="flex items-center gap-2.5">
-                    <PacmanAgent color={a.color} level={level} />
+                    <PacmanAgent color={a.color} running={agentStatuses[a.id] === 'running'} />
                     <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 12, color: 'var(--vtext)' }}>{a.label}</span>
                   </div>
                   <div className="flex items-center gap-2.5">
