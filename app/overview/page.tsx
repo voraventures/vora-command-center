@@ -10,17 +10,17 @@ import { supabase } from '@/lib/supabase'
 
 const VORA_AGENTS = [
   { id: 'finance-market',    label: 'Market Intelligence',  model: 'CLAUDE', color: '#00E676' },
-  { id: 'finance-portfolio', label: 'Portfolio Strategist', model: 'CLAUDE', color: '#00E676' },
-  { id: 'finance-savings',   label: 'Savings Optimizer',    model: 'QWEN3',  color: '#00E676' },
-  { id: 'finance-crypto',    label: 'Crypto & Alt Assets',  model: 'CLAUDE', color: '#00E676' },
-  { id: 'speech-coach',      label: 'Speech Coach',         model: 'QWEN3',  color: '#FFB800' },
+  { id: 'finance-portfolio', label: 'Portfolio Strategist', model: 'CLAUDE', color: '#00B4D8' },
+  { id: 'finance-savings',   label: 'Savings Optimizer',    model: 'QWEN3',  color: '#FFB800' },
+  { id: 'finance-crypto',    label: 'Crypto & Alt Assets',  model: 'CLAUDE', color: '#FF6B35' },
+  { id: 'speech-coach',      label: 'Speech Coach',         model: 'QWEN3',  color: '#FF4D8D' },
 ]
 const ORALIVA_AGENTS = [
   { id: 'email',    label: 'Email Agent',             model: 'QWEN3',       color: '#9C6FFF' },
-  { id: 'tasks',    label: 'Task & Assignment Agent',  model: 'QWEN3',      color: '#9C6FFF' },
-  { id: 'social',   label: 'OraLiva Social Agent',    model: 'QWEN3',       color: '#9C6FFF' },
-  { id: 'cap',      label: 'CAP Inspection Agent',    model: 'CLAUDE CODE', color: '#9C6FFF' },
-  { id: 'research', label: 'Research Agent',           model: 'CLAUDE CODE', color: '#9C6FFF' },
+  { id: 'tasks',    label: 'Task & Assignment Agent',  model: 'QWEN3',      color: '#7B61FF' },
+  { id: 'social',   label: 'OraLiva Social Agent',    model: 'QWEN3',       color: '#1D9BF0' },
+  { id: 'cap',      label: 'CAP Inspection Agent',    model: 'CLAUDE CODE', color: '#FF4444' },
+  { id: 'research', label: 'Research Agent',           model: 'CLAUDE CODE', color: '#00E5CC' },
 ]
 
 function timeAgo(iso: string): string {
@@ -39,42 +39,29 @@ function activityLevel(lastRun: string | undefined): 'hot' | 'warm' | 'idle' {
   return 'idle'
 }
 
-function ActivityDot({ lastRun }: { lastRun: string | undefined }) {
-  const level = activityLevel(lastRun)
-  const color = level === 'idle' ? '#252D45' : '#00E676'
-  const animation =
-    level === 'hot'  ? 'pulseDot 1s ease-in-out infinite' :
-    level === 'warm' ? 'pulseDot 3s ease-in-out infinite' : 'none'
+function PacmanAgent({ color, level }: { color: string; level: 'hot' | 'warm' | 'idle' }) {
+  const isActive = level !== 'idle'
+  const speed = level === 'hot' ? '0.3s' : '0.8s'
   return (
-    <span
-      style={{
-        display: 'inline-block', width: 8, height: 8, borderRadius: '50%',
-        background: color, flexShrink: 0,
-        animation,
-        opacity: level === 'idle' ? 0.4 : 1,
-      }}
-    />
-  )
-}
-
-function ActivityBars({ active }: { active: boolean }) {
-  const BAR_HEIGHTS = [6, 13, 9, 16, 11]
-  return (
-    <div style={{ display: 'flex', alignItems: 'flex-end', gap: 2, height: 16, width: 22 }}>
-      {BAR_HEIGHTS.map((h, i) => (
-        <div
-          key={i}
-          style={{
-            width: 3,
-            height: h,
-            background: active ? '#00E676' : '#252D45',
-            borderRadius: 1,
-            transformOrigin: 'bottom',
-            animation: active ? `audioBarPulse 0.65s ease-in-out ${i * 0.11}s infinite alternate` : 'none',
-            transition: 'background 300ms',
-          }}
-        />
-      ))}
+    <div style={{ position: 'relative', width: 22, height: 22, flexShrink: 0, opacity: level === 'idle' ? 0.22 : 1 }}>
+      <div style={{
+        position: 'absolute', width: 22, height: 11,
+        background: color, borderRadius: '11px 11px 0 0', top: 0,
+        transformOrigin: '50% 100%',
+        transform: isActive ? undefined : 'rotate(20deg)',
+        animation: isActive ? `pacChompTop ${speed} ease-in-out infinite` : 'none',
+      }} />
+      <div style={{
+        position: 'absolute', width: 22, height: 11,
+        background: color, borderRadius: '0 0 11px 11px', bottom: 0,
+        transformOrigin: '50% 0%',
+        transform: isActive ? undefined : 'rotate(-20deg)',
+        animation: isActive ? `pacChompBottom ${speed} ease-in-out infinite` : 'none',
+      }} />
+      <div style={{
+        position: 'absolute', width: 3, height: 3, borderRadius: '50%',
+        background: 'rgba(0,0,0,0.65)', top: 4, left: 5, zIndex: 2,
+      }} />
     </div>
   )
 }
@@ -474,7 +461,7 @@ export default function OverviewPage() {
                   }}
                 >
                   <div className="flex items-center gap-2.5">
-                    <ActivityDot lastRun={lastRun} />
+                    <PacmanAgent color={a.color} level={level} />
                     <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 12, color: 'var(--vtext)' }}>{a.label}</span>
                   </div>
                   <div className="flex items-center gap-3">
@@ -484,7 +471,6 @@ export default function OverviewPage() {
                     <span className="px-1.5 py-0.5 rounded" style={{ border: '1px solid var(--vborder)', background: 'var(--vsurface2)', fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 9, color: 'var(--vmuted)' }}>
                       {a.model}
                     </span>
-                    <ActivityBars active={level === 'hot'} />
                   </div>
                 </div>
               )
@@ -501,6 +487,7 @@ export default function OverviewPage() {
             </div>
             {ORALIVA_AGENTS.map((a, i) => {
               const lastRun = lastRunByAgent[a.id]
+              const level = activityLevel(lastRun)
               return (
                 <div
                   key={a.id}
@@ -513,7 +500,7 @@ export default function OverviewPage() {
                   }}
                 >
                   <div className="flex items-center gap-2.5">
-                    <ActivityDot lastRun={lastRun} />
+                    <PacmanAgent color={a.color} level={level} />
                     <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 12, color: 'var(--vtext)' }}>{a.label}</span>
                   </div>
                   <div className="flex items-center gap-2.5">

@@ -324,6 +324,16 @@
   100% { transform: scaleY(1);    opacity: 1; }
 }
 
+/* Pac-Man chomp — top/bottom halves of a circle, pivot at the joined edge */
+@keyframes pacChompTop {
+  0%, 100% { transform: rotate(20deg); }
+  50%       { transform: rotate(0deg); }
+}
+@keyframes pacChompBottom {
+  0%, 100% { transform: rotate(-20deg); }
+  50%       { transform: rotate(0deg); }
+}
+
 /* Slide in from right — live ticker */
 @keyframes slideInRight {
   from { opacity: 0; transform: translateX(20px); }
