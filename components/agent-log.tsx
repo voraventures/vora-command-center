@@ -17,12 +17,12 @@ function MachinePill({ machine }: { machine: string }) {
     <span
       className="inline-block px-2 py-0.5 rounded text-[10px]"
       style={{
-        fontFamily: 'var(--font-syne)',
+        fontFamily: 'var(--font-mono)',
         fontWeight: 400,
         letterSpacing: '0.05em',
-        background: isStudio ? 'var(--vtext)' : 'transparent',
-        color: isStudio ? '#FFFFFF' : 'var(--vtext2)',
-        border: isStudio ? 'none' : '1px solid var(--vborder2)',
+        background: 'var(--vsurface2)',
+        color: 'var(--vtext2)',
+        border: '1px solid var(--vborder)',
       }}
     >
       {isStudio ? 'MAC STUDIO' : 'MACBOOK'}
@@ -36,11 +36,11 @@ function StatusPill({ status }: { status: string }) {
     <span
       className="inline-block px-2 py-0.5 rounded text-[10px]"
       style={{
-        fontFamily: 'var(--font-syne)',
+        fontFamily: 'var(--font-mono)',
         fontWeight: 400,
         letterSpacing: '0.08em',
-        background: ok ? 'rgba(5,150,105,0.15)' : 'rgba(220,38,38,0.15)',
-        color: ok ? '#059669' : '#DC2626',
+        background: ok ? 'rgba(0,230,118,0.12)' : 'rgba(255,68,68,0.12)',
+        color: ok ? '#00E676' : '#FF4444',
       }}
     >
       {status.toUpperCase()}
@@ -72,13 +72,13 @@ function Row({ run, isNew, delay }: { run: AgentRun; isNew?: boolean; delay?: nu
         <div className="flex items-center gap-2">
           <span
             className="w-2 h-2 rounded-full flex-shrink-0"
-            style={{ background: run.status === 'success' ? 'var(--vgreen)' : 'var(--vred)' }}
+            style={{ background: run.status === 'success' ? '#00E676' : '#FF4444' }}
           />
           <div>
-            <div style={{ fontFamily: 'var(--font-syne)', fontSize: 12, color: 'var(--vtext)', fontWeight: 500 }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 500, fontSize: 13, color: 'var(--vtext)' }}>
               {run.agent_label}
             </div>
-            <div style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 10, color: 'var(--vmuted)' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}>
               {run.agent_id}
             </div>
           </div>
@@ -89,21 +89,21 @@ function Row({ run, isNew, delay }: { run: AgentRun; isNew?: boolean; delay?: nu
         <span
           className="px-1.5 py-0.5 rounded border text-[10px]"
           style={{
-            fontFamily: 'var(--font-syne)',
+            fontFamily: 'var(--font-mono)',
             fontWeight: 400,
             color: 'var(--vmuted)',
             borderColor: 'var(--vborder)',
-            background: 'var(--vbg)',
+            background: 'var(--vsurface2)',
           }}
         >
           {run.model}
         </span>
       </td>
-      <td className="px-3 py-3" style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}>
+      <td className="px-3 py-3" style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}>
         {run.duration_ms != null ? `${run.duration_ms}ms` : '—'}
       </td>
       <td className="px-3 py-3"><StatusPill status={run.status} /></td>
-      <td className="px-3 py-3" style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 11, color: 'var(--vdim)' }}>
+      <td className="px-3 py-3" style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: 'var(--vdim)' }}>
         {timeAgo(run.ran_at)}
       </td>
     </tr>
@@ -136,12 +136,12 @@ export function AgentLog({ initial, limit = 5, realtime = false }: Props) {
       {/* Header */}
       <div
         className="flex items-center justify-between px-4 py-3 border-b"
-        style={{ borderColor: 'var(--vborder)', background: 'var(--vbg)' }}
+        style={{ borderColor: 'var(--vborder)', background: 'var(--vsurface2)' }}
       >
         <span
           style={{
-            fontFamily: 'var(--font-syne)',
-            fontWeight: 400,
+            fontFamily: 'var(--font-mono)',
+            fontWeight: 500,
             fontSize: 10,
             color: 'var(--vmuted)',
             letterSpacing: '0.3em',
@@ -151,8 +151,8 @@ export function AgentLog({ initial, limit = 5, realtime = false }: Props) {
         </span>
         {realtime && (
           <span className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full animate-pulse-dot" style={{ background: 'var(--vgreen)' }} />
-            <span style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 10, color: 'var(--vmuted)', letterSpacing: '0.05em' }}>
+            <span className="w-1.5 h-1.5 rounded-full animate-pulse-dot" style={{ background: '#00E676' }} />
+            <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 10, color: '#00E676', letterSpacing: '0.05em' }}>
               LIVE
             </span>
           </span>
@@ -162,25 +162,25 @@ export function AgentLog({ initial, limit = 5, realtime = false }: Props) {
       {displayed.length === 0 ? (
         <div
           className="mx-4 my-6 flex flex-col items-center justify-center py-10 rounded-lg border border-dashed"
-          style={{ borderColor: 'var(--vborder)' }}
+          style={{ borderColor: 'var(--vborder2)' }}
         >
           <Bot className="w-8 h-8 mb-3" style={{ color: 'var(--vdim)' }} />
-          <div style={{ fontFamily: 'var(--font-syne)', fontWeight: 700, fontSize: 14, color: 'var(--vmuted)' }}>
+          <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, color: 'var(--vtext2)' }}>
             No agent runs yet
           </div>
-          <div className="mt-1" style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 11, color: 'var(--vdim)' }}>
+          <div className="mt-1" style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}>
             Start your local Hermes server to begin
           </div>
         </div>
       ) : (
         <table className="w-full">
           <thead>
-            <tr style={{ borderBottom: '1px solid var(--vborder)', background: 'var(--vbg)' }}>
+            <tr style={{ borderBottom: '1px solid var(--vborder)', background: 'var(--vsurface2)' }}>
               {['Agent', 'Machine', 'Model', 'Duration', 'Status', 'Time'].map((h) => (
                 <th
                   key={h}
                   className="px-4 py-2 text-left"
-                  style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 10, color: 'var(--vdim)', letterSpacing: '0.1em' }}
+                  style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 10, color: 'var(--vmuted)', letterSpacing: '0.1em' }}
                 >
                   {h.toUpperCase()}
                 </th>

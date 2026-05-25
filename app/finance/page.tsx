@@ -37,15 +37,15 @@ export default function FinancePage() {
       {/* Banner */}
       <div
         className="rounded-lg border animate-fade-up"
-        style={{ background: 'var(--vsurface)', borderColor: 'var(--vborder)', borderTop: '3px solid #059669' }}
+        style={{ background: 'var(--vsurface)', borderColor: 'var(--vborder)', borderLeft: '3px solid #00E676' }}
       >
         <div className="px-6 py-5">
           <div
             style={{
-              fontFamily: 'var(--font-syne)',
+              fontFamily: 'var(--font-mono)',
               fontWeight: 400,
               fontSize: 10,
-              color: '#059669',
+              color: '#00E676',
               letterSpacing: '0.2em',
               marginBottom: 8,
             }}
@@ -53,13 +53,13 @@ export default function FinancePage() {
             FINANCE AGENT SUITE
           </div>
           <div
-            style={{ fontFamily: 'var(--font-syne)', fontWeight: 800, fontSize: 24, color: 'var(--vtext)', lineHeight: 1, letterSpacing: '-0.02em' }}
+            style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 24, color: 'var(--vtext)', lineHeight: 1 }}
           >
             Local Intelligence Stack
           </div>
           <div
             className="mt-2"
-            style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 13, color: 'var(--vmuted)' }}
+            style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 13, color: 'var(--vmuted)' }}
           >
             4 specialized agents &middot; Mac Studio M4 Max &middot; qwen3:14b via Ollama
           </div>
@@ -73,9 +73,9 @@ export default function FinancePage() {
             key={id}
             className="card-hover rounded-lg border animate-fade-up"
             style={{
-              background: 'var(--vsurface)',
+              background: 'rgba(0,230,118,0.04)',
               borderColor: 'var(--vborder)',
-              borderTop: '3px solid #059669',
+              borderLeft: '3px solid #00E676',
               animationDelay: `${i * 60}ms`,
             }}
           >
@@ -83,20 +83,20 @@ export default function FinancePage() {
               <div className="flex items-start gap-3 mb-3">
                 <span
                   className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0"
-                  style={{ background: 'rgba(5,150,105,0.12)' }}
+                  style={{ background: 'rgba(0,230,118,0.12)' }}
                 >
-                  <Icon className="w-4 h-4" style={{ color: '#059669' }} />
+                  <Icon className="w-4 h-4" style={{ color: '#00E676' }} />
                 </span>
                 <div>
-                  <div style={{ fontFamily: 'var(--font-syne)', fontWeight: 700, fontSize: 14, color: 'var(--vtext)' }}>
+                  <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, color: 'var(--vtext)' }}>
                     {label}
                   </div>
-                  <div style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 10, color: 'var(--vmuted)', marginTop: 2 }}>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 10, color: 'var(--vmuted)', marginTop: 2 }}>
                     mac_studio &middot; {model}
                   </div>
                 </div>
               </div>
-              <div style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 12, color: 'var(--vmuted)', lineHeight: 1.6 }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 12, color: 'var(--vmuted)', lineHeight: 1.6 }}>
                 {desc}
               </div>
             </div>

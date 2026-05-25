@@ -33,15 +33,15 @@ export default function SpeechPage() {
       {/* Banner */}
       <div
         className="rounded-lg border animate-fade-up"
-        style={{ background: 'var(--vsurface)', borderColor: 'var(--vborder)', borderTop: '3px solid #D97706' }}
+        style={{ background: 'var(--vsurface)', borderColor: 'var(--vborder)', borderLeft: '3px solid #FFB800' }}
       >
         <div className="px-6 py-5">
           <div
             style={{
-              fontFamily: 'var(--font-syne)',
+              fontFamily: 'var(--font-mono)',
               fontWeight: 400,
               fontSize: 10,
-              color: '#D97706',
+              color: '#FFB800',
               letterSpacing: '0.2em',
               marginBottom: 8,
             }}
@@ -49,13 +49,13 @@ export default function SpeechPage() {
             SPEECH COACH
           </div>
           <div
-            style={{ fontFamily: 'var(--font-syne)', fontWeight: 800, fontSize: 24, color: 'var(--vtext)', lineHeight: 1, letterSpacing: '-0.02em' }}
+            style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 24, color: 'var(--vtext)', lineHeight: 1 }}
           >
             Advanced Accent Refinement
           </div>
           <div
             className="mt-2"
-            style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 13, color: 'var(--vmuted)' }}
+            style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 13, color: 'var(--vmuted)' }}
           >
             Spanish native &rarr; American English &middot; Phoneme, prosody &amp; fluency pipeline &middot; Mac Studio M4 Max
           </div>
@@ -69,9 +69,9 @@ export default function SpeechPage() {
             key={id}
             className="card-hover rounded-lg border animate-fade-up"
             style={{
-              background: 'var(--vsurface)',
+              background: 'rgba(255,184,0,0.04)',
               borderColor: 'var(--vborder)',
-              borderTop: '3px solid #D97706',
+              borderLeft: '3px solid #FFB800',
               animationDelay: `${i * 60}ms`,
             }}
           >
@@ -79,17 +79,17 @@ export default function SpeechPage() {
               <div className="flex items-start gap-3 mb-3">
                 <span
                   className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0"
-                  style={{ background: 'rgba(217,119,6,0.12)' }}
+                  style={{ background: 'rgba(255,184,0,0.12)' }}
                 >
-                  <Icon className="w-4 h-4" style={{ color: '#D97706' }} />
+                  <Icon className="w-4 h-4" style={{ color: '#FFB800' }} />
                 </span>
                 <div
-                  style={{ fontFamily: 'var(--font-syne)', fontWeight: 700, fontSize: 14, color: 'var(--vtext)' }}
+                  style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, color: 'var(--vtext)' }}
                 >
                   {label}
                 </div>
               </div>
-              <div style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 12, color: 'var(--vmuted)', lineHeight: 1.6 }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 12, color: 'var(--vmuted)', lineHeight: 1.6 }}>
                 {desc}
               </div>
             </div>

@@ -1,13 +1,19 @@
 import type { Metadata } from 'next'
-import { Syne } from 'next/font/google'
+import { Playfair_Display, DM_Mono } from 'next/font/google'
 import './globals.css'
 import { Sidebar } from '@/components/sidebar'
 import { TopBar } from '@/components/top-bar'
 
-const syne = Syne({
+const playfair = Playfair_Display({
   subsets: ['latin'],
-  weight: ['400', '700', '800'],
-  variable: '--font-syne',
+  weight: ['400', '700', '900'],
+  variable: '--font-display',
+})
+
+const dmMono = DM_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  variable: '--font-mono',
 })
 
 export const metadata: Metadata = {
@@ -17,8 +23,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={syne.variable}>
+    <html lang="en" className={`${playfair.variable} ${dmMono.variable}`}>
+      <body>
         <div className="flex h-screen overflow-hidden">
           <Sidebar />
           <div className="flex-1 flex flex-col overflow-hidden">

@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
 import { CountUp } from './count-up'
+import { AreaChart, Area, ResponsiveContainer } from 'recharts'
 
 interface Props {
   totalMrr: number
@@ -10,116 +10,189 @@ interface Props {
   hermesCount: number
   subsDelta: number
   pctToTarget: number
+  mrrSparkline?: number[]
+  subsSparkline?: number[]
+  agentSparkline?: number[]
+  hermesSparkline?: number[]
 }
 
-interface CellProps {
+const SHAPE = [2, 5, 3, 8, 6, 12, 10]
+
+function MiniSparkline({ data, accent, gradId }: { data: number[]; accent: string; gradId: string }) {
+  const active = data.some((v) => v > 0) ? data : SHAPE
+  const chartData = active.map((v, i) => ({ v, i }))
+  return (
+    <ResponsiveContainer width="100%" height="100%">
+      <AreaChart data={chartData} margin={{ top: 2, right: 0, bottom: 0, left: 0 }}>
+        <defs>
+          <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={accent} stopOpacity={0.3} />
+            <stop offset="100%" stopColor={accent} stopOpacity={0} />
+          </linearGradient>
+        </defs>
+        <Area
+          type="monotone"
+          dataKey="v"
+          stroke={accent}
+          strokeWidth={2}
+          fill={`url(#${gradId})`}
+          dot={false}
+          isAnimationActive={false}
+        />
+      </AreaChart>
+    </ResponsiveContainer>
+  )
+}
+
+function StatCard({
+  label,
+  value,
+  prefix = '',
+  suffix = '',
+  sublabel,
+  sublabelColor,
+  accent,
+  sparkline,
+  gradId,
+  delay = 0,
+}: {
+  label: string
   value: number
   prefix?: string
   suffix?: string
-  label: string
-  sub: React.ReactNode
+  sublabel: string
+  sublabelColor: string
   accent: string
-  accentBg: string
-  bordered?: boolean
+  sparkline: number[]
+  gradId: string
   delay?: number
-}
-
-function StatCell({ value, prefix = '', suffix = '', label, sub, accent, accentBg, bordered = true, delay = 0 }: CellProps) {
-  const [hovered, setHovered] = useState(false)
-
+}) {
   return (
     <div
-      className="flex-1 px-6 py-6 min-w-0 cursor-default animate-fade-up transition-colors duration-150"
+      className="animate-fade-up"
       style={{
-        borderRight: bordered ? '1px solid var(--vborder)' : undefined,
+        background: '#161B2E',
+        border: '1px solid #252D45',
+        borderRadius: 12,
+        padding: 20,
+        position: 'relative',
+        minHeight: 116,
         animationDelay: `${delay}ms`,
-        background: hovered ? accentBg : 'transparent',
       }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
     >
+      {/* Label — top left */}
       <div
-        className="tabular-nums leading-none"
         style={{
-          fontFamily: 'var(--font-syne)',
-          fontWeight: 800,
-          fontSize: 48,
-          color: accent,
-          lineHeight: 1,
-        }}
-      >
-        <CountUp target={value} prefix={prefix} suffix={suffix} />
-      </div>
-      <div
-        className="mt-3"
-        style={{
-          fontFamily: 'var(--font-syne)',
+          fontFamily: 'var(--font-mono)',
           fontWeight: 400,
-          fontSize: 11,
-          color: 'var(--vmuted)',
-          letterSpacing: '0.08em',
+          fontSize: 10,
+          color: '#5A6A8A',
+          letterSpacing: '0.25em',
           textTransform: 'uppercase',
         }}
       >
         {label}
       </div>
-      <div className="mt-1" style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 11 }}>
-        {sub}
+
+      {/* Sparkline — absolute top-right, 44% width, 56px tall */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 14,
+          right: 14,
+          width: '44%',
+          height: 56,
+          pointerEvents: 'none',
+        }}
+      >
+        <MiniSparkline data={sparkline} accent={accent} gradId={gradId} />
+      </div>
+
+      {/* Big number */}
+      <div
+        className="tabular-nums"
+        style={{
+          fontFamily: 'var(--font-display)',
+          fontWeight: 900,
+          fontSize: 48,
+          color: '#F0F4FF',
+          lineHeight: 1,
+          marginTop: 18,
+        }}
+      >
+        {prefix}<CountUp target={value} />{suffix}
+      </div>
+
+      {/* Sublabel */}
+      <div
+        style={{
+          fontFamily: 'var(--font-mono)',
+          fontWeight: 400,
+          fontSize: 11,
+          color: sublabelColor,
+          marginTop: 6,
+        }}
+      >
+        {sublabel}
       </div>
     </div>
   )
 }
 
-export function StatStrip({ totalMrr, totalSubs, agentCount, hermesCount, subsDelta, pctToTarget }: Props) {
+const EMPTY: number[] = []
+
+export function StatStrip({
+  totalMrr, totalSubs, agentCount, hermesCount, subsDelta, pctToTarget,
+  mrrSparkline = EMPTY,
+  subsSparkline = EMPTY,
+  agentSparkline = EMPTY,
+  hermesSparkline = EMPTY,
+}: Props) {
+  const subLabel = subsDelta !== 0
+    ? `${subsDelta > 0 ? '+' : ''}${subsDelta} vs prev snapshot`
+    : 'no change'
+
   return (
-    <div
-      className="flex rounded-lg border overflow-hidden"
-      style={{ background: 'var(--vsurface)', borderColor: 'var(--vborder)' }}
-    >
-      <StatCell
+    <div className="grid grid-cols-4 gap-3">
+      <StatCard
+        label="Total MRR"
         value={totalMrr}
         prefix="$"
-        label="Total MRR"
-        accent="var(--vgreen)"
-        accentBg="var(--green-bg)"
-        sub={
-          <span style={{ color: 'var(--spark)' }}>
-            {pctToTarget.toFixed(1)}% to $5K Florida trigger
-          </span>
-        }
+        accent="#00E676"
+        sparkline={mrrSparkline}
+        gradId="sg-mrr"
+        sublabelColor="#00E676"
+        sublabel={`${pctToTarget.toFixed(1)}% to $5K FL trigger`}
         delay={0}
       />
-      <StatCell
-        value={totalSubs}
+      <StatCard
         label="Subscribers"
-        accent="var(--twitterblue)"
-        accentBg="var(--twitter-bg)"
-        sub={
-          subsDelta !== 0 ? (
-            <span style={{ color: subsDelta > 0 ? 'var(--vgreen)' : 'var(--vred)' }}>
-              {subsDelta > 0 ? '+' : ''}{subsDelta} vs prev snapshot
-            </span>
-          ) : (
-            <span style={{ color: 'var(--vdim)' }}>no change</span>
-          )
-        }
+        value={totalSubs}
+        accent="#9C6FFF"
+        sparkline={subsSparkline}
+        gradId="sg-subs"
+        sublabelColor="#9C6FFF"
+        sublabel={subLabel}
         delay={60}
       />
-      <StatCell
-        value={agentCount}
+      <StatCard
         label="Agent Runs (24h)"
-        accent="var(--hermes)"
-        accentBg="var(--hermes-bg)"
-        sub={<span style={{ color: 'var(--vdim)' }}>Hermes · Ollama stack</span>}
+        value={agentCount}
+        accent="#00E676"
+        sparkline={agentSparkline}
+        gradId="sg-agents"
+        sublabelColor="#5A6A8A"
+        sublabel="Hermes · Ollama stack"
         delay={120}
       />
-      <StatCell
-        value={hermesCount}
+      <StatCard
         label="Hermes Actions (24h)"
-        accent="var(--speech)"
-        accentBg="var(--speech-bg)"
-        sub={<span style={{ color: 'var(--vdim)' }}>across all products</span>}
-        bordered={false}
+        value={hermesCount}
+        accent="#9C6FFF"
+        sparkline={hermesSparkline}
+        gradId="sg-hermes"
+        sublabelColor="#5A6A8A"
+        sublabel="across all products"
         delay={180}
       />
     </div>

@@ -30,22 +30,22 @@ function LiveClock() {
   return (
     <span
       className="tabular-nums"
-      style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 12, color: 'var(--vmuted)' }}
+      style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 13, color: 'var(--vmuted)' }}
     >
       {day} {date} &nbsp; {clock}
     </span>
   )
 }
 
-function StatusPill({ color, label }: { color: string; label: string }) {
+function StatusPill({ dotColor, textColor, label }: { dotColor: string; textColor: string; label: string }) {
   return (
     <span
       className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border"
       style={{
-        fontFamily: 'var(--font-syne)',
-        fontSize: 10,
+        fontFamily: 'var(--font-mono)',
+        fontSize: 9,
         fontWeight: 400,
-        color: 'var(--vmuted)',
+        color: textColor,
         borderColor: 'var(--vborder)',
         background: 'var(--vsurface)',
         letterSpacing: '0.05em',
@@ -53,7 +53,7 @@ function StatusPill({ color, label }: { color: string; label: string }) {
     >
       <span
         className="w-1.5 h-1.5 rounded-full animate-pulse-dot"
-        style={{ background: color }}
+        style={{ background: dotColor }}
       />
       {label}
     </span>
@@ -70,17 +70,17 @@ export function TopBar() {
       className="flex items-center justify-between px-6 lg:px-8 border-b flex-shrink-0"
       style={{
         height: 56,
-        background: 'var(--vsurface)',
+        background: '#0D1120',
         borderColor: 'var(--vborder)',
       }}
     >
       <h1
         style={{
-          fontFamily: 'var(--font-syne)',
-          fontWeight: 800,
-          fontSize: 20,
+          fontFamily: 'var(--font-display)',
+          fontWeight: 700,
+          fontSize: 24,
           color: 'var(--vtext)',
-          letterSpacing: '-0.02em',
+          letterSpacing: '-0.01em',
         }}
       >
         {title}
@@ -89,8 +89,8 @@ export function TopBar() {
       <div className="flex items-center gap-3">
         <LiveClock />
         <div className="w-px h-4" style={{ background: 'var(--vborder)' }} />
-        <StatusPill color="var(--vgreen)"  label="SUPABASE LIVE" />
-        <StatusPill color="var(--hermes)" label="HERMES IDLE" />
+        <StatusPill dotColor="var(--vgreen)"  textColor="var(--vgreen)"  label="SUPABASE LIVE" />
+        <StatusPill dotColor="var(--purple)"  textColor="var(--purple)"  label="HERMES IDLE" />
       </div>
     </header>
   )

@@ -7,9 +7,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-syne);
-  --font-mono: var(--font-syne);
-  --font-heading: var(--font-syne);
+  --font-sans: var(--font-mono);
+  --font-heading: var(--font-display);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -60,103 +59,110 @@
 
 :root {
   /*
-   * Vora design tokens — ALL direct hex values.
+   * Vora dark design tokens — ALL direct hex values.
    * Never alias through shadcn-reserved names (--muted, --accent, --border, etc.)
-   * because shadcn's compat block below will overwrite the shared name, causing
-   * color values to resolve to shadcn background tints instead of text colors.
    */
 
   /* Surfaces */
-  --vbg:       #F5F5F0;
-  --vsurface:  #FFFFFF;
-  --vsurface2: #F0F0EB;
+  --vbg:       #0F1117;
+  --vsurface:  #161B2E;
+  --vsurface2: #1E2540;
 
   /* Borders */
-  --vborder:  #E2E2DC;
-  --vborder2: #CECEC8;
+  --vborder:  #252D45;
+  --vborder2: #2F3A58;
 
-  /* Text hierarchy — all dark and readable on light backgrounds */
-  --vtext:  #0A0A08;   /* near-black body/heading */
-  --vtext2: #3A3A35;   /* dark secondary text */
-  --vmuted: #6B6B63;   /* medium gray — labels, metadata */
-  --vdim:   #9A9A92;   /* lighter gray — timestamps, hints */
+  /* Text hierarchy */
+  --vtext:  #F0F4FF;
+  --vtext2: #A8B4D0;
+  --vmuted: #5A6A8A;
+  --vdim:   #3D4F70;
 
   /* Accent palette */
-  --spark:      #E8194B;
-  --spark-bg:   rgba(232, 25, 75, 0.06);
-  --twitter:    #0066FF;
-  --twitterblue:#0066FF;
-  --twitter-bg: rgba(0, 102, 255, 0.06);
-  --hermes:     #7C3AED;
-  --hermes-bg:  rgba(124, 58, 237, 0.06);
-  --finance:    #059669;
-  --finance-bg: rgba(5, 150, 105, 0.06);
-  --speech:     #D97706;
-  --speech-bg:  rgba(217, 119, 6, 0.06);
-  --green:      #059669;
-  --green-bg:   rgba(5, 150, 105, 0.06);
-  --vgreen:     #059669;
-  --red:        #DC2626;
-  --vred:       #DC2626;
-  --yellow:     #D97706;
-  --vyellow:    #D97706;
+  --spark:       #FF4D8D;
+  --spark-bg:    rgba(255, 77, 141, 0.15);
+  --spark-dim:   rgba(255, 77, 141, 0.15);
+  --twitter:     #1D9BF0;
+  --twitterblue: #1D9BF0;
+  --twitter-bg:  rgba(29, 155, 240, 0.15);
+  --twitter-dim: rgba(29, 155, 240, 0.15);
+  --hermes:      #9C6FFF;
+  --hermes-bg:   rgba(156, 111, 255, 0.15);
+  --finance:     #00E676;
+  --finance-bg:  rgba(0, 230, 118, 0.15);
+  --finance-dim: rgba(0, 230, 118, 0.15);
+  --speech:      #FFB800;
+  --speech-bg:   rgba(255, 184, 0, 0.15);
+  --speech-dim:  rgba(255, 184, 0, 0.15);
+  --green:       #00E676;
+  --green-bg:    rgba(0, 230, 118, 0.15);
+  --green-dim:   rgba(0, 230, 118, 0.15);
+  --green-glow:  rgba(0, 230, 118, 0.25);
+  --vgreen:      #00E676;
+  --purple:      #9C6FFF;
+  --purple-bg:   rgba(156, 111, 255, 0.15);
+  --purple-dim:  rgba(156, 111, 255, 0.15);
+  --purple-glow: rgba(156, 111, 255, 0.25);
+  --red:         #FF4444;
+  --vred:        #FF4444;
+  --yellow:      #FFB800;
+  --vyellow:     #FFB800;
+  --orange:      #FF6B35;
 
-  /* Canonical short aliases (do not chain through shadcn names) */
-  --bg:      #F5F5F0;
-  --surface: #FFFFFF;
-  --surface2:#F0F0EB;
-  --border:  #E2E2DC;
-  --border2: #CECEC8;
-  --text:    #0A0A08;
-  --text2:   #3A3A35;
+  /* Canonical short aliases */
+  --bg:       #0F1117;
+  --surface:  #161B2E;
+  --surface2: #1E2540;
+  --text:     #F0F4FF;
+  --text2:    #A8B4D0;
+  --dim:      #2A3450;
 
-  /*
-   * shadcn compat — self-contained, uses shadcn's own naming conventions.
-   * --muted here is a BACKGROUND tint (shadcn convention), not a text color.
-   * Our text muted is --vmuted above.
-   */
-  --background:         #F5F5F0;
-  --foreground:         #0A0A08;
-  --card:               #FFFFFF;
-  --card-foreground:    #0A0A08;
-  --popover:            #FFFFFF;
-  --popover-foreground: #0A0A08;
-  --primary:            #0A0A08;
-  --primary-foreground: #FFFFFF;
-  --secondary:          #F0F0EB;
-  --secondary-foreground: #0A0A08;
-  --muted:              #F0F0EB;
-  --muted-foreground:   #6B6B63;
-  --accent:             #F0F0EB;
-  --accent-foreground:  #0A0A08;
-  --destructive:        #DC2626;
-  --border:             #E2E2DC;
-  --input:              #E2E2DC;
-  --ring:               #CECEC8;
-  --chart-1:            #E8194B;
-  --chart-2:            #059669;
-  --chart-3:            #0066FF;
-  --chart-4:            #7C3AED;
-  --chart-5:            #D97706;
-  --radius:             0.5rem;
-  --sidebar:            #FFFFFF;
-  --sidebar-foreground: #0A0A08;
-  --sidebar-primary:    #0A0A08;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent:     #F0F0EB;
-  --sidebar-accent-foreground: #0A0A08;
-  --sidebar-border:     #E2E2DC;
-  --sidebar-ring:       #CECEC8;
+  /* shadcn compat — dark theme, self-contained */
+  --background:           #0F1117;
+  --foreground:           #F0F4FF;
+  --card:                 #161B2E;
+  --card-foreground:      #F0F4FF;
+  --popover:              #1E2540;
+  --popover-foreground:   #F0F4FF;
+  --primary:              #00E676;
+  --primary-foreground:   #0F1117;
+  --secondary:            #1E2540;
+  --secondary-foreground: #F0F4FF;
+  --muted:                #1E2540;
+  --muted-foreground:     #5A6A8A;
+  --accent:               #1E2540;
+  --accent-foreground:    #F0F4FF;
+  --destructive:          #FF4444;
+  --border:               #252D45;
+  --input:                #252D45;
+  --ring:                 #2F3A58;
+  --chart-1:              #FF4D8D;
+  --chart-2:              #00E676;
+  --chart-3:              #1D9BF0;
+  --chart-4:              #9C6FFF;
+  --chart-5:              #FFB800;
+  --radius:               0.5rem;
+  --sidebar:              #0D1120;
+  --sidebar-foreground:   #F0F4FF;
+  --sidebar-primary:      #00E676;
+  --sidebar-primary-foreground: #0F1117;
+  --sidebar-accent:       #1E2540;
+  --sidebar-accent-foreground: #F0F4FF;
+  --sidebar-border:       #252D45;
+  --sidebar-ring:         #2F3A58;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    background-color: var(--vbg);
+  }
   body {
     background-color: var(--vbg);
     color: var(--vtext);
-    font-family: var(--font-syne), system-ui, sans-serif;
+    font-family: var(--font-mono), monospace;
     -webkit-font-smoothing: antialiased;
   }
 }
@@ -188,7 +194,7 @@
 
 @keyframes pulseDot {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.5; transform: scale(1.35); }
+  50%       { opacity: 0.4; transform: scale(1.4); }
 }
 
 @keyframes spin {
@@ -201,9 +207,9 @@
 .animate-slide-in-left  { animation: slideInLeft 0.35s ease-out both; }
 .animate-pulse-dot      { animation: pulseDot 2s ease-in-out infinite; }
 
-/* Skeleton shimmer — light gray tones */
+/* Skeleton shimmer — dark tones */
 .skeleton {
-  background: linear-gradient(90deg, #F0F0EB 25%, #E5E5E0 50%, #F0F0EB 75%);
+  background: linear-gradient(90deg, #1E2540 25%, #252D45 50%, #1E2540 75%);
   background-size: 400px 100%;
   animation: shimmer 1.4s ease-in-out infinite;
   border-radius: 4px;
@@ -217,11 +223,11 @@
 
 /* Product card hover */
 .product-card {
-  transition: box-shadow 0.2s ease-out, background 0.2s ease-out, transform 0.2s ease-out;
+  transition: box-shadow 0.2s ease-out, border-color 0.2s ease-out, transform 0.2s ease-out;
   cursor: pointer;
 }
 .product-card:hover {
-  box-shadow: 0 6px 24px rgba(10, 10, 8, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   transform: translateY(-2px);
 }
 
@@ -230,6 +236,6 @@
   transition: box-shadow 0.2s ease-out, transform 0.2s ease-out;
 }
 .card-hover:hover {
-  box-shadow: 0 4px 16px rgba(10, 10, 8, 0.06);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
   transform: translateY(-1px);
 }

@@ -3,22 +3,23 @@ import { ProductCard } from '@/components/product-card'
 import { AgentLog } from '@/components/agent-log'
 import { HermesFeed } from '@/components/hermes-feed'
 import { StatStrip } from '@/components/stat-strip'
+import { OverviewRevenueChart } from '@/components/overview-revenue-chart'
+import { SubscriberDonut } from '@/components/subscriber-donut'
 import { Settings } from 'lucide-react'
 
 export const revalidate = 30
 
 const FINANCE_AGENTS = [
-  { id: 'market-intel',     label: 'Market Intelligence' },
-  { id: 'portfolio',        label: 'Portfolio Strategist' },
-  { id: 'savings',          label: 'Savings Optimizer' },
-  { id: 'finance-crypto',   label: 'Crypto & Alt Assets' },
+  { id: 'market-intel',   label: 'Market Intelligence' },
+  { id: 'portfolio',      label: 'Portfolio Strategist' },
+  { id: 'savings',        label: 'Savings Optimizer' },
+  { id: 'finance-crypto', label: 'Crypto & Alt Assets' },
 ]
 
 function LocalCard({
   accentColor,
   label,
   pill,
-  pillBg,
   pillColor,
   footer,
   children,
@@ -27,7 +28,6 @@ function LocalCard({
   accentColor: string
   label: string
   pill: string
-  pillBg: string
   pillColor: string
   footer: string
   children: React.ReactNode
@@ -35,48 +35,49 @@ function LocalCard({
 }) {
   return (
     <div
-      className="product-card rounded-lg border flex flex-col animate-fade-up"
+      className="product-card rounded-lg flex flex-col animate-fade-up"
       style={{
-        background: 'var(--vsurface)',
-        borderColor: 'var(--vborder)',
-        borderTop: `3px solid ${accentColor}`,
+        background: '#161B2E',
+        border: '1px solid #252D45',
+        borderLeft: `3px solid ${accentColor}`,
+        borderRadius: 12,
         animationDelay: `${animDelay}ms`,
       }}
     >
       <div className="px-5 pt-5 pb-4 flex items-start justify-between">
-        <div>
-          <div className="flex items-center gap-2">
-            <span
-              style={{
-                fontFamily: 'var(--font-syne)',
-                fontWeight: 700,
-                fontSize: 16,
-                color: 'var(--vtext)',
-              }}
-            >
-              {label}
-            </span>
-            <span
-              className="px-1.5 py-0.5 rounded text-[8px]"
-              style={{
-                fontFamily: 'var(--font-syne)',
-                fontWeight: 400,
-                letterSpacing: '0.1em',
-                background: pillBg,
-                color: pillColor,
-              }}
-            >
-              {pill}
-            </span>
-          </div>
+        <div className="flex items-center gap-2">
+          <span
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontWeight: 700,
+              fontSize: 18,
+              color: '#F0F4FF',
+            }}
+          >
+            {label}
+          </span>
+          <span
+            className="px-1.5 py-0.5 rounded"
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontWeight: 400,
+              fontSize: 9,
+              letterSpacing: '0.1em',
+              background: `${accentColor}18`,
+              color: pillColor,
+            }}
+          >
+            {pill}
+          </span>
         </div>
         <button
-          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded border text-[11px] transition-colors duration-100"
+          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded transition-colors duration-100"
           style={{
-            fontFamily: 'var(--font-syne)',
+            fontFamily: 'var(--font-mono)',
             fontWeight: 400,
-            color: 'var(--vmuted)',
-            borderColor: 'var(--vborder)',
+            fontSize: 11,
+            color: '#5A6A8A',
+            border: '1px solid #252D45',
             background: 'transparent',
           }}
         >
@@ -90,11 +91,11 @@ function LocalCard({
       <div
         className="px-5 py-3 border-t mt-4"
         style={{
-          borderColor: 'var(--vborder)',
-          fontFamily: 'var(--font-syne)',
+          borderColor: '#252D45',
+          fontFamily: 'var(--font-mono)',
           fontWeight: 400,
           fontSize: 11,
-          color: 'var(--vmuted)',
+          color: '#5A6A8A',
         }}
       >
         {footer}
@@ -113,71 +114,100 @@ function MrrProgressBar({ current, target = 5000 }: { current: number; target?: 
 
   return (
     <div
-      className="rounded-lg border animate-fade-up"
-      style={{ background: 'var(--vsurface)', borderColor: 'var(--vborder)', animationDelay: '300ms' }}
+      className="animate-fade-up"
+      style={{
+        background: '#161B2E',
+        border: '1px solid #252D45',
+        borderRadius: 12,
+        animationDelay: '300ms',
+      }}
     >
-      <div className="px-6 py-5">
+      <div style={{ padding: '24px 28px' }}>
         <div
           style={{
-            fontFamily: 'var(--font-syne)',
+            fontFamily: 'var(--font-mono)',
             fontWeight: 400,
             fontSize: 10,
-            color: 'var(--vmuted)',
-            letterSpacing: '0.2em',
+            color: '#5A6A8A',
+            letterSpacing: '0.25em',
           }}
         >
           FL MOVE PROGRESS
         </div>
 
-        <div className="mt-3 flex items-baseline gap-2">
+        <div style={{ marginTop: 12, display: 'flex', alignItems: 'baseline', gap: 10 }}>
           <span
             className="tabular-nums"
-            style={{ fontFamily: 'var(--font-syne)', fontWeight: 800, fontSize: 28, color: 'var(--vgreen)', lineHeight: 1 }}
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontWeight: 900,
+              fontSize: 48,
+              color: '#00E676',
+              lineHeight: 1,
+            }}
           >
             ${current.toLocaleString()}
           </span>
-          <span style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 14, color: 'var(--vmuted)' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 14, color: '#5A6A8A' }}>
             / $5,000 MRR
           </span>
         </div>
 
-        {/* Progress bar */}
-        <div className="mt-5 relative">
-          <div
-            className="h-2 rounded-full overflow-hidden"
-            style={{ background: 'var(--vbg)' }}
-          >
+        {/* Track */}
+        <div style={{ marginTop: 20, position: 'relative' }}>
+          {/* Track background */}
+          <div style={{ height: 8, borderRadius: 4, background: '#252D45', position: 'relative', overflow: 'visible' }}>
+            {/* Fill */}
             <div
-              className="h-full rounded-full"
               style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                bottom: 0,
                 width: `${pct}%`,
-                background: 'linear-gradient(90deg, #059669, #10B981)',
+                borderRadius: 4,
+                background: 'linear-gradient(90deg, #00E676, #9C6FFF)',
                 animation: 'progressFill 800ms ease-out both',
               }}
             />
-          </div>
 
-          {/* Milestones */}
-          <div className="relative mt-3 h-8">
+            {/* Milestone circles on track */}
             {milestones.map((m) => (
               <div
                 key={m.value}
-                className="absolute flex flex-col items-center"
                 style={{
+                  position: 'absolute',
+                  left: `${m.pct}%`,
+                  top: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: 12,
+                  height: 12,
+                  borderRadius: '50%',
+                  background: current >= m.value ? '#00E676' : '#161B2E',
+                  border: `2px solid ${current >= m.value ? '#00E676' : '#2F3A58'}`,
+                  zIndex: 1,
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Milestone labels */}
+          <div style={{ position: 'relative', marginTop: 12, height: 16 }}>
+            {milestones.map((m) => (
+              <div
+                key={m.value}
+                style={{
+                  position: 'absolute',
                   left: `${m.pct}%`,
                   transform: m.pct === 100 ? 'translateX(-100%)' : m.pct === 0 ? 'none' : 'translateX(-50%)',
                 }}
               >
-                <div
-                  className="w-px h-2"
-                  style={{ background: current >= m.value ? 'var(--vgreen)' : 'var(--vborder2)' }}
-                />
                 <span
-                  className="mt-0.5 text-[10px] tabular-nums"
                   style={{
-                    fontFamily: 'var(--font-syne)',
+                    fontFamily: 'var(--font-mono)',
                     fontWeight: 400,
-                    color: current >= m.value ? 'var(--vgreen)' : 'var(--vdim)',
+                    fontSize: 10,
+                    color: current >= m.value ? '#00E676' : '#5A6A8A',
                   }}
                 >
                   {m.label}
@@ -188,11 +218,10 @@ function MrrProgressBar({ current, target = 5000 }: { current: number; target?: 
         </div>
 
         <div
-          className="mt-6"
-          style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 12, color: 'var(--vmuted)' }}
+          style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 12, color: '#5A6A8A', marginTop: 20 }}
         >
           {pct.toFixed(1)}% to Florida.{' '}
-          <span style={{ color: 'var(--vtext2)' }}>
+          <span style={{ color: '#A8B4D0' }}>
             ${(target - current).toLocaleString()} remaining.
           </span>
         </div>
@@ -235,9 +264,24 @@ export default async function OverviewPage() {
   const subsDelta = totalSubs - prevSubs
   const pctToTarget = Math.min((totalMrr / 5000) * 100, 100)
 
+  const sparkSubs   = latestByProduct.find((x) => x.id === 'sparkcheck')?.latest?.subscriber_count ?? 0
+  const twitterSubs = latestByProduct.find((x) => x.id === 'twitter_growth_optimizer')?.latest?.subscriber_count ?? 0
+
+  // Combined sparkline data (group by date, sum across products)
+  const mrrByDate = new Map<string, { mrr: number; subs: number }>()
+  for (const s of (snapshots ?? [])) {
+    const d = new Date(s.recorded_at).toDateString()
+    const curr = mrrByDate.get(d) ?? { mrr: 0, subs: 0 }
+    mrrByDate.set(d, { mrr: curr.mrr + s.mrr_usd, subs: curr.subs + s.subscriber_count })
+  }
+  const sortedDates  = Array.from(mrrByDate.values())
+  const mrrSparkline = sortedDates.slice(-7).map((d) => d.mrr)
+  const subsSparkline = sortedDates.slice(-7).map((d) => d.subs)
+
   return (
     <div className="space-y-5 max-w-6xl">
-      {/* Stat strip */}
+
+      {/* 1. Stat strip — 4 cards */}
       <StatStrip
         totalMrr={totalMrr}
         totalSubs={totalSubs}
@@ -245,9 +289,34 @@ export default async function OverviewPage() {
         hermesCount={hermesCount ?? 0}
         subsDelta={subsDelta}
         pctToTarget={pctToTarget}
+        mrrSparkline={mrrSparkline}
+        subsSparkline={subsSparkline}
       />
 
-      {/* Product + local agent cards */}
+      {/* 2. Key KPI heading */}
+      <div style={{ paddingTop: 8 }}>
+        <h2
+          style={{
+            fontFamily: 'var(--font-display)',
+            fontWeight: 700,
+            fontSize: 28,
+            color: '#F0F4FF',
+            lineHeight: 1,
+          }}
+        >
+          Key KPI
+        </h2>
+      </div>
+
+      {/* 3. Revenue chart (2/3) + Subscriber donut (1/3) */}
+      <div className="grid grid-cols-3 gap-4">
+        <div className="col-span-2">
+          <OverviewRevenueChart snapshots={snapshots ?? []} />
+        </div>
+        <SubscriberDonut sparkSubs={sparkSubs} twitterSubs={twitterSubs} />
+      </div>
+
+      {/* 4. SparkCheck + Twitter product cards */}
       <div className="grid grid-cols-2 gap-4">
         {(products ?? []).map((p, i) => {
           const { latest } = latestByProduct.find((x) => x.id === p.id) ?? {}
@@ -262,34 +331,46 @@ export default async function OverviewPage() {
             />
           )
         })}
+      </div>
 
-        {/* Finance agents */}
+      {/* 5. Finance Agents + Speech Coach cards */}
+      <div className="grid grid-cols-2 gap-4">
         <LocalCard
-          accentColor="#059669"
-          label="FINANCE AGENTS"
+          accentColor="#00E676"
+          label="Finance Agents"
           pill="LOCAL"
-          pillBg="rgba(5,150,105,0.15)"
-          pillColor="#059669"
+          pillColor="#00E676"
           footer="4 agents configured · Mac Studio M4 Max"
-          animDelay={120}
+          animDelay={0}
         >
           <div className="space-y-2.5 pb-2">
             {FINANCE_AGENTS.map((a) => (
               <div key={a.id} className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#059669' }} />
-                  <span style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 12, color: 'var(--vtext)' }}>
+                  <span
+                    className="w-1.5 h-1.5 rounded-full"
+                    style={{ background: '#00E676' }}
+                  />
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontWeight: 400,
+                      fontSize: 13,
+                      color: '#A8B4D0',
+                    }}
+                  >
                     {a.label}
                   </span>
                 </div>
                 <span
-                  className="px-1.5 py-0.5 rounded border text-[9px]"
+                  className="px-1.5 py-0.5 rounded"
                   style={{
-                    fontFamily: 'var(--font-syne)',
+                    fontFamily: 'var(--font-mono)',
                     fontWeight: 400,
-                    color: 'var(--vmuted)',
-                    borderColor: 'var(--vborder)',
-                    background: 'var(--vbg)',
+                    fontSize: 9,
+                    color: '#5A6A8A',
+                    border: '1px solid #252D45',
+                    background: '#1E2540',
                   }}
                 >
                   QWEN3
@@ -299,26 +380,44 @@ export default async function OverviewPage() {
           </div>
         </LocalCard>
 
-        {/* Speech coach */}
         <LocalCard
-          accentColor="#D97706"
-          label="SPEECH COACH"
+          accentColor="#FFB800"
+          label="Speech Coach"
           pill="LOCAL"
-          pillBg="rgba(217,119,6,0.15)"
-          pillColor="#D97706"
+          pillColor="#FFB800"
           footer="1 agent configured · Mac Studio M4 Max"
-          animDelay={180}
+          animDelay={60}
         >
           <div className="pb-2">
-            <div style={{ fontFamily: 'var(--font-syne)', fontWeight: 700, fontSize: 15, color: 'var(--vtext)' }}>
+            <div
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontWeight: 700,
+                fontSize: 16,
+                color: '#F0F4FF',
+              }}
+            >
               Advanced accent refinement
             </div>
-            <div className="mt-1" style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 12, color: 'var(--vmuted)' }}>
+            <div
+              className="mt-1"
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontWeight: 400,
+                fontSize: 13,
+                color: '#5A6A8A',
+              }}
+            >
               Spanish native &rarr; American English
             </div>
             <div
               className="mt-3"
-              style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontWeight: 400,
+                fontSize: 11,
+                color: '#5A6A8A',
+              }}
             >
               Phoneme analysis &middot; Prosody training &middot; Domain drilling
             </div>
@@ -326,14 +425,15 @@ export default async function OverviewPage() {
         </LocalCard>
       </div>
 
-      {/* Feeds */}
+      {/* 6. Agent Runs + Hermes Activity */}
       <div className="grid grid-cols-2 gap-4">
         <AgentLog initial={agentRuns ?? []} limit={5} realtime />
         <HermesFeed initial={hermesLogs ?? []} limit={5} realtime />
       </div>
 
-      {/* MRR progress */}
+      {/* 7. FL Move Progress */}
       <MrrProgressBar current={totalMrr} />
+
     </div>
   )
 }

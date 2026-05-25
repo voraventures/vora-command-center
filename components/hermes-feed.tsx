@@ -5,10 +5,6 @@ import { Activity } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { HermesLog } from '@/lib/types'
 
-const PRODUCT_COLOR: Record<string, string> = {
-  sparkcheck:               '#E8194B',
-  twitter_growth_optimizer: '#0066FF',
-}
 const PRODUCT_LABEL: Record<string, string> = {
   sparkcheck:               'SparkCheck',
   twitter_growth_optimizer: 'Twitter',
@@ -29,7 +25,6 @@ function timeAgo(iso: string): string {
 }
 
 function FeedItem({ log, isNew, delay }: { log: HermesLog; isNew?: boolean; delay?: number }) {
-  const color = log.product ? (PRODUCT_COLOR[log.product] ?? '#7C3AED') : '#7C3AED'
   const productLabel = log.product ? (PRODUCT_LABEL[log.product] ?? log.product) : null
 
   return (
@@ -47,7 +42,7 @@ function FeedItem({ log, isNew, delay }: { log: HermesLog; isNew?: boolean; dela
       <div className="flex flex-col items-center flex-shrink-0 mt-1" style={{ width: 16 }}>
         <span
           className="w-3 h-3 rounded-full flex-shrink-0"
-          style={{ background: color, boxShadow: `0 0 0 3px ${color}20` }}
+          style={{ background: '#9C6FFF', boxShadow: '0 0 0 3px rgba(156,111,255,0.2)' }}
         />
         <div className="flex-1 w-px mt-1" style={{ background: 'var(--vborder)', minHeight: 8 }} />
       </div>
@@ -55,18 +50,10 @@ function FeedItem({ log, isNew, delay }: { log: HermesLog; isNew?: boolean; dela
       {/* Content */}
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-4">
-          <div style={{ fontFamily: 'var(--font-syne)', fontWeight: 500, fontSize: 13, color: 'var(--vtext)' }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 500, fontSize: 13, color: 'var(--vtext2)' }}>
             {log.action}
           </div>
-          <span
-            style={{
-              fontFamily: 'var(--font-syne)',
-              fontWeight: 400,
-              fontSize: 11,
-              color: 'var(--vdim)',
-              flexShrink: 0,
-            }}
-          >
+          <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: 'var(--vdim)', flexShrink: 0 }}>
             {timeAgo(log.logged_at)}
           </span>
         </div>
@@ -74,7 +61,7 @@ function FeedItem({ log, isNew, delay }: { log: HermesLog; isNew?: boolean; dela
         {log.detail && (
           <div
             className="mt-0.5"
-            style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}
+            style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}
           >
             {log.detail}
           </div>
@@ -84,10 +71,10 @@ function FeedItem({ log, isNew, delay }: { log: HermesLog; isNew?: boolean; dela
           <span
             className="inline-block mt-1.5 px-2 py-0.5 rounded text-[10px]"
             style={{
-              fontFamily: 'var(--font-syne)',
+              fontFamily: 'var(--font-mono)',
               fontWeight: 400,
-              color,
-              background: `${color}18`,
+              color: '#9C6FFF',
+              background: 'rgba(156,111,255,0.15)',
               letterSpacing: '0.05em',
             }}
           >
@@ -123,12 +110,12 @@ export function HermesFeed({ initial, limit = 5, realtime = false }: Props) {
       {/* Header */}
       <div
         className="flex items-center justify-between px-4 py-3 border-b"
-        style={{ borderColor: 'var(--vborder)', background: 'var(--vbg)' }}
+        style={{ borderColor: 'var(--vborder)', background: 'var(--vsurface2)' }}
       >
         <span
           style={{
-            fontFamily: 'var(--font-syne)',
-            fontWeight: 400,
+            fontFamily: 'var(--font-mono)',
+            fontWeight: 500,
             fontSize: 10,
             color: 'var(--vmuted)',
             letterSpacing: '0.3em',
@@ -138,8 +125,8 @@ export function HermesFeed({ initial, limit = 5, realtime = false }: Props) {
         </span>
         {realtime && (
           <span className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full animate-pulse-dot" style={{ background: 'var(--hermes)' }} />
-            <span style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 10, color: 'var(--vmuted)', letterSpacing: '0.05em' }}>
+            <span className="w-1.5 h-1.5 rounded-full animate-pulse-dot" style={{ background: '#9C6FFF' }} />
+            <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 10, color: '#9C6FFF', letterSpacing: '0.05em' }}>
               LIVE
             </span>
           </span>
@@ -149,10 +136,10 @@ export function HermesFeed({ initial, limit = 5, realtime = false }: Props) {
       {displayed.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-12">
           <Activity className="w-8 h-8 mb-3" style={{ color: 'var(--vdim)' }} />
-          <div style={{ fontFamily: 'var(--font-syne)', fontWeight: 700, fontSize: 14, color: 'var(--vmuted)' }}>
+          <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, color: 'var(--vtext2)' }}>
             Hermes is quiet
           </div>
-          <div className="mt-1" style={{ fontFamily: 'var(--font-syne)', fontWeight: 400, fontSize: 11, color: 'var(--vdim)' }}>
+          <div className="mt-1" style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}>
             No activity logged yet
           </div>
         </div>
