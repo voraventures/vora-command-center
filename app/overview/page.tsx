@@ -9,18 +9,18 @@ import { GitBranch, ExternalLink, ChevronDown, ChevronUp } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
 const VORA_AGENTS = [
-  { id: 'finance-market',    label: 'Market Intelligence',  model: 'CLAUDE', color: '#00E676' },
-  { id: 'finance-portfolio', label: 'Portfolio Strategist', model: 'CLAUDE', color: '#00B4D8' },
-  { id: 'finance-savings',   label: 'Savings Optimizer',    model: 'QWEN3',  color: '#FFB800' },
-  { id: 'finance-crypto',    label: 'Crypto & Alt Assets',  model: 'CLAUDE', color: '#FF6B35' },
-  { id: 'speech-coach',      label: 'Speech Coach',         model: 'QWEN3',  color: '#FF4D8D' },
+  { id: 'finance-market',    label: 'Market Intelligence',  model: 'CLAUDE', color: '#00FF87' },
+  { id: 'finance-portfolio', label: 'Portfolio Strategist', model: 'CLAUDE', color: '#00D4FF' },
+  { id: 'finance-savings',   label: 'Savings Optimizer',    model: 'QWEN3',  color: '#FFD000' },
+  { id: 'finance-crypto',    label: 'Crypto & Alt Assets',  model: 'CLAUDE', color: '#FF6B00' },
+  { id: 'speech-coach',      label: 'Speech Coach',         model: 'QWEN3',  color: '#FF2D78' },
 ]
 const ORALIVA_AGENTS = [
-  { id: 'email',    label: 'Email Agent',             model: 'QWEN3',       color: '#9C6FFF' },
-  { id: 'tasks',    label: 'Task & Assignment Agent',  model: 'QWEN3',      color: '#7B61FF' },
-  { id: 'social',   label: 'OraLiva Social Agent',    model: 'QWEN3',       color: '#1D9BF0' },
-  { id: 'cap',      label: 'CAP Inspection Agent',    model: 'CLAUDE CODE', color: '#FF4444' },
-  { id: 'research', label: 'Research Agent',           model: 'CLAUDE CODE', color: '#00E5CC' },
+  { id: 'email',    label: 'Email Agent',             model: 'QWEN3',       color: '#BF7FFF' },
+  { id: 'tasks',    label: 'Task & Assignment Agent',  model: 'QWEN3',      color: '#7B7FFF' },
+  { id: 'social',   label: 'OraLiva Social Agent',    model: 'QWEN3',       color: '#00AEFF' },
+  { id: 'cap',      label: 'CAP Inspection Agent',    model: 'CLAUDE CODE', color: '#FF3333' },
+  { id: 'research', label: 'Research Agent',           model: 'CLAUDE CODE', color: '#00FFD4' },
 ]
 
 function timeAgo(iso: string): string {
@@ -41,26 +41,26 @@ function activityLevel(lastRun: string | undefined): 'hot' | 'warm' | 'idle' {
 
 function PacmanAgent({ color, level }: { color: string; level: 'hot' | 'warm' | 'idle' }) {
   const isActive = level !== 'idle'
-  const speed = level === 'hot' ? '0.3s' : '0.8s'
+  const speed = level === 'hot' ? '0.2s' : '0.6s'
   return (
-    <div style={{ position: 'relative', width: 22, height: 22, flexShrink: 0, opacity: level === 'idle' ? 0.22 : 1 }}>
+    <div style={{ position: 'relative', width: 28, height: 28, flexShrink: 0, opacity: level === 'idle' ? 0.5 : 1 }}>
       <div style={{
-        position: 'absolute', width: 22, height: 11,
-        background: color, borderRadius: '11px 11px 0 0', top: 0,
+        position: 'absolute', width: 28, height: 14,
+        background: color, borderRadius: '14px 14px 0 0', top: 0,
         transformOrigin: '50% 100%',
         transform: isActive ? undefined : 'rotate(20deg)',
         animation: isActive ? `pacChompTop ${speed} ease-in-out infinite` : 'none',
       }} />
       <div style={{
-        position: 'absolute', width: 22, height: 11,
-        background: color, borderRadius: '0 0 11px 11px', bottom: 0,
+        position: 'absolute', width: 28, height: 14,
+        background: color, borderRadius: '0 0 14px 14px', bottom: 0,
         transformOrigin: '50% 0%',
         transform: isActive ? undefined : 'rotate(-20deg)',
         animation: isActive ? `pacChompBottom ${speed} ease-in-out infinite` : 'none',
       }} />
       <div style={{
-        position: 'absolute', width: 3, height: 3, borderRadius: '50%',
-        background: 'rgba(0,0,0,0.65)', top: 4, left: 5, zIndex: 2,
+        position: 'absolute', width: 4, height: 4, borderRadius: '50%',
+        background: 'rgba(0,0,0,0.65)', top: 5, left: 6, zIndex: 2,
       }} />
     </div>
   )
