@@ -1,100 +1,104 @@
-import { Landmark, TrendingUp, PiggyBank, Bitcoin } from 'lucide-react'
+import { TrendingUp, Landmark, PiggyBank, Bitcoin } from 'lucide-react'
 
 const AGENTS = [
   {
     id: 'market-intel',
     label: 'Market Intelligence',
     icon: TrendingUp,
-    desc: 'Scans equities, indices, and macro signals. Builds daily briefings.',
+    desc: 'Scans equities, macro signals, and indices. Generates daily briefings and sector alerts.',
     model: 'qwen3:14b',
   },
   {
     id: 'portfolio',
     label: 'Portfolio Strategist',
     icon: Landmark,
-    desc: 'Analyzes allocation, rebalancing signals, and risk exposure.',
+    desc: 'Analyzes allocation, rebalancing signals, and risk exposure across asset classes.',
     model: 'qwen3:14b',
   },
   {
     id: 'savings',
     label: 'Savings Optimizer',
     icon: PiggyBank,
-    desc: 'Tracks expenses, finds savings opportunities, models scenarios.',
+    desc: 'Tracks monthly expenses, identifies savings opportunities, and models FL move scenarios.',
     model: 'qwen3:14b',
   },
   {
     id: 'crypto',
     label: 'Crypto & Alt Assets',
     icon: Bitcoin,
-    desc: 'On-chain data, DeFi yields, cross-asset correlation analysis.',
+    desc: 'On-chain data analysis, DeFi yield tracking, cross-asset correlation signals.',
     model: 'qwen3:14b',
   },
 ]
 
 export default function FinancePage() {
   return (
-    <div className="space-y-6 max-w-4xl">
+    <div className="space-y-5 max-w-4xl">
+      {/* Banner */}
       <div
-        className="rounded-lg border p-6"
-        style={{
-          background: 'oklch(0.14 0.022 255)',
-          borderColor: 'color-mix(in oklch, #10B981 25%, oklch(0.27 0.035 255))',
-        }}
+        className="rounded-lg border animate-fade-up"
+        style={{ background: 'var(--vsurface)', borderColor: 'var(--vborder)', borderLeft: '4px solid #059669' }}
       >
-        <div
-          className="text-[10px] uppercase tracking-widest mb-1"
-          style={{ fontFamily: 'var(--font-dm-mono)', color: 'var(--finance)' }}
-        >
-          Finance Agent Suite
-        </div>
-        <div
-          className="text-vtext mt-1"
-          style={{ fontFamily: 'var(--font-syne)', fontWeight: 800, fontSize: 22 }}
-        >
-          Local Intelligence Stack
-        </div>
-        <div
-          className="text-vmuted text-[12px] mt-2"
-          style={{ fontFamily: 'var(--font-dm-mono)' }}
-        >
-          4 specialized agents running on Mac Studio M4 Max &middot; qwen3:14b via Ollama
+        <div className="px-6 py-5">
+          <div
+            style={{
+              fontFamily: 'var(--font-dm-mono)',
+              fontWeight: 500,
+              fontSize: 10,
+              color: '#059669',
+              letterSpacing: '0.2em',
+              marginBottom: 8,
+            }}
+          >
+            FINANCE AGENT SUITE
+          </div>
+          <div
+            style={{ fontFamily: 'var(--font-syne)', fontWeight: 800, fontSize: 24, color: 'var(--vtext)', lineHeight: 1, letterSpacing: '-0.02em' }}
+          >
+            Local Intelligence Stack
+          </div>
+          <div
+            className="mt-2"
+            style={{ fontFamily: 'var(--font-inter)', fontSize: 13, color: 'var(--vmuted)' }}
+          >
+            4 specialized agents &middot; Mac Studio M4 Max &middot; qwen3:14b via Ollama
+          </div>
         </div>
       </div>
 
+      {/* Agent cards */}
       <div className="grid grid-cols-2 gap-4">
-        {AGENTS.map(({ id, label, icon: Icon, desc, model }) => (
+        {AGENTS.map(({ id, label, icon: Icon, desc, model }, i) => (
           <div
             key={id}
-            className="rounded-lg border border-vborder p-5"
-            style={{ background: 'oklch(0.14 0.02 255)' }}
+            className="card-hover rounded-lg border animate-fade-up"
+            style={{
+              background: 'var(--vsurface)',
+              borderColor: 'var(--vborder)',
+              borderLeft: '4px solid #059669',
+              animationDelay: `${i * 60}ms`,
+            }}
           >
-            <div className="flex items-start gap-3 mb-3">
-              <span
-                className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0"
-                style={{ background: 'oklch(0.70 0.17 155 / 0.1)' }}
-              >
-                <Icon className="w-4 h-4" style={{ color: 'var(--finance)' }} />
-              </span>
-              <div>
-                <div
-                  className="text-vtext text-[13px]"
-                  style={{ fontFamily: 'var(--font-dm-mono)' }}
+            <div className="px-5 pt-5 pb-4">
+              <div className="flex items-start gap-3 mb-3">
+                <span
+                  className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0"
+                  style={{ background: '#F0FDF4' }}
                 >
-                  {label}
-                </div>
-                <div
-                  className="text-vdim text-[10px] mt-0.5"
-                  style={{ fontFamily: 'var(--font-dm-mono)' }}
-                >
-                  mac_studio &middot; {model}
+                  <Icon className="w-4 h-4" style={{ color: '#059669' }} />
+                </span>
+                <div>
+                  <div style={{ fontFamily: 'var(--font-syne)', fontWeight: 700, fontSize: 14, color: 'var(--vtext)' }}>
+                    {label}
+                  </div>
+                  <div style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 10, color: 'var(--vmuted)', marginTop: 2 }}>
+                    mac_studio &middot; {model}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div
-              className="text-vmuted text-[11px] leading-relaxed"
-              style={{ fontFamily: 'var(--font-dm-mono)' }}
-            >
-              {desc}
+              <div style={{ fontFamily: 'var(--font-inter)', fontSize: 12, color: 'var(--vmuted)', lineHeight: 1.6 }}>
+                {desc}
+              </div>
             </div>
           </div>
         ))}

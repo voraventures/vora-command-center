@@ -5,13 +5,12 @@ import { RevenueChart } from '@/components/revenue-chart'
 export const revalidate = 30
 
 const PRODUCT_LABEL: Record<string, string> = {
-  sparkcheck: 'SparkCheck',
+  sparkcheck:               'SparkCheck',
   twitter_growth_optimizer: 'Twitter Growth Opt.',
 }
-
 const PRODUCT_COLOR: Record<string, string> = {
-  sparkcheck: '#FF4D8D',
-  twitter_growth_optimizer: '#1D9BF0',
+  sparkcheck:               '#E8194B',
+  twitter_growth_optimizer: '#0066FF',
 }
 
 export default async function RevenuePage() {
@@ -23,130 +22,174 @@ export default async function RevenuePage() {
   ])
 
   const productIds = ['sparkcheck', 'twitter_growth_optimizer']
-  const snapshotsByProduct = (id: string) => (snapshots ?? []).filter((s) => s.product === id)
+  const byProduct  = (id: string) => (snapshots ?? []).filter((s) => s.product === id)
 
   const totals = productIds.map((id) => {
-    const snaps = snapshotsByProduct(id)
+    const snaps  = byProduct(id)
     const latest = snaps[snaps.length - 1]
-    const prev = snaps[snaps.length - 2]
+    const prev   = snaps[snaps.length - 2]
     return { id, latest, prev, delta: latest && prev ? latest.mrr_usd - prev.mrr_usd : 0 }
   })
 
-  const totalMrr = totals.reduce((s, t) => s + (t.latest?.mrr_usd ?? 0), 0)
+  const totalMrr  = totals.reduce((s, t) => s + (t.latest?.mrr_usd ?? 0), 0)
   const totalSubs = totals.reduce((s, t) => s + (t.latest?.subscriber_count ?? 0), 0)
   const pct = Math.min((totalMrr / 5000) * 100, 100)
 
   return (
-    <div className="space-y-6 max-w-5xl">
+    <div className="space-y-5 max-w-5xl">
       {/* Summary banner */}
       <div
-        className="rounded-lg border border-vborder px-6 py-5 flex items-center justify-between"
-        style={{ background: 'oklch(0.14 0.02 255)' }}
+        className="rounded-lg border px-6 py-5 flex items-center justify-between animate-fade-up"
+        style={{ background: 'var(--vsurface)', borderColor: 'var(--vborder)' }}
       >
         <div>
           <div
-            className="text-vtext tabular-nums leading-none"
-            style={{ fontFamily: 'var(--font-syne)', fontWeight: 800, fontSize: 36 }}
+            style={{
+              fontFamily: 'var(--font-dm-mono)',
+              fontSize: 10,
+              color: 'var(--vmuted)',
+              letterSpacing: '0.2em',
+              marginBottom: 8,
+            }}
           >
-            ${totalMrr.toLocaleString()}
+            COMBINED MRR
           </div>
-          <div
-            className="text-vmuted text-[11px] mt-2"
-            style={{ fontFamily: 'var(--font-dm-mono)' }}
-          >
-            Combined MRR &middot; {totalSubs} subscribers
+          <div className="flex items-baseline gap-3">
+            <span
+              className="tabular-nums"
+              style={{
+                fontFamily: 'var(--font-syne)',
+                fontWeight: 800,
+                fontSize: 40,
+                color: 'var(--vgreen)',
+                lineHeight: 1,
+              }}
+            >
+              ${totalMrr.toLocaleString()}
+            </span>
+            <span style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 13, color: 'var(--vmuted)' }}>
+              {totalSubs.toLocaleString()} subscribers
+            </span>
           </div>
         </div>
+
         <div className="text-right">
           <div
-            className="text-vgreen tabular-nums"
-            style={{ fontFamily: 'var(--font-syne)', fontWeight: 800, fontSize: 24 }}
+            className="tabular-nums"
+            style={{
+              fontFamily: 'var(--font-syne)',
+              fontWeight: 800,
+              fontSize: 28,
+              color: pct >= 100 ? 'var(--vgreen)' : 'var(--spark)',
+              lineHeight: 1,
+            }}
           >
             {pct.toFixed(1)}%
           </div>
           <div
-            className="text-vdim text-[10px] mt-1"
-            style={{ fontFamily: 'var(--font-dm-mono)' }}
+            className="mt-1"
+            style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vmuted)' }}
           >
-            to $5K Florida move trigger
+            to $5K Florida trigger
           </div>
-          <div className="mt-2 h-1 w-40 rounded-full bg-vsurface2">
+          <div
+            className="mt-3 h-1.5 rounded-full overflow-hidden"
+            style={{ width: 160, background: 'var(--vbg)' }}
+          >
             <div
-              className="h-full rounded-full bg-vgreen"
-              style={{ width: `${pct}%` }}
+              className="h-full rounded-full"
+              style={{
+                width: `${pct}%`,
+                background: 'var(--vgreen)',
+                animation: 'progressFill 800ms ease-out both',
+              }}
             />
           </div>
         </div>
       </div>
 
-      {/* Per-product MRR cards */}
+      {/* MRR cards */}
       <div className="grid grid-cols-2 gap-4">
-        {productIds.map((id) => (
-          <MrrCard key={id} product={id} snapshots={snapshotsByProduct(id)} />
+        {productIds.map((id, i) => (
+          <MrrCard key={id} product={id} snapshots={byProduct(id)} animDelay={i * 60} />
         ))}
       </div>
 
       {/* Chart */}
       <RevenueChart snapshots={snapshots ?? []} />
 
-      {/* Snapshot history table */}
+      {/* Snapshot history */}
       <div
-        className="rounded-lg border border-vborder overflow-hidden"
-        style={{ background: 'oklch(0.14 0.02 255)' }}
+        className="rounded-lg border overflow-hidden animate-fade-up"
+        style={{ background: 'var(--vsurface)', borderColor: 'var(--vborder)', animationDelay: '200ms' }}
       >
         <div
-          className="px-5 py-3 border-b border-vborder flex items-center"
-          style={{ background: 'oklch(0.17 0.018 255)' }}
+          className="px-5 py-3 border-b"
+          style={{ borderColor: 'var(--vborder)', background: 'var(--vbg)' }}
         >
           <span
-            className="text-[10px] text-vmuted uppercase tracking-widest"
-            style={{ fontFamily: 'var(--font-dm-mono)' }}
+            style={{
+              fontFamily: 'var(--font-dm-mono)',
+              fontWeight: 500,
+              fontSize: 10,
+              color: 'var(--vmuted)',
+              letterSpacing: '0.2em',
+            }}
           >
-            Snapshot History
+            SNAPSHOT HISTORY
           </span>
         </div>
 
         <table className="w-full">
           <thead>
-            <tr className="border-b border-vborder">
+            <tr style={{ borderBottom: '1px solid var(--vborder)', background: 'var(--vbg)' }}>
               {['Product', 'MRR', 'Subscribers', 'Delta', 'Recorded'].map((h) => (
                 <th
                   key={h}
-                  className="px-5 py-2.5 text-left text-[10px] text-vdim uppercase tracking-wider"
-                  style={{ fontFamily: 'var(--font-dm-mono)' }}
+                  className="px-5 py-2.5 text-left"
+                  style={{
+                    fontFamily: 'var(--font-dm-mono)',
+                    fontSize: 10,
+                    color: 'var(--vdim)',
+                    letterSpacing: '0.1em',
+                  }}
                 >
-                  {h}
+                  {h.toUpperCase()}
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-vborder">
+          <tbody>
             {(recent ?? []).length === 0 && (
               <tr>
                 <td
                   colSpan={5}
-                  className="px-5 py-10 text-center text-[11px] text-vdim"
-                  style={{ fontFamily: 'var(--font-dm-mono)' }}
+                  className="px-5 py-10 text-center"
+                  style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 12, color: 'var(--vdim)' }}
                 >
                   No MRR snapshots yet. POST to /api/mrr to add one.
                 </td>
               </tr>
             )}
             {(recent ?? []).map((s, i) => {
-              const prev = (recent ?? []).find(
-                (r, j) => j > i && r.product === s.product
-              )
+              const prev  = (recent ?? []).find((r, j) => j > i && r.product === s.product)
               const delta = prev ? s.mrr_usd - prev.mrr_usd : null
               return (
                 <tr
                   key={s.id}
-                  className="hover:bg-vsurface transition-colors duration-100"
+                  style={{
+                    borderBottom: '1px solid var(--vborder)',
+                    transition: 'background 0.1s',
+                  }}
+                  onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = 'var(--vbg)')}
+                  onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
                 >
-                  <td className="px-5 py-2.5">
+                  <td className="px-5 py-3">
                     <span
-                      className="text-[12px]"
                       style={{
                         fontFamily: 'var(--font-dm-mono)',
+                        fontSize: 12,
+                        fontWeight: 500,
                         color: PRODUCT_COLOR[s.product] ?? 'var(--vtext)',
                       }}
                     >
@@ -154,36 +197,30 @@ export default async function RevenuePage() {
                     </span>
                   </td>
                   <td
-                    className="px-5 py-2.5 text-vtext tabular-nums text-[12px]"
-                    style={{ fontFamily: 'var(--font-dm-mono)' }}
+                    className="px-5 py-3 tabular-nums"
+                    style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 13, fontWeight: 500, color: 'var(--vtext)' }}
                   >
                     ${s.mrr_usd.toLocaleString()}
                   </td>
                   <td
-                    className="px-5 py-2.5 text-vmuted tabular-nums text-[12px]"
-                    style={{ fontFamily: 'var(--font-dm-mono)' }}
+                    className="px-5 py-3 tabular-nums"
+                    style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 12, color: 'var(--vmuted)' }}
                   >
-                    {s.subscriber_count}
+                    {s.subscriber_count.toLocaleString()}
                   </td>
                   <td
-                    className="px-5 py-2.5 tabular-nums text-[12px]"
+                    className="px-5 py-3 tabular-nums"
                     style={{
                       fontFamily: 'var(--font-dm-mono)',
-                      color:
-                        delta === null
-                          ? 'var(--vdim)'
-                          : delta > 0
-                          ? 'var(--vgreen)'
-                          : delta < 0
-                          ? 'var(--vred)'
-                          : 'var(--vdim)',
+                      fontSize: 12,
+                      color: delta === null ? 'var(--vdim)' : delta > 0 ? 'var(--vgreen)' : delta < 0 ? 'var(--vred)' : 'var(--vdim)',
                     }}
                   >
                     {delta === null ? '—' : `${delta > 0 ? '+' : ''}$${delta}`}
                   </td>
                   <td
-                    className="px-5 py-2.5 text-vdim text-[10px] tabular-nums"
-                    style={{ fontFamily: 'var(--font-dm-mono)' }}
+                    className="px-5 py-3"
+                    style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vdim)' }}
                   >
                     {new Date(s.recorded_at).toLocaleString()}
                   </td>

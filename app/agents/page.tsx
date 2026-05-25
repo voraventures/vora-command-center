@@ -4,181 +4,200 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { AgentRun } from '@/lib/types'
 
-const STATIC_AGENTS = [
-  { id: 'oraliva-1', label: 'OraLiva Core', tag: 'speech', machine: 'macbook', model: 'oraliva-v2', color: '#F59E0B', remote: true },
-  { id: 'oraliva-2', label: 'OraLiva Phoneme', tag: 'speech', machine: 'macbook', model: 'oraliva-v2', color: '#F59E0B', remote: true },
-  { id: 'oraliva-3', label: 'OraLiva Prosody', tag: 'speech', machine: 'macbook', model: 'oraliva-v2', color: '#F59E0B', remote: true },
-  { id: 'oraliva-4', label: 'OraLiva Fluency', tag: 'speech', machine: 'macbook', model: 'oraliva-v2', color: '#F59E0B', remote: true },
-  { id: 'oraliva-5', label: 'OraLiva Coach', tag: 'speech', machine: 'macbook', model: 'oraliva-v2', color: '#F59E0B', remote: true },
-  { id: 'finance-intel', label: 'Market Intelligence', tag: 'finance', machine: 'mac_studio', model: 'qwen3:14b', color: '#10B981', remote: false },
-  { id: 'finance-portfolio', label: 'Portfolio Strategist', tag: 'finance', machine: 'mac_studio', model: 'qwen3:14b', color: '#10B981', remote: false },
-  { id: 'finance-savings', label: 'Savings Optimizer', tag: 'finance', machine: 'mac_studio', model: 'qwen3:14b', color: '#10B981', remote: false },
-  { id: 'finance-crypto', label: 'Crypto & Alt Assets', tag: 'finance', machine: 'mac_studio', model: 'qwen3:14b', color: '#10B981', remote: false },
-  { id: 'speech-coach', label: 'Speech Coach', tag: 'speech', machine: 'mac_studio', model: 'qwen3:14b', color: '#F59E0B', remote: false },
+const VORA_AGENTS = [
+  { id: 'finance-intel',     label: 'Market Intelligence', tag: 'finance', machine: 'mac_studio', model: 'qwen3:14b', color: '#059669' },
+  { id: 'finance-portfolio', label: 'Portfolio Strategist', tag: 'finance', machine: 'mac_studio', model: 'qwen3:14b', color: '#059669' },
+  { id: 'finance-savings',   label: 'Savings Optimizer',   tag: 'finance', machine: 'mac_studio', model: 'qwen3:14b', color: '#059669' },
+  { id: 'finance-crypto',    label: 'Crypto & Alt Assets', tag: 'finance', machine: 'mac_studio', model: 'qwen3:14b', color: '#059669' },
+  { id: 'speech-coach',      label: 'Speech Coach',        tag: 'speech',  machine: 'mac_studio', model: 'qwen3:14b', color: '#D97706' },
+]
+const ORALIVA_AGENTS = [
+  { id: 'oraliva-1', label: 'OraLiva Core',     tag: 'speech', machine: 'macbook', model: 'oraliva-v2', color: '#D97706' },
+  { id: 'oraliva-2', label: 'OraLiva Phoneme',  tag: 'speech', machine: 'macbook', model: 'oraliva-v2', color: '#D97706' },
+  { id: 'oraliva-3', label: 'OraLiva Prosody',  tag: 'speech', machine: 'macbook', model: 'oraliva-v2', color: '#D97706' },
+  { id: 'oraliva-4', label: 'OraLiva Fluency',  tag: 'speech', machine: 'macbook', model: 'oraliva-v2', color: '#D97706' },
+  { id: 'oraliva-5', label: 'OraLiva Coach',    tag: 'speech', machine: 'macbook', model: 'oraliva-v2', color: '#D97706' },
 ]
 
-type TagFilter = 'all' | 'finance' | 'speech'
-type MachineFilter = 'all' | 'mac_studio' | 'macbook'
+type Filter = 'all' | 'vora' | 'oraliva' | 'mac_studio' | 'macbook'
+
+function AgentCard({
+  agent,
+  remote = false,
+  delay = 0,
+}: {
+  agent: typeof VORA_AGENTS[0]
+  remote?: boolean
+  delay?: number
+}) {
+  return (
+    <div
+      className="card-hover rounded-lg border bg-vsurface animate-fade-up flex items-start gap-3 p-4"
+      style={{
+        borderColor: 'var(--vborder)',
+        borderLeft: `4px solid ${agent.color}`,
+        opacity: remote ? 0.65 : 1,
+        animationDelay: `${delay}ms`,
+      }}
+    >
+      <span className="w-2 h-2 rounded-full mt-1 flex-shrink-0" style={{ background: agent.color }} />
+      <div className="flex-1 min-w-0">
+        <div style={{ fontFamily: 'var(--font-dm-mono)', fontWeight: 500, fontSize: 12, color: 'var(--vtext)' }}>
+          {agent.label}
+        </div>
+        <div className="mt-0.5" style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 10, color: 'var(--vmuted)' }}>
+          {agent.machine} &middot; {agent.model}
+        </div>
+        <div className="flex items-center gap-1.5 mt-2">
+          <span
+            className="px-1.5 py-0.5 rounded text-[9px]"
+            style={{ fontFamily: 'var(--font-dm-mono)', background: `${agent.color}18`, color: agent.color, letterSpacing: '0.05em' }}
+          >
+            {agent.tag}
+          </span>
+          {remote && (
+            <span
+              className="px-1.5 py-0.5 rounded border text-[9px]"
+              style={{ fontFamily: 'var(--font-dm-mono)', color: 'var(--vdim)', borderColor: 'var(--vborder)' }}
+            >
+              REMOTE
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function MachinePill({ machine }: { machine: string }) {
+  const isStudio = machine === 'mac_studio'
+  return (
+    <span className="inline-block px-2 py-0.5 rounded text-[10px]"
+      style={{
+        fontFamily: 'var(--font-dm-mono)', fontWeight: 500, letterSpacing: '0.05em',
+        background: isStudio ? 'var(--vtext)' : 'transparent',
+        color: isStudio ? '#FFF' : 'var(--vtext)',
+        border: isStudio ? 'none' : '1px solid var(--vborder2)',
+      }}
+    >
+      {isStudio ? 'MAC STUDIO' : 'MACBOOK'}
+    </span>
+  )
+}
 
 export default function AgentsPage() {
-  const [runs, setRuns] = useState<AgentRun[]>([])
+  const [runs, setRuns] = useState<(AgentRun & { _isNew?: boolean })[]>([])
   const [loading, setLoading] = useState(true)
-  const [machineFilter, setMachineFilter] = useState<MachineFilter>('all')
+  const [filter, setFilter] = useState<Filter>('all')
   const [statusFilter, setStatusFilter] = useState<'all' | 'success' | 'error'>('all')
-  const [tagFilter, setTagFilter] = useState<TagFilter>('all')
 
   useEffect(() => {
     async function load() {
-      const { data } = await supabase
-        .from('agent_runs')
-        .select('*')
-        .order('ran_at', { ascending: false })
-        .limit(100)
+      const { data } = await supabase.from('agent_runs').select('*').order('ran_at', { ascending: false }).limit(100)
       setRuns(data ?? [])
       setLoading(false)
     }
     load()
-
-    const channel = supabase
+    const ch = supabase
       .channel('agents_page_rt')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'agent_runs' }, (p) =>
-        setRuns((prev) => [p.new as AgentRun, ...prev])
+        setRuns((prev) => [{ ...(p.new as AgentRun), _isNew: true }, ...prev])
       )
       .subscribe()
-    return () => { supabase.removeChannel(channel) }
+    return () => { supabase.removeChannel(ch) }
   }, [])
 
-  const filteredAgents = STATIC_AGENTS.filter((a) => {
-    if (tagFilter !== 'all' && a.tag !== tagFilter) return false
-    if (machineFilter !== 'all' && a.machine !== machineFilter) return false
+  const showVora     = filter === 'all' || filter === 'vora'     || filter === 'mac_studio'
+  const showOraLiva  = filter === 'all' || filter === 'oraliva'  || filter === 'macbook'
+
+  const filteredRuns = runs.filter((r) => {
+    if (filter === 'mac_studio' && r.machine !== 'mac_studio') return false
+    if (filter === 'macbook'    && r.machine !== 'macbook')    return false
+    if (statusFilter !== 'all'  && r.status  !== statusFilter) return false
     return true
   })
 
-  const filteredRuns = runs.filter((r) => {
-    if (machineFilter !== 'all' && r.machine !== machineFilter) return false
-    if (statusFilter !== 'all' && r.status !== statusFilter) return false
-    return true
-  })
+  const FILTERS: { key: Filter; label: string }[] = [
+    { key: 'all',        label: 'All' },
+    { key: 'vora',       label: 'Vora Ventures' },
+    { key: 'oraliva',    label: 'OraLiva' },
+    { key: 'mac_studio', label: 'Mac Studio' },
+    { key: 'macbook',    label: 'MacBook' },
+  ]
 
   return (
     <div className="space-y-7 max-w-6xl">
       {/* Filter bar */}
       <div className="flex items-center gap-2 flex-wrap">
-        {(['all', 'mac_studio', 'macbook'] as const).map((v) => (
+        {FILTERS.map(({ key, label }) => (
           <button
-            key={v}
-            onClick={() => setMachineFilter(v)}
-            className="px-3 py-1.5 rounded text-[11px] transition-colors duration-100 outline-none focus-visible:ring-1 focus-visible:ring-vborder2"
+            key={key}
+            onClick={() => setFilter(key)}
+            className="px-3 py-1.5 rounded-full text-[11px] transition-all duration-100 outline-none"
             style={{
               fontFamily: 'var(--font-dm-mono)',
-              background: machineFilter === v ? 'oklch(0.22 0.022 255)' : 'transparent',
-              color: machineFilter === v ? 'var(--vtext)' : 'var(--vmuted)',
-              border: '1px solid',
-              borderColor: machineFilter === v ? 'oklch(0.35 0.05 255)' : 'oklch(0.27 0.035 255)',
+              fontWeight: 500,
+              background: filter === key ? 'var(--vtext)' : 'transparent',
+              color: filter === key ? '#FFF' : 'var(--vmuted)',
+              border: `1px solid ${filter === key ? 'var(--vtext)' : 'var(--vborder)'}`,
             }}
           >
-            {v === 'all' ? 'All Machines' : v}
-          </button>
-        ))}
-        <div className="w-px h-4 bg-vborder mx-1" />
-        {(['all', 'finance', 'speech'] as const).map((v) => (
-          <button
-            key={v}
-            onClick={() => setTagFilter(v)}
-            className="px-3 py-1.5 rounded text-[11px] transition-colors duration-100 outline-none focus-visible:ring-1 focus-visible:ring-vborder2"
-            style={{
-              fontFamily: 'var(--font-dm-mono)',
-              background: tagFilter === v ? 'oklch(0.22 0.022 255)' : 'transparent',
-              color: tagFilter === v ? 'var(--vtext)' : 'var(--vmuted)',
-              border: '1px solid',
-              borderColor: tagFilter === v ? 'oklch(0.35 0.05 255)' : 'oklch(0.27 0.035 255)',
-            }}
-          >
-            {v === 'all' ? 'All Tags' : v}
+            {label}
           </button>
         ))}
       </div>
 
-      {/* Agent registry */}
-      <div>
-        <div
-          className="text-[10px] text-vmuted uppercase tracking-widest mb-3"
-          style={{ fontFamily: 'var(--font-dm-mono)' }}
-        >
-          Agent Registry &mdash; {filteredAgents.length} configured
-        </div>
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-          {filteredAgents.map((agent) => (
-            <div
-              key={agent.id}
-              className="rounded-lg border border-vborder p-4 flex items-start gap-3"
-              style={{
-                background: 'oklch(0.14 0.02 255)',
-                opacity: agent.remote ? 0.55 : 1,
-              }}
-            >
-              <span
-                className="w-2 h-2 rounded-full flex-shrink-0 mt-1"
-                style={{ background: agent.color }}
-              />
-              <div className="min-w-0">
-                <div
-                  className="text-vtext text-[12px] truncate"
-                  style={{ fontFamily: 'var(--font-dm-mono)' }}
-                >
-                  {agent.label}
-                </div>
-                <div
-                  className="text-vdim text-[10px] mt-0.5"
-                  style={{ fontFamily: 'var(--font-dm-mono)' }}
-                >
-                  {agent.machine} &middot; {agent.model}
-                </div>
-                <div className="flex items-center gap-1.5 mt-1.5">
-                  <span
-                    className="px-1.5 py-0.5 rounded text-[9px] uppercase tracking-wider"
-                    style={{
-                      fontFamily: 'var(--font-dm-mono)',
-                      background: `${agent.color}18`,
-                      color: agent.color,
-                    }}
-                  >
-                    {agent.tag}
-                  </span>
-                  {agent.remote && (
-                    <span
-                      className="text-[9px] text-vdim uppercase tracking-wider"
-                      style={{ fontFamily: 'var(--font-dm-mono)' }}
-                    >
-                      remote
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Vora Ventures agents */}
+      {showVora && (
+        <section>
+          <div
+            className="flex items-center gap-2 mb-3"
+            style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 10, color: 'var(--vmuted)', letterSpacing: '0.2em' }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#059669' }} />
+            VORA VENTURES &mdash; MAC STUDIO M4 MAX &mdash; {VORA_AGENTS.length} AGENTS
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+            {VORA_AGENTS.map((a, i) => <AgentCard key={a.id} agent={a} delay={i * 40} />)}
+          </div>
+        </section>
+      )}
+
+      {/* OraLiva agents */}
+      {showOraLiva && (
+        <section>
+          <div
+            className="flex items-center gap-2 mb-3"
+            style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 10, color: 'var(--vmuted)', letterSpacing: '0.2em' }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#D97706' }} />
+            ORALIVA &mdash; MACBOOK &mdash; REMOTE &mdash; {ORALIVA_AGENTS.length} AGENTS
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+            {ORALIVA_AGENTS.map((a, i) => <AgentCard key={a.id} agent={a} remote delay={i * 40} />)}
+          </div>
+        </section>
+      )}
 
       {/* Run log */}
-      <div>
+      <section>
         <div className="flex items-center justify-between mb-3">
           <div
-            className="text-[10px] text-vmuted uppercase tracking-widest"
-            style={{ fontFamily: 'var(--font-dm-mono)' }}
+            style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 10, color: 'var(--vmuted)', letterSpacing: '0.2em' }}
           >
-            Run Log &mdash; real-time
+            RUN LOG &mdash; REAL-TIME
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             {(['all', 'success', 'error'] as const).map((v) => (
               <button
                 key={v}
                 onClick={() => setStatusFilter(v)}
-                className="px-2.5 py-1 rounded text-[11px] transition-colors duration-100 outline-none"
+                className="px-2.5 py-1 rounded-full text-[11px] transition-all duration-100"
                 style={{
                   fontFamily: 'var(--font-dm-mono)',
-                  background: statusFilter === v ? 'oklch(0.22 0.022 255)' : 'transparent',
-                  color: statusFilter === v ? 'var(--vtext)' : 'var(--vmuted)',
+                  background: statusFilter === v ? 'var(--vtext)' : 'transparent',
+                  color: statusFilter === v ? '#FFF' : 'var(--vmuted)',
+                  border: `1px solid ${statusFilter === v ? 'var(--vtext)' : 'var(--vborder)'}`,
                 }}
               >
                 {v}
@@ -187,35 +206,26 @@ export default function AgentsPage() {
           </div>
         </div>
 
-        <div
-          className="rounded-lg border border-vborder overflow-hidden"
-          style={{ background: 'oklch(0.14 0.02 255)' }}
-        >
+        <div className="rounded-lg border overflow-hidden" style={{ background: 'var(--vsurface)', borderColor: 'var(--vborder)' }}>
           <table className="w-full">
             <thead>
-              <tr className="border-b border-vborder" style={{ background: 'oklch(0.17 0.018 255)' }}>
+              <tr style={{ borderBottom: '1px solid var(--vborder)', background: 'var(--vbg)' }}>
                 {['Status', 'Agent', 'Machine', 'Model', 'Duration', 'Time'].map((h) => (
-                  <th
-                    key={h}
-                    className="px-4 py-2.5 text-left text-[10px] text-vdim uppercase tracking-wider"
-                    style={{ fontFamily: 'var(--font-dm-mono)' }}
+                  <th key={h} className="px-4 py-2.5 text-left"
+                    style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 10, color: 'var(--vdim)', letterSpacing: '0.1em' }}
                   >
-                    {h}
+                    {h.toUpperCase()}
                   </th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-vborder">
+            <tbody>
               {loading && (
                 <tr>
-                  <td colSpan={6} className="px-4 py-10 text-center">
+                  <td colSpan={6} className="px-4 py-10">
                     <div className="flex items-center justify-center gap-3">
-                      {[0, 1, 2].map((i) => (
-                        <div
-                          key={i}
-                          className="h-1.5 rounded-full animate-pulse"
-                          style={{ width: 32 + i * 16, background: 'oklch(0.27 0.035 255)' }}
-                        />
+                      {[40, 56, 48].map((w, i) => (
+                        <div key={i} className="skeleton h-2 rounded" style={{ width: w }} />
                       ))}
                     </div>
                   </td>
@@ -223,72 +233,52 @@ export default function AgentsPage() {
               )}
               {!loading && filteredRuns.length === 0 && (
                 <tr>
-                  <td
-                    colSpan={6}
-                    className="px-4 py-10 text-center"
+                  <td colSpan={6} className="px-4 py-10 text-center"
+                    style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 12, color: 'var(--vdim)' }}
                   >
-                    <div
-                      className="text-vmuted text-[11px]"
-                      style={{ fontFamily: 'var(--font-dm-mono)' }}
-                    >
-                      No runs match the current filters.
-                    </div>
+                    No runs match the current filters.
                   </td>
                 </tr>
               )}
-              {filteredRuns.map((run) => (
+              {filteredRuns.map((run, i) => (
                 <tr
                   key={run.id}
-                  className="hover:bg-vsurface transition-colors duration-100"
+                  className={run._isNew ? 'animate-slide-in-left' : 'animate-fade-up'}
+                  style={{
+                    borderBottom: '1px solid var(--vborder)',
+                    transition: 'background 0.1s',
+                    animationDelay: run._isNew ? undefined : `${i * 30}ms`,
+                  }}
+                  onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = 'var(--vbg)')}
+                  onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
                 >
                   <td className="px-4 py-3">
-                    <span
-                      className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] uppercase"
+                    <span className="inline-block px-2 py-0.5 rounded text-[10px]"
                       style={{
-                        fontFamily: 'var(--font-dm-mono)',
-                        background: run.status === 'success' ? 'oklch(0.70 0.17 155 / 0.1)' : 'oklch(0.63 0.22 25 / 0.1)',
-                        color: run.status === 'success' ? 'var(--vgreen)' : 'var(--vred)',
+                        fontFamily: 'var(--font-dm-mono)', fontWeight: 500, letterSpacing: '0.08em',
+                        background: run.status === 'success' ? '#DCFCE7' : '#FEE2E2',
+                        color: run.status === 'success' ? '#059669' : '#DC2626',
                       }}
                     >
-                      {run.status}
+                      {run.status.toUpperCase()}
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <div
-                      className="text-vtext text-[12px]"
-                      style={{ fontFamily: 'var(--font-dm-mono)' }}
+                    <div style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 12, fontWeight: 500, color: 'var(--vtext)' }}>{run.agent_label}</div>
+                    <div style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 10, color: 'var(--vmuted)' }}>{run.agent_id}</div>
+                  </td>
+                  <td className="px-4 py-3"><MachinePill machine={run.machine} /></td>
+                  <td className="px-4 py-3">
+                    <span className="px-1.5 py-0.5 rounded border text-[10px]"
+                      style={{ fontFamily: 'var(--font-dm-mono)', color: 'var(--vmuted)', borderColor: 'var(--vborder)', background: 'var(--vbg)' }}
                     >
-                      {run.agent_label}
-                    </div>
-                    <div
-                      className="text-vdim text-[10px] mt-0.5"
-                      style={{ fontFamily: 'var(--font-dm-mono)' }}
-                    >
-                      {run.agent_id}
-                    </div>
+                      {run.model}
+                    </span>
                   </td>
-                  <td
-                    className="px-4 py-3 text-vmuted text-[12px]"
-                    style={{ fontFamily: 'var(--font-dm-mono)' }}
-                  >
-                    {run.machine}
-                  </td>
-                  <td
-                    className="px-4 py-3 text-vmuted text-[12px]"
-                    style={{ fontFamily: 'var(--font-dm-mono)' }}
-                  >
-                    {run.model}
-                  </td>
-                  <td
-                    className="px-4 py-3 text-vdim text-[12px] tabular-nums"
-                    style={{ fontFamily: 'var(--font-dm-mono)' }}
-                  >
+                  <td className="px-4 py-3" style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vmuted)' }}>
                     {run.duration_ms != null ? `${run.duration_ms}ms` : '—'}
                   </td>
-                  <td
-                    className="px-4 py-3 text-vdim text-[10px] tabular-nums"
-                    style={{ fontFamily: 'var(--font-dm-mono)' }}
-                  >
+                  <td className="px-4 py-3" style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vdim)' }}>
                     {new Date(run.ran_at).toLocaleString()}
                   </td>
                 </tr>
@@ -296,7 +286,7 @@ export default function AgentsPage() {
             </tbody>
           </table>
         </div>
-      </div>
+      </section>
     </div>
   )
 }

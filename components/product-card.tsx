@@ -1,17 +1,13 @@
 'use client'
 
+import { useState } from 'react'
 import { ExternalLink, GitFork } from 'lucide-react'
 import { Product, MrrSnapshot } from '@/lib/types'
-import { Sparkline } from './sparkline'
+import { LineChart, Line, ResponsiveContainer } from 'recharts'
 
-const ACCENT: Record<string, string> = {
-  sparkcheck: 'var(--spark)',
-  twitter_growth_optimizer: 'var(--twitterblue)',
-}
-
-const ACCENT_HEX: Record<string, string> = {
-  sparkcheck: '#FF4D8D',
-  twitter_growth_optimizer: '#1D9BF0',
+const CONFIG: Record<string, { accent: string; label: string }> = {
+  sparkcheck:               { accent: '#E8194B', label: 'SparkCheck' },
+  twitter_growth_optimizer: { accent: '#0066FF', label: 'Twitter Growth Opt.' },
 }
 
 interface Props {
@@ -19,126 +15,156 @@ interface Props {
   snapshots?: MrrSnapshot[]
   latestMrr?: number
   latestSubs?: number
+  animDelay?: number
 }
 
-export function ProductCard({ product, snapshots = [], latestMrr = 0, latestSubs = 0 }: Props) {
-  const accent = ACCENT[product.id] ?? 'var(--hermes)'
-  const accentHex = ACCENT_HEX[product.id] ?? '#8B5CF6'
-  const sparkData = snapshots.slice(-7).map((s) => s.mrr_usd)
+export function ProductCard({ product, snapshots = [], latestMrr = 0, latestSubs = 0, animDelay = 0 }: Props) {
+  const { accent } = CONFIG[product.id] ?? { accent: '#7C3AED', label: product.label }
+  const sparkData = snapshots.slice(-8).map((s, i) => ({ v: s.mrr_usd, i }))
+
+  const [sparkKey, setSparkKey] = useState(0)
 
   return (
     <div
-      className="product-card relative rounded-lg p-5 border"
+      className="product-card rounded-lg border bg-vsurface animate-fade-up"
       style={{
-        background: 'oklch(0.14 0.022 255)',
-        borderColor: `color-mix(in oklch, ${accentHex} 30%, oklch(0.27 0.035 255))`,
-        '--card-accent': accentHex,
-      } as React.CSSProperties}
+        borderColor: 'var(--vborder)',
+        borderLeft: `4px solid ${accent}`,
+        animationDelay: `${animDelay}ms`,
+      }}
+      onMouseEnter={() => setSparkKey((k) => k + 1)}
     >
       {/* Header */}
-      <div className="flex items-start justify-between mb-4">
+      <div className="px-5 pt-5 pb-4 flex items-start justify-between">
         <div>
-          <div
-            className="text-xs tracking-widest uppercase font-medium mb-1.5"
-            style={{ fontFamily: 'var(--font-dm-mono)', color: accent }}
-          >
-            {product.label}
-          </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 mb-0.5">
             <span
-              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] uppercase tracking-wider"
+              style={{
+                fontFamily: 'var(--font-syne)',
+                fontWeight: 700,
+                fontSize: 18,
+                color: 'var(--vtext)',
+                letterSpacing: '-0.01em',
+              }}
+            >
+              {CONFIG[product.id]?.label ?? product.label}
+            </span>
+            <span
+              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded"
               style={{
                 fontFamily: 'var(--font-dm-mono)',
-                background:
-                  product.status === 'live'
-                    ? 'oklch(0.70 0.17 155 / 0.12)'
-                    : 'oklch(0.52 0.04 255 / 0.15)',
-                color: product.status === 'live' ? 'var(--vgreen)' : 'var(--vmuted)',
+                fontWeight: 500,
+                fontSize: 8,
+                letterSpacing: '0.1em',
+                background: product.status === 'live' ? '#DCFCE7' : '#F3F4F6',
+                color: product.status === 'live' ? '#059669' : '#6B7280',
               }}
             >
               <span
                 className="w-1.5 h-1.5 rounded-full"
-                style={{
-                  background: product.status === 'live' ? 'var(--vgreen)' : 'var(--vmuted)',
-                }}
+                style={{ background: product.status === 'live' ? '#059669' : '#9CA3AF' }}
               />
-              {product.status}
+              {product.status.toUpperCase()}
             </span>
           </div>
-        </div>
-
-        <div className="flex items-center gap-1.5">
-          <a
-            href={product.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1 px-2 py-1 rounded text-vmuted hover:text-vtext transition-colors"
-            style={{
-              fontFamily: 'var(--font-dm-mono)',
-              fontSize: 11,
-              background: 'oklch(0.22 0.022 255)',
-            }}
-          >
-            <ExternalLink className="w-3 h-3" />
-            Live
-          </a>
-          <a
-            href={`https://github.com/${product.github_repo}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1 px-2 py-1 rounded text-vmuted hover:text-vtext transition-colors"
-            style={{
-              fontFamily: 'var(--font-dm-mono)',
-              fontSize: 11,
-              background: 'oklch(0.22 0.022 255)',
-            }}
-          >
-            <GitFork className="w-3 h-3" />
-            Repo
-          </a>
+          {product.notes && (
+            <div style={{ fontFamily: 'var(--font-inter)', fontSize: 12, color: 'var(--vmuted)' }}>
+              {product.notes}
+            </div>
+          )}
         </div>
       </div>
 
-      {/* MRR + Subs */}
-      <div className="flex items-end justify-between mb-3">
+      {/* MRR row */}
+      <div className="px-5 pb-4 flex items-end justify-between">
         <div>
-          <div
-            className="text-vtext tabular-nums"
-            style={{ fontFamily: 'var(--font-syne)', fontSize: 28, fontWeight: 800, lineHeight: 1 }}
-          >
-            ${latestMrr.toLocaleString()}
+          <div className="flex items-baseline gap-2">
+            <span
+              className="tabular-nums"
+              style={{
+                fontFamily: 'var(--font-syne)',
+                fontWeight: 800,
+                fontSize: 36,
+                color: 'var(--vtext)',
+                lineHeight: 1,
+              }}
+            >
+              ${latestMrr.toLocaleString()}
+            </span>
+            <span
+              style={{
+                fontFamily: 'var(--font-dm-mono)',
+                fontWeight: 500,
+                fontSize: 11,
+                color: 'var(--vmuted)',
+                letterSpacing: '0.08em',
+              }}
+            >
+              MRR
+            </span>
           </div>
           <div
-            className="text-vmuted text-[11px] mt-1.5"
-            style={{ fontFamily: 'var(--font-dm-mono)' }}
+            className="mt-1"
+            style={{
+              fontFamily: 'var(--font-dm-mono)',
+              fontSize: 11,
+              color: 'var(--vmuted)',
+            }}
           >
-            MRR &middot; {latestSubs} subscribers
+            {latestSubs.toLocaleString()} subscribers
           </div>
         </div>
+
+        {/* Sparkline */}
         {sparkData.length >= 2 && (
-          <div className="w-28">
-            <Sparkline data={sparkData} color={accentHex} height={40} />
-          </div>
-        )}
-        {sparkData.length < 2 && (
-          <div
-            className="text-vdim text-[10px]"
-            style={{ fontFamily: 'var(--font-dm-mono)' }}
-          >
-            No history
+          <div className="w-28 h-10">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart key={sparkKey} data={sparkData} margin={{ top: 2, right: 2, bottom: 2, left: 2 }}>
+                <Line
+                  type="monotone"
+                  dataKey="v"
+                  stroke={accent}
+                  strokeWidth={1.5}
+                  dot={false}
+                  isAnimationActive
+                  animationDuration={600}
+                />
+              </LineChart>
+            </ResponsiveContainer>
           </div>
         )}
       </div>
 
-      {/* Notes */}
-      {product.notes && (
-        <div
-          className="text-vdim text-[11px] pt-3 border-t border-vborder"
-          style={{ fontFamily: 'var(--font-dm-mono)' }}
+      {/* Footer */}
+      <div
+        className="px-5 py-3 border-t flex items-center gap-3"
+        style={{ borderColor: 'var(--vborder)' }}
+      >
+        <a
+          href={product.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1.5 transition-colors duration-100"
+          style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vmuted)' }}
+          onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = accent)}
+          onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--vmuted)')}
         >
-          {product.notes}
-        </div>
-      )}
+          <ExternalLink className="w-3.5 h-3.5" />
+          Live site
+        </a>
+        <a
+          href={`https://github.com/${product.github_repo}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1.5 transition-colors duration-100"
+          style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vmuted)' }}
+          onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = accent)}
+          onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--vmuted)')}
+        >
+          <GitFork className="w-3.5 h-3.5" />
+          GitHub
+        </a>
+      </div>
     </div>
   )
 }

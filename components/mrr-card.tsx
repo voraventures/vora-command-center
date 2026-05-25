@@ -1,75 +1,115 @@
 'use client'
 
 import { MrrSnapshot } from '@/lib/types'
-import { Sparkline } from './sparkline'
+import { LineChart, Line, ResponsiveContainer } from 'recharts'
 
-const ACCENT_HEX: Record<string, string> = {
-  sparkcheck: '#FF4D8D',
-  twitter_growth_optimizer: '#1D9BF0',
-}
-
-const LABEL: Record<string, string> = {
-  sparkcheck: 'SparkCheck',
-  twitter_growth_optimizer: 'Twitter Growth Opt.',
+const CONFIG: Record<string, { accent: string; label: string }> = {
+  sparkcheck:               { accent: '#E8194B', label: 'SparkCheck' },
+  twitter_growth_optimizer: { accent: '#0066FF', label: 'Twitter Growth Opt.' },
 }
 
 interface Props {
   product: string
   snapshots: MrrSnapshot[]
+  animDelay?: number
 }
 
-export function MrrCard({ product, snapshots }: Props) {
-  const accentHex = ACCENT_HEX[product] ?? '#8B5CF6'
+export function MrrCard({ product, snapshots, animDelay = 0 }: Props) {
+  const { accent, label } = CONFIG[product] ?? { accent: '#7C3AED', label: product }
   const latest = snapshots[snapshots.length - 1]
-  const prev = snapshots[snapshots.length - 2]
-  const delta = latest && prev ? latest.mrr_usd - prev.mrr_usd : 0
-  const data = snapshots.map((s) => s.mrr_usd)
-  const mrr = latest?.mrr_usd ?? 0
-  const subs = latest?.subscriber_count ?? 0
+  const prev   = snapshots[snapshots.length - 2]
+  const delta  = latest && prev ? latest.mrr_usd - prev.mrr_usd : 0
+  const mrr    = latest?.mrr_usd ?? 0
+  const subs   = latest?.subscriber_count ?? 0
+  const sparkData = snapshots.slice(-10).map((s, i) => ({ v: s.mrr_usd, i }))
 
   return (
     <div
-      className="rounded-lg border border-vborder p-5"
-      style={{ background: 'oklch(0.14 0.02 255)' }}
+      className="card-hover rounded-lg border animate-fade-up"
+      style={{
+        background: 'var(--vsurface)',
+        borderColor: 'var(--vborder)',
+        borderLeft: `4px solid ${accent}`,
+        animationDelay: `${animDelay}ms`,
+      }}
     >
-      <div
-        className="text-[10px] uppercase tracking-widest mb-4"
-        style={{ fontFamily: 'var(--font-dm-mono)', color: accentHex }}
-      >
-        {LABEL[product] ?? product}
-      </div>
+      <div className="px-5 pt-5 pb-4">
+        <div
+          style={{
+            fontFamily: 'var(--font-dm-mono)',
+            fontWeight: 500,
+            fontSize: 10,
+            color: accent,
+            letterSpacing: '0.15em',
+            textTransform: 'uppercase',
+          }}
+        >
+          {label}
+        </div>
 
-      <div className="flex items-end justify-between">
-        <div>
-          <div
-            className="text-vtext tabular-nums"
-            style={{ fontFamily: 'var(--font-syne)', fontWeight: 800, fontSize: 26, lineHeight: 1 }}
-          >
-            ${mrr.toLocaleString()}
-          </div>
-          <div
-            className="text-vmuted text-[11px] mt-2"
-            style={{ fontFamily: 'var(--font-dm-mono)' }}
-          >
-            {subs} subscribers
-          </div>
-          {delta !== 0 && (
+        <div className="mt-3 flex items-end justify-between">
+          <div>
+            <div className="flex items-baseline gap-2">
+              <span
+                className="tabular-nums"
+                style={{
+                  fontFamily: 'var(--font-syne)',
+                  fontWeight: 800,
+                  fontSize: 32,
+                  color: 'var(--vtext)',
+                  lineHeight: 1,
+                }}
+              >
+                ${mrr.toLocaleString()}
+              </span>
+              <span
+                style={{
+                  fontFamily: 'var(--font-dm-mono)',
+                  fontSize: 11,
+                  color: 'var(--vmuted)',
+                  letterSpacing: '0.08em',
+                }}
+              >
+                MRR
+              </span>
+            </div>
             <div
-              className="text-[11px] mt-1 tabular-nums"
-              style={{
-                fontFamily: 'var(--font-dm-mono)',
-                color: delta > 0 ? 'var(--vgreen)' : 'var(--vred)',
-              }}
+              className="mt-1.5"
+              style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vmuted)' }}
             >
-              {delta > 0 ? '+' : ''}${delta.toFixed(0)} vs prev
+              {subs.toLocaleString()} subscribers
+            </div>
+            {delta !== 0 && (
+              <div
+                className="mt-1 tabular-nums"
+                style={{
+                  fontFamily: 'var(--font-dm-mono)',
+                  fontSize: 11,
+                  color: delta > 0 ? 'var(--vgreen)' : 'var(--vred)',
+                }}
+              >
+                {delta > 0 ? '+' : ''}${delta.toFixed(0)} vs prev
+              </div>
+            )}
+          </div>
+
+          {sparkData.length >= 2 && (
+            <div className="w-24 h-10">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={sparkData} margin={{ top: 2, right: 2, bottom: 2, left: 2 }}>
+                  <Line
+                    type="monotone"
+                    dataKey="v"
+                    stroke={accent}
+                    strokeWidth={1.5}
+                    dot={false}
+                    isAnimationActive={false}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
             </div>
           )}
         </div>
-        {data.length >= 2 && (
-          <div className="w-24">
-            <Sparkline data={data} color={accentHex} height={44} />
-          </div>
-        )}
       </div>
     </div>
   )

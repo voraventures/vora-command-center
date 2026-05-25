@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { Bot } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { AgentRun } from '@/lib/types'
 
@@ -10,36 +11,110 @@ interface Props {
   realtime?: boolean
 }
 
-function StatusPill({ status }: { status: string }) {
-  const ok = status === 'success'
+function MachinePill({ machine }: { machine: string }) {
+  const isStudio = machine === 'mac_studio'
   return (
     <span
-      className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] uppercase tracking-wider"
+      className="inline-block px-2 py-0.5 rounded text-[10px]"
       style={{
         fontFamily: 'var(--font-dm-mono)',
-        background: ok ? 'oklch(0.70 0.17 155 / 0.1)' : 'oklch(0.63 0.22 25 / 0.1)',
-        color: ok ? 'var(--vgreen)' : 'var(--vred)',
+        fontWeight: 500,
+        letterSpacing: '0.05em',
+        background: isStudio ? 'var(--vtext)' : 'transparent',
+        color: isStudio ? '#FFFFFF' : 'var(--vtext)',
+        border: isStudio ? 'none' : '1px solid var(--vborder2)',
       }}
     >
-      {status}
+      {isStudio ? 'MAC STUDIO' : 'MACBOOK'}
     </span>
   )
 }
 
+function StatusPill({ status }: { status: string }) {
+  const ok = status === 'success'
+  return (
+    <span
+      className="inline-block px-2 py-0.5 rounded text-[10px]"
+      style={{
+        fontFamily: 'var(--font-dm-mono)',
+        fontWeight: 500,
+        letterSpacing: '0.08em',
+        background: ok ? '#DCFCE7' : '#FEE2E2',
+        color: ok ? '#059669' : '#DC2626',
+      }}
+    >
+      {status.toUpperCase()}
+    </span>
+  )
+}
+
+function timeAgo(iso: string): string {
+  const diff = Math.floor((Date.now() - new Date(iso).getTime()) / 1000)
+  if (diff < 60)   return `${diff}s ago`
+  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`
+  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`
+  return `${Math.floor(diff / 86400)}d ago`
+}
+
+function Row({ run, isNew, delay }: { run: AgentRun; isNew?: boolean; delay?: number }) {
+  return (
+    <tr
+      className={isNew ? 'animate-slide-in-left' : 'animate-fade-up'}
+      style={{ animationDelay: delay != null ? `${delay}ms` : undefined }}
+    >
+      <td className="px-4 py-3">
+        <div className="flex items-center gap-2">
+          <span
+            className="w-2 h-2 rounded-full flex-shrink-0"
+            style={{ background: run.status === 'success' ? 'var(--vgreen)' : 'var(--vred)' }}
+          />
+          <div>
+            <div style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 12, color: 'var(--vtext)', fontWeight: 500 }}>
+              {run.agent_label}
+            </div>
+            <div style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 10, color: 'var(--vmuted)' }}>
+              {run.agent_id}
+            </div>
+          </div>
+        </div>
+      </td>
+      <td className="px-3 py-3"><MachinePill machine={run.machine} /></td>
+      <td className="px-3 py-3">
+        <span
+          className="px-1.5 py-0.5 rounded border text-[10px]"
+          style={{
+            fontFamily: 'var(--font-dm-mono)',
+            color: 'var(--vmuted)',
+            borderColor: 'var(--vborder)',
+            background: 'var(--vbg)',
+          }}
+        >
+          {run.model}
+        </span>
+      </td>
+      <td className="px-3 py-3" style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vmuted)' }}>
+        {run.duration_ms != null ? `${run.duration_ms}ms` : '—'}
+      </td>
+      <td className="px-3 py-3"><StatusPill status={run.status} /></td>
+      <td className="px-3 py-3" style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vdim)' }}>
+        {timeAgo(run.ran_at)}
+      </td>
+    </tr>
+  )
+}
+
 export function AgentLog({ initial, limit = 5, realtime = false }: Props) {
-  const [runs, setRuns] = useState<AgentRun[]>(initial)
+  const [runs, setRuns] = useState<(AgentRun & { _isNew?: boolean })[]>(initial)
+  const mounted = useRef(false)
 
   useEffect(() => {
+    mounted.current = true
     if (!realtime) return
     const channel = supabase
       .channel('agent_runs_feed')
-      .on(
-        'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'agent_runs' },
-        (payload) => {
-          setRuns((prev) => [payload.new as AgentRun, ...prev].slice(0, 100))
-        }
-      )
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'agent_runs' }, (payload) => {
+        setRuns((prev) => [{ ...(payload.new as AgentRun), _isNew: true }, ...prev].slice(0, 200))
+      })
       .subscribe()
     return () => { supabase.removeChannel(channel) }
   }, [realtime])
@@ -47,82 +122,75 @@ export function AgentLog({ initial, limit = 5, realtime = false }: Props) {
   const displayed = runs.slice(0, limit)
 
   return (
-    <div className="rounded-lg border border-vborder overflow-hidden" style={{ background: 'oklch(0.14 0.02 255)' }}>
+    <div
+      className="rounded-lg border overflow-hidden"
+      style={{ background: 'var(--vsurface)', borderColor: 'var(--vborder)' }}
+    >
+      {/* Header */}
       <div
-        className="flex items-center justify-between px-4 py-3 border-b border-vborder"
-        style={{ background: 'oklch(0.17 0.018 255)' }}
+        className="flex items-center justify-between px-4 py-3 border-b"
+        style={{ borderColor: 'var(--vborder)', background: 'var(--vsurface)' }}
       >
         <span
-          className="text-[10px] text-vmuted uppercase tracking-widest"
-          style={{ fontFamily: 'var(--font-dm-mono)' }}
+          style={{
+            fontFamily: 'var(--font-dm-mono)',
+            fontWeight: 500,
+            fontSize: 10,
+            color: 'var(--vmuted)',
+            letterSpacing: '0.3em',
+          }}
         >
-          Agent Runs
+          AGENT RUNS
         </span>
         {realtime && (
           <span className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-vgreen animate-pulse" />
-            <span
-              className="text-[10px] text-vdim uppercase tracking-wide"
-              style={{ fontFamily: 'var(--font-dm-mono)' }}
-            >
-              Live
+            <span className="w-1.5 h-1.5 rounded-full animate-pulse-dot" style={{ background: 'var(--vgreen)' }} />
+            <span style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 10, color: 'var(--vmuted)', letterSpacing: '0.05em' }}>
+              LIVE
             </span>
           </span>
         )}
       </div>
 
       {displayed.length === 0 ? (
-        <div className="px-4 py-10 text-center">
-          <div
-            className="text-vmuted text-[11px]"
-            style={{ fontFamily: 'var(--font-dm-mono)' }}
-          >
-            No agent runs yet.
+        <div
+          className="mx-4 my-6 flex flex-col items-center justify-center py-10 rounded-lg border border-dashed"
+          style={{ borderColor: 'var(--vborder)' }}
+        >
+          <Bot className="w-8 h-8 mb-3" style={{ color: 'var(--vdim)' }} />
+          <div style={{ fontFamily: 'var(--font-syne)', fontWeight: 700, fontSize: 14, color: 'var(--vmuted)' }}>
+            No agent runs yet
           </div>
-          <div
-            className="text-vdim text-[10px] mt-1"
-            style={{ fontFamily: 'var(--font-dm-mono)' }}
-          >
-            Start your local agent server to begin.
+          <div className="mt-1" style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vdim)' }}>
+            Start your local Hermes server to begin
           </div>
         </div>
       ) : (
-        <div className="divide-y divide-vborder">
-          {displayed.map((run) => (
-            <div
-              key={run.id}
-              className="px-4 py-3 flex items-center gap-3 hover:bg-vsurface transition-colors duration-100"
-            >
-              <div className="flex-1 min-w-0">
-                <div
-                  className="text-vtext text-xs truncate"
-                  style={{ fontFamily: 'var(--font-dm-mono)' }}
+        <table className="w-full">
+          <thead>
+            <tr style={{ borderBottom: '1px solid var(--vborder)', background: 'var(--vbg)' }}>
+              {['Agent', 'Machine', 'Model', 'Duration', 'Status', 'Time'].map((h) => (
+                <th
+                  key={h}
+                  className="px-4 py-2 text-left"
+                  style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 10, color: 'var(--vdim)', letterSpacing: '0.1em' }}
                 >
-                  {run.agent_label}
-                </div>
-                <div
-                  className="text-vdim text-[10px] mt-0.5"
-                  style={{ fontFamily: 'var(--font-dm-mono)' }}
-                >
-                  {run.machine} &middot; {run.model}
-                  {run.duration_ms ? ` &middot; ${run.duration_ms}ms` : ''}
-                </div>
-              </div>
-              <div className="flex items-center gap-2 flex-shrink-0">
-                <StatusPill status={run.status} />
-                <span
-                  className="text-vdim text-[10px] tabular-nums"
-                  style={{ fontFamily: 'var(--font-dm-mono)' }}
-                >
-                  {new Date(run.ran_at).toLocaleTimeString('en-US', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
+                  {h.toUpperCase()}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {displayed.map((run, i) => (
+              <Row
+                key={run.id}
+                run={run}
+                isNew={run._isNew}
+                delay={run._isNew ? undefined : i * 50}
+              />
+            ))}
+          </tbody>
+        </table>
       )}
     </div>
   )

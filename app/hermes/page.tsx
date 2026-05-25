@@ -1,16 +1,16 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { Activity } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { HermesLog } from '@/lib/types'
 
 const PRODUCT_COLOR: Record<string, string> = {
-  sparkcheck: '#FF4D8D',
-  twitter_growth_optimizer: '#1D9BF0',
+  sparkcheck:               '#E8194B',
+  twitter_growth_optimizer: '#0066FF',
 }
-
 const PRODUCT_LABEL: Record<string, string> = {
-  sparkcheck: 'SparkCheck',
+  sparkcheck:               'SparkCheck',
   twitter_growth_optimizer: 'Twitter Growth',
 }
 
@@ -18,8 +18,16 @@ function isSameDay(a: Date, b: Date) {
   return a.toDateString() === b.toDateString()
 }
 
+function timeAgo(iso: string): string {
+  const diff = Math.floor((Date.now() - new Date(iso).getTime()) / 1000)
+  if (diff < 60)    return `${diff}s ago`
+  if (diff < 3600)  return `${Math.floor(diff / 60)}m ago`
+  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`
+  return `${Math.floor(diff / 86400)}d ago`
+}
+
 export default function HermesPage() {
-  const [logs, setLogs] = useState<HermesLog[]>([])
+  const [logs, setLogs] = useState<(HermesLog & { _isNew?: boolean })[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -33,110 +41,111 @@ export default function HermesPage() {
       setLoading(false)
     }
     load()
-
-    const channel = supabase
+    const ch = supabase
       .channel('hermes_full_page')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'hermes_log' }, (p) =>
-        setLogs((prev) => [p.new as HermesLog, ...prev])
+        setLogs((prev) => [{ ...(p.new as HermesLog), _isNew: true }, ...prev])
       )
       .subscribe()
-    return () => { supabase.removeChannel(channel) }
+    return () => { supabase.removeChannel(ch) }
   }, [])
 
   const today = new Date()
-  const todayLogs = logs.filter((l) => isSameDay(new Date(l.logged_at), today))
-  const todayCount = todayLogs.length
-
+  const todayCount = logs.filter((l) => isSameDay(new Date(l.logged_at), today)).length
   const productCounts = logs.reduce<Record<string, number>>((acc, l) => {
     if (l.product) acc[l.product] = (acc[l.product] ?? 0) + 1
     return acc
   }, {})
   const topProduct = Object.entries(productCounts).sort((a, b) => b[1] - a[1])[0]?.[0]
+  const perHour = logs.filter((l) => new Date(l.logged_at) > new Date(Date.now() - 3600000)).length
 
-  const hourAgo = new Date(Date.now() - 60 * 60 * 1000)
-  const perHour = logs.filter((l) => new Date(l.logged_at) > hourAgo).length
+  const STATS = [
+    {
+      value: todayCount,
+      label: 'Actions Today',
+      sub: 'since midnight',
+      isNum: true,
+    },
+    {
+      value: topProduct ? (PRODUCT_LABEL[topProduct] ?? topProduct) : '—',
+      label: 'Most Active',
+      sub: topProduct ? `${productCounts[topProduct]} total` : 'no data',
+      isNum: false,
+    },
+    {
+      value: perHour,
+      label: 'Per Hour',
+      sub: 'rolling 1h window',
+      isNum: true,
+    },
+  ]
 
   return (
-    <div className="space-y-6 max-w-4xl">
-      {/* Stats row */}
+    <div className="space-y-5 max-w-4xl">
+      {/* Stats */}
       <div
-        className="grid grid-cols-3 rounded-lg border border-vborder overflow-hidden"
-        style={{ background: 'oklch(0.14 0.02 255)' }}
+        className="grid grid-cols-3 rounded-lg border overflow-hidden animate-fade-up"
+        style={{ background: 'var(--vsurface)', borderColor: 'var(--vborder)' }}
       >
-        {[
-          { value: todayCount, label: 'Actions Today', sub: 'since midnight' },
-          {
-            value: topProduct ? (PRODUCT_LABEL[topProduct] ?? topProduct) : '—',
-            label: 'Most Active',
-            sub: topProduct ? `${productCounts[topProduct]} total` : 'no activity',
-            isText: true,
-          },
-          { value: perHour, label: 'Per Hour', sub: 'rolling 1h window' },
-        ].map(({ value, label, sub, isText }, i) => (
+        {STATS.map(({ value, label, sub, isNum }, i) => (
           <div
             key={label}
-            className={`px-6 py-5 ${i < 2 ? 'border-r border-vborder' : ''}`}
+            className="px-6 py-5"
+            style={{ borderRight: i < 2 ? '1px solid var(--vborder)' : undefined }}
           >
             <div
-              className="text-vtext leading-none"
+              className="tabular-nums leading-none"
               style={{
                 fontFamily: 'var(--font-syne)',
                 fontWeight: 800,
-                fontSize: isText ? 18 : 32,
+                fontSize: isNum ? 40 : 20,
+                color: 'var(--vtext)',
+                lineHeight: 1,
               }}
             >
               {value}
             </div>
             <div
-              className="text-vmuted text-[11px] mt-2"
-              style={{ fontFamily: 'var(--font-dm-mono)' }}
+              className="mt-2"
+              style={{ fontFamily: 'var(--font-dm-mono)', fontWeight: 500, fontSize: 11, color: 'var(--vmuted)', letterSpacing: '0.08em', textTransform: 'uppercase' }}
             >
               {label}
             </div>
-            <div
-              className="text-vdim text-[10px] mt-0.5"
-              style={{ fontFamily: 'var(--font-dm-mono)' }}
-            >
+            <div className="mt-0.5" style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vdim)' }}>
               {sub}
             </div>
           </div>
         ))}
       </div>
 
-      {/* Activity feed */}
+      {/* Feed */}
       <div
-        className="rounded-lg border border-vborder overflow-hidden"
-        style={{ background: 'oklch(0.14 0.02 255)' }}
+        className="rounded-lg border overflow-hidden"
+        style={{ background: 'var(--vsurface)', borderColor: 'var(--vborder)' }}
       >
         <div
-          className="flex items-center justify-between px-5 py-3 border-b border-vborder"
-          style={{ background: 'oklch(0.17 0.018 255)' }}
+          className="flex items-center justify-between px-5 py-3 border-b"
+          style={{ borderColor: 'var(--vborder)', background: 'var(--vbg)' }}
         >
           <span
-            className="text-[10px] text-vmuted uppercase tracking-widest"
-            style={{ fontFamily: 'var(--font-dm-mono)' }}
+            style={{ fontFamily: 'var(--font-dm-mono)', fontWeight: 500, fontSize: 10, color: 'var(--vmuted)', letterSpacing: '0.2em' }}
           >
-            Activity Feed
+            ACTIVITY FEED
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--hermes)' }} />
-            <span
-              className="text-[10px] text-vdim uppercase tracking-wide"
-              style={{ fontFamily: 'var(--font-dm-mono)' }}
-            >
-              Live
-            </span>
+            <span className="w-1.5 h-1.5 rounded-full animate-pulse-dot" style={{ background: 'var(--hermes)' }} />
+            <span style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 10, color: 'var(--vmuted)', letterSpacing: '0.05em' }}>LIVE</span>
           </span>
         </div>
 
         {loading && (
-          <div className="p-6 space-y-3">
+          <div className="p-6 space-y-5">
             {[0, 1, 2, 3, 4].map((i) => (
-              <div key={i} className="flex items-start gap-3 animate-pulse">
-                <div className="w-2 h-2 rounded-full bg-vsurface2 mt-1 flex-shrink-0" />
-                <div className="flex-1 space-y-1.5">
-                  <div className="h-2.5 rounded bg-vsurface2" style={{ width: `${55 + (i % 3) * 15}%` }} />
-                  <div className="h-2 rounded bg-vsurface2" style={{ width: `${30 + (i % 2) * 20}%` }} />
+              <div key={i} className="flex items-start gap-4">
+                <div className="skeleton w-3 h-3 rounded-full mt-0.5 flex-shrink-0" />
+                <div className="flex-1 space-y-2">
+                  <div className="skeleton h-3 rounded" style={{ width: `${50 + (i % 3) * 15}%` }} />
+                  <div className="skeleton h-2.5 rounded" style={{ width: `${30 + (i % 2) * 20}%` }} />
                 </div>
               </div>
             ))}
@@ -144,72 +153,62 @@ export default function HermesPage() {
         )}
 
         {!loading && logs.length === 0 && (
-          <div className="px-5 py-16 text-center">
-            <div
-              className="text-vmuted text-[11px]"
-              style={{ fontFamily: 'var(--font-dm-mono)' }}
-            >
-              Hermes is quiet.
+          <div className="flex flex-col items-center justify-center py-16">
+            <Activity className="w-10 h-10 mb-4" style={{ color: 'var(--vdim)' }} />
+            <div style={{ fontFamily: 'var(--font-syne)', fontWeight: 700, fontSize: 16, color: 'var(--vmuted)' }}>
+              Hermes is quiet
             </div>
-            <div
-              className="text-vdim text-[10px] mt-1"
-              style={{ fontFamily: 'var(--font-dm-mono)' }}
-            >
-              POST to /api/hermes-log to log activity.
+            <div className="mt-1" style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 12, color: 'var(--vdim)' }}>
+              POST to /api/hermes-log to log activity
             </div>
           </div>
         )}
 
-        <div className="divide-y divide-vborder">
-          {logs.map((log) => {
-            const color = log.product ? PRODUCT_COLOR[log.product] ?? '#8B5CF6' : '#8B5CF6'
-            const productLabel = log.product ? PRODUCT_LABEL[log.product] ?? log.product : null
+        <div>
+          {logs.map((log, i) => {
+            const color = log.product ? (PRODUCT_COLOR[log.product] ?? '#7C3AED') : '#7C3AED'
+            const productLabel = log.product ? (PRODUCT_LABEL[log.product] ?? log.product) : null
 
             return (
               <div
                 key={log.id}
-                className="px-5 py-3.5 flex items-start gap-3 hover:bg-vsurface transition-colors duration-100"
+                className={`flex gap-4 px-5 py-4 ${log._isNew ? 'animate-slide-down' : 'animate-fade-up'}`}
+                style={{
+                  borderBottom: '1px solid var(--vborder)',
+                  animationDelay: log._isNew ? undefined : `${i * 30}ms`,
+                  transition: 'background 0.1s',
+                }}
+                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = 'var(--vbg)')}
+                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
               >
-                <span
-                  className="w-2 h-2 rounded-full flex-shrink-0 mt-1"
-                  style={{ background: color }}
-                />
+                {/* Timeline */}
+                <div className="flex flex-col items-center flex-shrink-0 mt-1" style={{ width: 16 }}>
+                  <span
+                    className="w-3 h-3 rounded-full"
+                    style={{ background: color, boxShadow: `0 0 0 3px ${color}22` }}
+                  />
+                  <div className="flex-1 w-px mt-1.5" style={{ background: 'var(--vborder)', minHeight: 8 }} />
+                </div>
+
+                {/* Content */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-4">
-                    <div
-                      className="text-vtext text-[12px]"
-                      style={{ fontFamily: 'var(--font-dm-mono)' }}
-                    >
+                    <div style={{ fontFamily: 'var(--font-inter)', fontWeight: 500, fontSize: 13, color: 'var(--vtext)' }}>
                       {log.action}
                     </div>
-                    <span
-                      className="text-vdim text-[10px] tabular-nums flex-shrink-0"
-                      style={{ fontFamily: 'var(--font-dm-mono)' }}
-                    >
-                      {new Date(log.logged_at).toLocaleString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
+                    <span style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vdim)', flexShrink: 0 }}>
+                      {timeAgo(log.logged_at)}
                     </span>
                   </div>
                   {log.detail && (
-                    <div
-                      className="text-vdim text-[11px] mt-1"
-                      style={{ fontFamily: 'var(--font-dm-mono)' }}
-                    >
+                    <div className="mt-0.5" style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vmuted)' }}>
                       {log.detail}
                     </div>
                   )}
                   {productLabel && (
                     <span
-                      className="inline-block mt-1.5 text-[10px] px-1.5 py-0.5 rounded"
-                      style={{
-                        fontFamily: 'var(--font-dm-mono)',
-                        color,
-                        background: `${color}18`,
-                      }}
+                      className="inline-block mt-1.5 px-2 py-0.5 rounded text-[10px]"
+                      style={{ fontFamily: 'var(--font-dm-mono)', fontWeight: 500, color, background: `${color}18`, letterSpacing: '0.05em' }}
                     >
                       {productLabel}
                     </span>

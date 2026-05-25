@@ -6,9 +6,10 @@ interface Props {
   data: number[]
   color: string
   height?: number
+  animate?: boolean
 }
 
-export function Sparkline({ data, color, height = 40 }: Props) {
+export function Sparkline({ data, color, height = 40, animate = false }: Props) {
   if (data.length < 2) return null
   const chartData = data.map((v, i) => ({ v, i }))
 
@@ -21,16 +22,18 @@ export function Sparkline({ data, color, height = 40 }: Props) {
           stroke={color}
           strokeWidth={1.5}
           dot={false}
-          isAnimationActive={false}
+          isAnimationActive={animate}
+          animationDuration={600}
         />
         <Tooltip
           contentStyle={{
-            background: 'oklch(0.17 0.018 255)',
-            border: '1px solid oklch(0.27 0.035 255)',
-            borderRadius: 4,
-            fontSize: 10,
+            background: '#FFFFFF',
+            border: '1px solid #E5E4E0',
+            borderRadius: 6,
+            fontSize: 11,
             fontFamily: 'var(--font-dm-mono)',
-            padding: '3px 6px',
+            padding: '4px 8px',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
           }}
           formatter={(v) => [`$${Number(v ?? 0).toLocaleString()}`, '']}
           labelFormatter={() => ''}

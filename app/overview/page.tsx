@@ -8,65 +8,92 @@ import { Settings } from 'lucide-react'
 export const revalidate = 30
 
 const FINANCE_AGENTS = [
-  { id: 'market-intel', label: 'Market Intelligence', color: 'var(--finance)' },
-  { id: 'portfolio', label: 'Portfolio Strategist', color: 'var(--finance)' },
-  { id: 'savings', label: 'Savings Optimizer', color: 'var(--finance)' },
-  { id: 'crypto', label: 'Crypto & Alt Assets', color: 'var(--finance)' },
+  { id: 'market-intel',     label: 'Market Intelligence' },
+  { id: 'portfolio',        label: 'Portfolio Strategist' },
+  { id: 'savings',          label: 'Savings Optimizer' },
+  { id: 'finance-crypto',   label: 'Crypto & Alt Assets' },
 ]
 
-function LocalAgentCard({
-  accent,
-  accentHex,
+function LocalCard({
+  accentColor,
+  accentBg,
   label,
-  status,
+  pill,
+  pillBg,
+  pillColor,
+  footer,
   children,
+  animDelay = 0,
 }: {
-  accent: string
-  accentHex: string
+  accentColor: string
+  accentBg: string
   label: string
-  status: string
+  pill: string
+  pillBg: string
+  pillColor: string
+  footer: string
   children: React.ReactNode
+  animDelay?: number
 }) {
   return (
     <div
-      className="rounded-lg border p-5"
-      style={{
-        background: 'oklch(0.14 0.022 255)',
-        borderColor: `color-mix(in oklch, ${accentHex} 25%, oklch(0.27 0.035 255))`,
-      }}
+      className="product-card rounded-lg border bg-vsurface flex flex-col animate-fade-up"
+      style={{ borderColor: 'var(--vborder)', borderLeft: `4px solid ${accentColor}`, animationDelay: `${animDelay}ms` }}
     >
-      <div className="flex items-start justify-between mb-4">
+      <div className="px-5 pt-5 pb-4 flex items-start justify-between">
         <div>
-          <div
-            className="text-xs uppercase tracking-widest mb-1.5"
-            style={{ fontFamily: 'var(--font-dm-mono)', color: accent }}
-          >
-            {label}
+          <div className="flex items-center gap-2">
+            <span
+              style={{
+                fontFamily: 'var(--font-syne)',
+                fontWeight: 700,
+                fontSize: 16,
+                color: 'var(--vtext)',
+              }}
+            >
+              {label}
+            </span>
+            <span
+              className="px-1.5 py-0.5 rounded text-[8px]"
+              style={{
+                fontFamily: 'var(--font-dm-mono)',
+                fontWeight: 500,
+                letterSpacing: '0.1em',
+                background: pillBg,
+                color: pillColor,
+              }}
+            >
+              {pill}
+            </span>
           </div>
-          <span
-            className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] uppercase tracking-wider"
-            style={{
-              fontFamily: 'var(--font-dm-mono)',
-              background: 'oklch(0.52 0.04 255 / 0.15)',
-              color: 'var(--vmuted)',
-            }}
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-vmuted" />
-            {status}
-          </span>
         </div>
         <button
-          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-[11px] text-vmuted hover:text-vtext transition-colors"
+          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded border text-[11px] transition-colors duration-100"
           style={{
             fontFamily: 'var(--font-dm-mono)',
-            background: 'oklch(0.22 0.022 255)',
+            color: 'var(--vmuted)',
+            borderColor: 'var(--vborder)',
+            background: 'transparent',
           }}
         >
           <Settings className="w-3 h-3" />
           Configure
         </button>
       </div>
-      {children}
+
+      <div className="px-5 flex-1">{children}</div>
+
+      <div
+        className="px-5 py-3 border-t mt-4"
+        style={{
+          borderColor: 'var(--vborder)',
+          fontFamily: 'var(--font-dm-mono)',
+          fontSize: 11,
+          color: 'var(--vmuted)',
+        }}
+      >
+        {footer}
+      </div>
     </div>
   )
 }
@@ -74,87 +101,94 @@ function LocalAgentCard({
 function MrrProgressBar({ current, target = 5000 }: { current: number; target?: number }) {
   const pct = Math.min((current / target) * 100, 100)
   const milestones = [
-    { value: 1000, label: '$1K', pct: 20 },
-    { value: 2500, label: '$2.5K', pct: 50 },
+    { value: 1000,  label: '$1K',  pct: 20 },
+    { value: 2500,  label: '$2.5K', pct: 50 },
     { value: target, label: '$5K', pct: 100 },
   ]
 
   return (
     <div
-      className="rounded-lg border border-vborder p-6"
-      style={{ background: 'oklch(0.14 0.02 255)' }}
+      className="rounded-lg border animate-fade-up"
+      style={{ background: 'var(--vsurface)', borderColor: 'var(--vborder)', animationDelay: '300ms' }}
     >
-      <div className="flex items-center justify-between mb-5">
-        <div>
-          <div
-            className="text-[10px] text-vmuted uppercase tracking-widest"
-            style={{ fontFamily: 'var(--font-dm-mono)' }}
-          >
-            FL Move Progress
-          </div>
-          <div
-            className="text-vtext mt-1"
-            style={{ fontFamily: 'var(--font-syne)', fontWeight: 800, fontSize: 22 }}
-          >
-            ${current.toLocaleString()} <span className="text-vmuted text-sm">/ $5,000 MRR</span>
-          </div>
-        </div>
-        <div className="text-right">
-          <div
-            className="text-vgreen tabular-nums"
-            style={{ fontFamily: 'var(--font-syne)', fontWeight: 800, fontSize: 22 }}
-          >
-            {pct.toFixed(1)}%
-          </div>
-          <div
-            className="text-vdim text-[10px] mt-1"
-            style={{ fontFamily: 'var(--font-dm-mono)' }}
-          >
-            ${(target - current).toLocaleString()} remaining
-          </div>
-        </div>
-      </div>
-
-      {/* Progress bar */}
-      <div className="relative">
-        <div className="h-2 rounded-full bg-vsurface2 overflow-hidden">
-          <div
-            className="h-full rounded-full transition-all"
-            style={{
-              width: `${pct}%`,
-              background: 'linear-gradient(90deg, oklch(0.61 0.21 280), oklch(0.70 0.17 155))',
-            }}
-          />
+      <div className="px-6 py-5">
+        <div
+          style={{
+            fontFamily: 'var(--font-dm-mono)',
+            fontWeight: 500,
+            fontSize: 10,
+            color: 'var(--vmuted)',
+            letterSpacing: '0.2em',
+          }}
+        >
+          FL MOVE PROGRESS
         </div>
 
-        {/* Milestone markers */}
-        <div className="relative mt-3">
-          {milestones.map((m) => (
+        <div className="mt-3 flex items-baseline gap-2">
+          <span
+            className="tabular-nums"
+            style={{ fontFamily: 'var(--font-syne)', fontWeight: 800, fontSize: 28, color: 'var(--vgreen)', lineHeight: 1 }}
+          >
+            ${current.toLocaleString()}
+          </span>
+          <span style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 14, color: 'var(--vmuted)' }}>
+            / $5,000 MRR
+          </span>
+        </div>
+
+        {/* Progress bar */}
+        <div className="mt-5 relative">
+          <div
+            className="h-2 rounded-full overflow-hidden"
+            style={{ background: 'var(--vbg)' }}
+          >
             <div
-              key={m.value}
-              className="absolute flex flex-col items-center"
+              className="h-full rounded-full"
               style={{
-                left: `${m.pct}%`,
-                transform: m.pct === 100 ? 'translateX(-100%)' : m.pct === 0 ? 'none' : 'translateX(-50%)',
+                width: `${pct}%`,
+                background: 'linear-gradient(90deg, #059669, #10B981)',
+                animation: 'progressFill 800ms ease-out both',
               }}
-            >
+            />
+          </div>
+
+          {/* Milestones */}
+          <div className="relative mt-3 h-8">
+            {milestones.map((m) => (
               <div
-                className="w-px h-2"
+                key={m.value}
+                className="absolute flex flex-col items-center"
                 style={{
-                  background: current >= m.value ? 'var(--vgreen)' : 'var(--vborder2)',
-                }}
-              />
-              <span
-                className="text-[10px] mt-1 tabular-nums"
-                style={{
-                  fontFamily: 'var(--font-dm-mono)',
-                  color: current >= m.value ? 'var(--vgreen)' : 'var(--vdim)',
+                  left: `${m.pct}%`,
+                  transform: m.pct === 100 ? 'translateX(-100%)' : m.pct === 0 ? 'none' : 'translateX(-50%)',
                 }}
               >
-                {m.label}
-              </span>
-            </div>
-          ))}
+                <div
+                  className="w-px h-2"
+                  style={{ background: current >= m.value ? 'var(--vgreen)' : 'var(--vborder2)' }}
+                />
+                <span
+                  className="mt-0.5 text-[10px] tabular-nums"
+                  style={{
+                    fontFamily: 'var(--font-dm-mono)',
+                    color: current >= m.value ? 'var(--vgreen)' : 'var(--vdim)',
+                  }}
+                >
+                  {m.label}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div
+          className="mt-6"
+          style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 12, color: 'var(--vmuted)' }}
+        >
+          {pct.toFixed(1)}% to Florida.{' '}
+          <span style={{ color: 'var(--vtext2)' }}>
+            ${(target - current).toLocaleString()} remaining.
+          </span>
         </div>
       </div>
     </div>
@@ -163,7 +197,7 @@ function MrrProgressBar({ current, target = 5000 }: { current: number; target?: 
 
 export default async function OverviewPage() {
   const supabase = createServerClient()
-  const since24h = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+  const since24h = new Date(Date.now() - 86400000).toISOString()
 
   const [
     { data: products },
@@ -182,24 +216,22 @@ export default async function OverviewPage() {
   ])
 
   const productIds = ['sparkcheck', 'twitter_growth_optimizer']
-
-  const snapshotsByProduct = (id: string) =>
-    (snapshots ?? []).filter((s) => s.product === id)
+  const snapshotsByProduct = (id: string) => (snapshots ?? []).filter((s) => s.product === id)
 
   const latestByProduct = productIds.map((id) => {
     const snaps = snapshotsByProduct(id)
     return { id, latest: snaps[snaps.length - 1], prev: snaps[snaps.length - 2] }
   })
 
-  const totalMrr = latestByProduct.reduce((sum, { latest }) => sum + (latest?.mrr_usd ?? 0), 0)
-  const totalSubs = latestByProduct.reduce((sum, { latest }) => sum + (latest?.subscriber_count ?? 0), 0)
-  const prevTotalSubs = latestByProduct.reduce((sum, { prev }) => sum + (prev?.subscriber_count ?? 0), 0)
-  const subsDelta = totalSubs - prevTotalSubs
+  const totalMrr  = latestByProduct.reduce((s, { latest }) => s + (latest?.mrr_usd ?? 0), 0)
+  const totalSubs = latestByProduct.reduce((s, { latest }) => s + (latest?.subscriber_count ?? 0), 0)
+  const prevSubs  = latestByProduct.reduce((s, { prev }) => s + (prev?.subscriber_count ?? 0), 0)
+  const subsDelta = totalSubs - prevSubs
   const pctToTarget = Math.min((totalMrr / 5000) * 100, 100)
 
   return (
-    <div className="space-y-6 max-w-6xl">
-      {/* Section 1: Stats */}
+    <div className="space-y-5 max-w-6xl">
+      {/* Stat strip */}
       <StatStrip
         totalMrr={totalMrr}
         totalSubs={totalSubs}
@@ -209,9 +241,9 @@ export default async function OverviewPage() {
         pctToTarget={pctToTarget}
       />
 
-      {/* Section 2: Product + Local Agent cards */}
+      {/* Product + local agent cards */}
       <div className="grid grid-cols-2 gap-4">
-        {(products ?? []).map((p) => {
+        {(products ?? []).map((p, i) => {
           const { latest } = latestByProduct.find((x) => x.id === p.id) ?? {}
           return (
             <ProductCard
@@ -220,69 +252,82 @@ export default async function OverviewPage() {
               snapshots={snapshotsByProduct(p.id)}
               latestMrr={latest?.mrr_usd ?? 0}
               latestSubs={latest?.subscriber_count ?? 0}
+              animDelay={i * 60}
             />
           )
         })}
 
-        {/* Finance Agents */}
-        <LocalAgentCard
-          accent="var(--finance)"
-          accentHex="#10B981"
-          label="Finance Agents"
-          status="Local"
+        {/* Finance agents */}
+        <LocalCard
+          accentColor="#059669"
+          accentBg="#059669"
+          label="FINANCE AGENTS"
+          pill="LOCAL"
+          pillBg="#DCFCE7"
+          pillColor="#059669"
+          footer="4 agents configured · Mac Studio M4 Max"
+          animDelay={120}
         >
-          <div className="space-y-2">
-            {FINANCE_AGENTS.map((agent) => (
-              <div
-                key={agent.id}
-                className="flex items-center gap-2.5 py-1.5"
-              >
+          <div className="space-y-2.5 pb-2">
+            {FINANCE_AGENTS.map((a) => (
+              <div key={a.id} className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#059669' }} />
+                  <span style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 12, color: 'var(--vtext)' }}>
+                    {a.label}
+                  </span>
+                </div>
                 <span
-                  className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                  style={{ background: 'var(--finance)' }}
-                />
-                <span
-                  className="text-[12px] text-vmuted"
-                  style={{ fontFamily: 'var(--font-dm-mono)' }}
+                  className="px-1.5 py-0.5 rounded border text-[9px]"
+                  style={{
+                    fontFamily: 'var(--font-dm-mono)',
+                    color: 'var(--vmuted)',
+                    borderColor: 'var(--vborder)',
+                    background: 'var(--vbg)',
+                  }}
                 >
-                  {agent.label}
+                  QWEN3
                 </span>
               </div>
             ))}
           </div>
-        </LocalAgentCard>
+        </LocalCard>
 
-        {/* Speech Coach */}
-        <LocalAgentCard
-          accent="var(--speech)"
-          accentHex="#F59E0B"
-          label="Speech Coach"
-          status="Local"
+        {/* Speech coach */}
+        <LocalCard
+          accentColor="#D97706"
+          accentBg="#D97706"
+          label="SPEECH COACH"
+          pill="LOCAL"
+          pillBg="#FEF3C7"
+          pillColor="#D97706"
+          footer="1 agent configured · Mac Studio M4 Max"
+          animDelay={180}
         >
-          <div
-            className="text-vmuted text-[12px] leading-relaxed"
-            style={{ fontFamily: 'var(--font-dm-mono)' }}
-          >
-            Advanced accent refinement
-            <br />
-            <span className="text-vdim text-[11px]">Spanish native &rarr; American English</span>
+          <div className="pb-2">
+            <div style={{ fontFamily: 'var(--font-syne)', fontWeight: 700, fontSize: 15, color: 'var(--vtext)' }}>
+              Advanced accent refinement
+            </div>
+            <div className="mt-1" style={{ fontFamily: 'var(--font-inter)', fontSize: 12, color: 'var(--vmuted)' }}>
+              Spanish native &rarr; American English
+            </div>
+            <div
+              className="mt-3"
+              style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 11, color: 'var(--vmuted)' }}
+            >
+              Phoneme analysis &middot; Prosody training &middot; Domain drilling
+            </div>
           </div>
-          <div
-            className="mt-3 pt-3 border-t border-vborder text-[10px] text-vdim"
-            style={{ fontFamily: 'var(--font-dm-mono)' }}
-          >
-            Phoneme analysis &middot; prosody training &middot; real-time feedback
-          </div>
-        </LocalAgentCard>
+        </LocalCard>
       </div>
 
-      {/* Section 3: Agent log + Hermes feed */}
+      {/* Feeds */}
       <div className="grid grid-cols-2 gap-4">
         <AgentLog initial={agentRuns ?? []} limit={5} realtime />
         <HermesFeed initial={hermesLogs ?? []} limit={5} realtime />
       </div>
 
-      {/* Section 4: MRR Progress */}
+      {/* MRR progress */}
       <MrrProgressBar current={totalMrr} />
     </div>
   )

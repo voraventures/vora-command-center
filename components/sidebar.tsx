@@ -2,22 +2,15 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import {
-  LayoutDashboard,
-  TrendingUp,
-  Bot,
-  Activity,
-  Landmark,
-  Mic,
-} from 'lucide-react'
+import { LayoutDashboard, TrendingUp, Bot, Activity, Landmark, Mic } from 'lucide-react'
 
-const nav = [
-  { href: '/overview', label: 'Overview', icon: LayoutDashboard },
-  { href: '/revenue', label: 'Revenue', icon: TrendingUp },
-  { href: '/agents', label: 'Agents', icon: Bot },
-  { href: '/hermes', label: 'Hermes', icon: Activity },
-  { href: '/finance', label: 'Finance', icon: Landmark },
-  { href: '/speech', label: 'Speech', icon: Mic },
+const NAV = [
+  { href: '/overview',  label: 'Overview', icon: LayoutDashboard, accent: '#0A0A08' },
+  { href: '/revenue',   label: 'Revenue',  icon: TrendingUp,      accent: '#059669' },
+  { href: '/agents',    label: 'Agents',   icon: Bot,             accent: '#7C3AED' },
+  { href: '/hermes',    label: 'Hermes',   icon: Activity,        accent: '#7C3AED' },
+  { href: '/finance',   label: 'Finance',  icon: Landmark,        accent: '#059669' },
+  { href: '/speech',    label: 'Speech',   icon: Mic,             accent: '#D97706' },
 ]
 
 export function Sidebar() {
@@ -25,52 +18,75 @@ export function Sidebar() {
 
   return (
     <aside
-      className="w-60 flex-shrink-0 flex flex-col border-r border-vborder"
-      style={{ background: 'oklch(0.14 0.02 255)' }}
+      className="w-60 flex-shrink-0 flex flex-col border-r"
+      style={{ background: 'var(--vsurface)', borderColor: 'var(--vborder)' }}
     >
-      {/* Logo block */}
-      <div className="px-5 pt-6 pb-5 border-b border-vborder">
+      {/* Logo */}
+      <div className="px-5 pt-6 pb-5 border-b" style={{ borderColor: 'var(--vborder)' }}>
         <div
-          className="text-2xl tracking-tight text-vtext"
-          style={{ fontFamily: 'var(--font-syne)', fontWeight: 800, letterSpacing: '-0.02em' }}
+          style={{
+            fontFamily: 'var(--font-syne)',
+            fontWeight: 800,
+            fontSize: 28,
+            color: 'var(--vtext)',
+            lineHeight: 1,
+          }}
         >
           VORA
         </div>
         <div
-          className="text-xs text-vmuted mt-0.5 tracking-widest"
-          style={{ fontFamily: 'var(--font-syne)', fontWeight: 700 }}
+          className="mt-1"
+          style={{
+            fontFamily: 'var(--font-dm-mono)',
+            fontWeight: 500,
+            fontSize: 10,
+            color: 'var(--vmuted)',
+            letterSpacing: '0.3em',
+          }}
         >
           VENTURES
         </div>
         <div
-          className="text-[10px] text-vdim mt-1 tracking-[0.2em] uppercase"
-          style={{ fontFamily: 'var(--font-dm-mono)' }}
+          className="mt-0.5"
+          style={{
+            fontFamily: 'var(--font-dm-mono)',
+            fontWeight: 400,
+            fontSize: 8,
+            color: 'var(--vdim)',
+            letterSpacing: '0.4em',
+          }}
         >
-          Command Center
+          COMMAND CENTER
         </div>
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 px-3 py-4 space-y-0.5">
-        {nav.map(({ href, label, icon: Icon }) => {
+      <nav className="flex-1 px-2 py-3 space-y-0.5">
+        {NAV.map(({ href, label, icon: Icon, accent }) => {
           const active = pathname === href || pathname.startsWith(href + '/')
           return (
             <Link
               key={href}
               href={href}
-              className={[
-                'flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-all duration-150 outline-none',
-                'focus-visible:ring-1 focus-visible:ring-vborder2',
-                active
-                  ? 'bg-vsurface2 text-vtext'
-                  : 'text-vmuted hover:text-vtext hover:bg-vsurface',
-              ].join(' ')}
-              style={{ fontFamily: 'var(--font-dm-mono)', fontSize: 13 }}
+              className="flex items-center gap-2.5 rounded-md text-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-1 transition-colors duration-100"
+              style={{
+                fontFamily: 'var(--font-dm-mono)',
+                fontWeight: 500,
+                fontSize: 13,
+                padding: active ? '8px 12px 8px 8px' : '8px 12px',
+                background: active ? 'var(--vtext)' : 'transparent',
+                color: active ? '#FFFFFF' : 'var(--vtext)',
+                borderLeft: active ? `4px solid ${accent}` : '4px solid transparent',
+                textDecoration: 'none',
+              }}
+              onMouseEnter={(e) => {
+                if (!active) (e.currentTarget as HTMLElement).style.background = 'var(--vsurface2)'
+              }}
+              onMouseLeave={(e) => {
+                if (!active) (e.currentTarget as HTMLElement).style.background = 'transparent'
+              }}
             >
-              <Icon
-                className="w-4 h-4 flex-shrink-0 transition-colors duration-150"
-                style={{ color: active ? 'var(--hermes)' : undefined }}
-              />
+              <Icon className="w-4 h-4 flex-shrink-0" />
               {label}
             </Link>
           )
@@ -78,22 +94,38 @@ export function Sidebar() {
       </nav>
 
       {/* User block */}
-      <div className="px-5 py-4 border-t border-vborder">
+      <div
+        className="px-5 py-4 border-t"
+        style={{ borderColor: 'var(--vborder)' }}
+      >
         <div className="flex items-center gap-2.5">
-          <span className="relative flex-shrink-0">
-            <span className="block w-2 h-2 rounded-full bg-vgreen" />
-            <span className="absolute inset-0 rounded-full bg-vgreen animate-ping opacity-40" />
-          </span>
+          <div className="relative flex-shrink-0">
+            <span
+              className="block w-2 h-2 rounded-full animate-pulse-dot"
+              style={{ background: 'var(--vgreen)' }}
+            />
+          </div>
           <div>
             <div
-              className="text-vtext text-xs font-medium leading-tight"
-              style={{ fontFamily: 'var(--font-dm-mono)' }}
+              style={{
+                fontFamily: 'var(--font-syne)',
+                fontWeight: 700,
+                fontSize: 12,
+                color: 'var(--vtext)',
+                lineHeight: 1.2,
+              }}
             >
               LUIS COOMER
             </div>
             <div
-              className="text-vdim text-[10px] leading-tight mt-0.5 tracking-wide"
-              style={{ fontFamily: 'var(--font-dm-mono)' }}
+              className="mt-0.5"
+              style={{
+                fontFamily: 'var(--font-dm-mono)',
+                fontWeight: 400,
+                fontSize: 9,
+                color: 'var(--vmuted)',
+                letterSpacing: '0.05em',
+              }}
             >
               MAC STUDIO M4 MAX
             </div>
