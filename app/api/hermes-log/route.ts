@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@/lib/supabase'
 
 export async function POST(req: NextRequest) {
-  const auth = req.headers.get('authorization')
-  if (auth !== `Bearer ${process.env.VORA_WEBHOOK_SECRET}`) {
+  const secret = process.env.VORA_WEBHOOK_SECRET
+  const token = req.headers.get('authorization')?.replace(/^Bearer\s+/i, '').trim()
+  if (!secret || token !== secret) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
