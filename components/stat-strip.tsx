@@ -1,5 +1,8 @@
 'use client'
 
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { ArrowUpRight } from 'lucide-react'
 import { CountUp } from './count-up'
 import { AreaChart, Area, ResponsiveContainer } from 'recharts'
 
@@ -47,31 +50,19 @@ function MiniSparkline({ data, accent, gradId }: { data: number[]; accent: strin
 }
 
 function StatCard({
-  label,
-  value,
-  prefix = '',
-  suffix = '',
-  sublabel,
-  sublabelColor,
-  accent,
-  sparkline,
-  gradId,
-  delay = 0,
+  label, value, prefix = '', suffix = '', sublabel, sublabelColor,
+  accent, sparkline, gradId, delay = 0, href,
 }: {
-  label: string
-  value: number
-  prefix?: string
-  suffix?: string
-  sublabel: string
-  sublabelColor: string
-  accent: string
-  sparkline: number[]
-  gradId: string
-  delay?: number
+  label: string; value: number; prefix?: string; suffix?: string
+  sublabel: string; sublabelColor: string; accent: string
+  sparkline: number[]; gradId: string; delay?: number; href?: string
 }) {
+  const router = useRouter()
+  const [hovered, setHovered] = useState(false)
+
   return (
     <div
-      className="animate-fade-up stat-card-hover"
+      className={`animate-fade-up stat-card-hover${href ? ' btn-press' : ''}`}
       style={{
         background: '#161B2E',
         border: '1px solid #252D45',
@@ -80,9 +71,29 @@ function StatCard({
         position: 'relative',
         minHeight: 116,
         animationDelay: `${delay}ms`,
+        cursor: href ? 'pointer' : 'default',
       }}
+      onClick={href ? () => router.push(href) : undefined}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
-      {/* Label — top left */}
+      {/* Navigate arrow — visible on hover */}
+      {href && (
+        <ArrowUpRight
+          className="w-3.5 h-3.5"
+          style={{
+            position: 'absolute',
+            top: 12,
+            right: 12,
+            color: '#A78BFA',
+            opacity: hovered ? 1 : 0,
+            transition: 'opacity 150ms ease-out',
+            zIndex: 2,
+          }}
+        />
+      )}
+
+      {/* Label */}
       <div
         style={{
           fontFamily: 'var(--font-mono)',
@@ -96,7 +107,7 @@ function StatCard({
         {label}
       </div>
 
-      {/* Sparkline — absolute top-right, 44% width, 56px tall */}
+      {/* Sparkline */}
       <div
         style={{
           position: 'absolute',
@@ -166,6 +177,7 @@ export function StatStrip({
         sublabelColor="#00E676"
         sublabel={`${pctToTarget.toFixed(1)}% to $5K FL trigger`}
         delay={0}
+        href="/revenue"
       />
       <StatCard
         label="Subscribers"
@@ -176,6 +188,7 @@ export function StatStrip({
         sublabelColor="#9C6FFF"
         sublabel={subLabel}
         delay={60}
+        href="/revenue"
       />
       <StatCard
         label="Agent Runs (24h)"
@@ -186,6 +199,7 @@ export function StatStrip({
         sublabelColor="#A78BFA"
         sublabel="Hermes · Ollama stack"
         delay={120}
+        href="/agents"
       />
       <StatCard
         label="Hermes Actions (24h)"
@@ -196,6 +210,7 @@ export function StatStrip({
         sublabelColor="#A78BFA"
         sublabel="across all products"
         delay={180}
+        href="/hermes"
       />
     </div>
   )

@@ -19,12 +19,7 @@ export function Sidebar() {
   return (
     <aside
       className="w-60 flex-shrink-0 flex flex-col border-r sidebar-enter"
-      style={{
-        background: 'rgba(13, 17, 32, 0.92)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
-        borderColor: 'var(--vborder)',
-      }}
+      style={{ background: '#0D1120', borderColor: 'var(--vborder)' }}
     >
       {/* Logo */}
       <div className="px-5 pt-6 pb-5 border-b" style={{ borderColor: 'var(--vborder)' }}>
@@ -95,7 +90,7 @@ export function Sidebar() {
       {/* User block */}
       <div
         className="px-5 py-4 border-t"
-        style={{ borderColor: 'var(--vborder)', background: 'rgba(13, 17, 32, 0.92)' }}
+        style={{ borderColor: 'var(--vborder)', background: '#0D1120' }}
       >
         <div className="flex items-center gap-2.5">
           <span

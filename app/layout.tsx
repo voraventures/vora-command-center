@@ -3,7 +3,6 @@ import { Playfair_Display, DM_Mono } from 'next/font/google'
 import './globals.css'
 import { Sidebar } from '@/components/sidebar'
 import { TopBar } from '@/components/top-bar'
-import AmbientCanvas from '@/components/ambient-canvas'
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -26,8 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${playfair.variable} ${dmMono.variable}`}>
       <body>
-        <AmbientCanvas />
-        <div className="flex h-screen overflow-hidden" style={{ position: 'relative', zIndex: 1 }}>
+        <div className="flex h-screen overflow-hidden">
           <Sidebar />
           <div className="flex-1 flex flex-col overflow-hidden">
             <TopBar />

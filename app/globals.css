@@ -63,10 +63,10 @@
    * Never alias through shadcn-reserved names (--muted, --accent, --border, etc.)
    */
 
-  /* Surfaces — semi-transparent so ambient canvas shows through */
-  --vbg:       rgba(15, 17, 23, 0.95);
-  --vsurface:  rgba(22, 27, 46, 0.85);
-  --vsurface2: rgba(30, 37, 64, 0.85);
+  /* Surfaces */
+  --vbg:       #0F1117;
+  --vsurface:  #161B2E;
+  --vsurface2: #1E2540;
 
   /* Borders */
   --vborder:  #252D45;
@@ -118,11 +118,11 @@
   --dim:      #2A3450;
 
   /* shadcn compat — dark theme, self-contained */
-  --background:           rgba(15, 17, 23, 0.95);
+  --background:           #0F1117;
   --foreground:           #F0F4FF;
-  --card:                 rgba(22, 27, 46, 0.85);
+  --card:                 #161B2E;
   --card-foreground:      #F0F4FF;
-  --popover:              rgba(30, 37, 64, 0.92);
+  --popover:              #1E2540;
   --popover-foreground:   #F0F4FF;
   --primary:              #00E676;
   --primary-foreground:   #0F1117;
@@ -142,7 +142,7 @@
   --chart-4:              #9C6FFF;
   --chart-5:              #FFB800;
   --radius:               0.5rem;
-  --sidebar:              rgba(13, 17, 32, 0.92);
+  --sidebar:              #0D1120;
   --sidebar-foreground:   #F0F4FF;
   --sidebar-primary:      #00E676;
   --sidebar-primary-foreground: #0F1117;
@@ -157,10 +157,10 @@
     @apply border-border outline-ring/50;
   }
   html {
-    background-color: #0F1117;
+    background-color: var(--vbg);
   }
   body {
-    background-color: #0F1117;
+    background-color: var(--vbg);
     color: var(--vtext);
     font-family: var(--font-mono), monospace;
     -webkit-font-smoothing: antialiased;
@@ -318,14 +318,18 @@
 .btn-press { transition: transform 100ms ease-out; }
 .btn-press:active { transform: scale(0.97); }
 
-/* Backdrop blur — ambient canvas shows through card surfaces */
-[data-card],
-.product-card,
-.card-hover,
-.stat-card-hover {
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+/* Audio bar animation — agent activity viz */
+@keyframes audioBarPulse {
+  0%   { transform: scaleY(0.25); opacity: 0.4; }
+  100% { transform: scaleY(1);    opacity: 1; }
 }
+
+/* Slide in from right — live ticker */
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.animate-slide-in-right { animation: slideInRight 0.35s ease-out both; }
 
 /* Reduced motion — accessibility */
 @media (prefers-reduced-motion: reduce) {
