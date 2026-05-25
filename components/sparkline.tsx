@@ -5,28 +5,37 @@ import { LineChart, Line, ResponsiveContainer, Tooltip } from 'recharts'
 interface Props {
   data: number[]
   color: string
+  height?: number
 }
 
-export function Sparkline({ data, color }: Props) {
+export function Sparkline({ data, color, height = 40 }: Props) {
+  if (data.length < 2) return null
   const chartData = data.map((v, i) => ({ v, i }))
+
   return (
-    <div className="w-24 h-12">
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={chartData}>
-          <Line
-            type="monotone"
-            dataKey="v"
-            stroke={color}
-            strokeWidth={1.5}
-            dot={false}
-          />
-          <Tooltip
-            contentStyle={{ background: '#0F0F0F', border: '1px solid #1E1E1E', fontSize: 10 }}
-            formatter={(v) => [`$${v ?? 0}`, 'MRR']}
-            labelFormatter={() => ''}
-          />
-        </LineChart>
-      </ResponsiveContainer>
-    </div>
+    <ResponsiveContainer width="100%" height={height}>
+      <LineChart data={chartData} margin={{ top: 2, right: 2, bottom: 2, left: 2 }}>
+        <Line
+          type="monotone"
+          dataKey="v"
+          stroke={color}
+          strokeWidth={1.5}
+          dot={false}
+          isAnimationActive={false}
+        />
+        <Tooltip
+          contentStyle={{
+            background: 'oklch(0.17 0.018 255)',
+            border: '1px solid oklch(0.27 0.035 255)',
+            borderRadius: 4,
+            fontSize: 10,
+            fontFamily: 'var(--font-dm-mono)',
+            padding: '3px 6px',
+          }}
+          formatter={(v) => [`$${Number(v ?? 0).toLocaleString()}`, '']}
+          labelFormatter={() => ''}
+        />
+      </LineChart>
+    </ResponsiveContainer>
   )
 }

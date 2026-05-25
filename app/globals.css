@@ -7,9 +7,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-dm-mono);
+  --font-heading: var(--font-syne);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -43,78 +43,111 @@
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* Vora palette as Tailwind utilities */
+  --color-vbg: var(--vbg);
+  --color-vsurface: var(--vsurface);
+  --color-vsurface2: var(--vsurface2);
+  --color-vborder: var(--vborder);
+  --color-vborder2: var(--vborder2);
+  --color-vtext: var(--vtext);
+  --color-vmuted: var(--vmuted);
+  --color-vdim: var(--vdim);
+  --color-spark: var(--spark);
+  --color-twitterblue: var(--twitterblue);
+  --color-hermes: var(--hermes);
+  --color-finance: var(--finance);
+  --color-speech: var(--speech);
+  --color-vgreen: var(--vgreen);
+  --color-vred: var(--vred);
 }
 
+/* Vora Command Center palette — always active */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --vbg: oklch(0.11 0.022 255);
+  --vsurface: oklch(0.17 0.018 255);
+  --vsurface2: oklch(0.22 0.022 255);
+  --vborder: oklch(0.27 0.035 255);
+  --vborder2: oklch(0.35 0.05 255);
+  --vtext: oklch(0.93 0.012 255);
+  --vmuted: oklch(0.52 0.04 255);
+  --vdim: oklch(0.32 0.04 255);
+  --spark: oklch(0.65 0.26 350);
+  --twitterblue: oklch(0.66 0.17 225);
+  --hermes: oklch(0.61 0.21 280);
+  --finance: oklch(0.70 0.17 155);
+  --speech: oklch(0.78 0.18 70);
+  --vgreen: oklch(0.70 0.17 155);
+  --vred: oklch(0.63 0.22 25);
+
+  /* shadcn light vars (not used — always dark) */
+  --background: oklch(0.99 0.005 255);
+  --foreground: oklch(0.14 0.022 255);
+  --card: oklch(0.99 0.005 255);
+  --card-foreground: oklch(0.14 0.022 255);
+  --popover: oklch(0.99 0.005 255);
+  --popover-foreground: oklch(0.14 0.022 255);
+  --primary: oklch(0.14 0.022 255);
+  --primary-foreground: oklch(0.99 0.005 255);
+  --secondary: oklch(0.96 0.008 255);
+  --secondary-foreground: oklch(0.14 0.022 255);
+  --muted: oklch(0.96 0.008 255);
+  --muted-foreground: oklch(0.52 0.04 255);
+  --accent: oklch(0.96 0.008 255);
+  --accent-foreground: oklch(0.14 0.022 255);
+  --destructive: oklch(0.63 0.22 25);
+  --border: oklch(0.91 0.008 255);
+  --input: oklch(0.91 0.008 255);
+  --ring: oklch(0.52 0.04 255);
+  --chart-1: oklch(0.66 0.17 225);
+  --chart-2: oklch(0.70 0.17 155);
+  --chart-3: oklch(0.65 0.26 350);
+  --chart-4: oklch(0.61 0.21 280);
+  --chart-5: oklch(0.78 0.18 70);
+  --radius: 0.375rem;
+  --sidebar: oklch(0.17 0.018 255);
+  --sidebar-foreground: oklch(0.93 0.012 255);
+  --sidebar-primary: oklch(0.93 0.012 255);
+  --sidebar-primary-foreground: oklch(0.11 0.022 255);
+  --sidebar-accent: oklch(0.22 0.022 255);
+  --sidebar-accent-foreground: oklch(0.93 0.012 255);
+  --sidebar-border: oklch(0.27 0.035 255);
+  --sidebar-ring: oklch(0.52 0.04 255);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  /* Override shadcn dark vars with Vora palette */
+  --background: oklch(0.11 0.022 255);
+  --foreground: oklch(0.93 0.012 255);
+  --card: oklch(0.17 0.018 255);
+  --card-foreground: oklch(0.93 0.012 255);
+  --popover: oklch(0.17 0.018 255);
+  --popover-foreground: oklch(0.93 0.012 255);
+  --primary: oklch(0.93 0.012 255);
+  --primary-foreground: oklch(0.11 0.022 255);
+  --secondary: oklch(0.22 0.022 255);
+  --secondary-foreground: oklch(0.93 0.012 255);
+  --muted: oklch(0.22 0.022 255);
+  --muted-foreground: oklch(0.52 0.04 255);
+  --accent: oklch(0.22 0.022 255);
+  --accent-foreground: oklch(0.93 0.012 255);
+  --destructive: oklch(0.63 0.22 25);
+  --border: oklch(0.27 0.035 255);
+  --input: oklch(0.27 0.035 255);
+  --ring: oklch(0.52 0.04 255);
+  --chart-1: oklch(0.66 0.17 225);
+  --chart-2: oklch(0.70 0.17 155);
+  --chart-3: oklch(0.65 0.26 350);
+  --chart-4: oklch(0.61 0.21 280);
+  --chart-5: oklch(0.78 0.18 70);
+  --sidebar: oklch(0.14 0.02 255);
+  --sidebar-foreground: oklch(0.93 0.012 255);
+  --sidebar-primary: oklch(0.93 0.012 255);
+  --sidebar-primary-foreground: oklch(0.11 0.022 255);
+  --sidebar-accent: oklch(0.22 0.022 255);
+  --sidebar-accent-foreground: oklch(0.93 0.012 255);
+  --sidebar-border: oklch(0.27 0.035 255);
+  --sidebar-ring: oklch(0.52 0.04 255);
 }
 
 @layer base {
@@ -122,34 +155,23 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
-  }
-  html {
-    @apply font-sans;
+    @apply bg-vbg text-vtext antialiased;
+    font-family: var(--font-inter), system-ui, sans-serif;
   }
 }
 
-/* Vora Command Center custom vars */
-:root {
-  --vora-background: #09090B;
-  --vora-surface: #0F0F0F;
-  --vora-border: #1E1E1E;
-  --accent-spark: #FF5C8D;
-  --accent-twitter: #1DA1F2;
-  --accent-hermes: #9B5CFF;
-}
+/* Scrollbar */
+::-webkit-scrollbar { width: 3px; height: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: oklch(0.27 0.035 255); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: oklch(0.35 0.05 255); }
 
-* {
-  box-sizing: border-box;
+/* Product card hover glow — accent set via CSS custom property on the element */
+.product-card {
+  transition: transform 0.18s ease-out, box-shadow 0.18s ease-out, border-color 0.18s ease-out;
 }
-
-::-webkit-scrollbar {
-  width: 4px;
-}
-::-webkit-scrollbar-track {
-  background: #0F0F0F;
-}
-::-webkit-scrollbar-thumb {
-  background: #1E1E1E;
-  border-radius: 2px;
+.product-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px color-mix(in oklch, var(--card-accent, oklch(0.93 0.012 255)) 12%, transparent);
+  border-color: var(--card-accent, oklch(0.35 0.05 255));
 }
