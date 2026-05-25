@@ -21,7 +21,7 @@ function MachinePill({ machine }: { machine: string }) {
         fontWeight: 400,
         letterSpacing: '0.05em',
         background: isStudio ? 'var(--vtext)' : 'transparent',
-        color: isStudio ? '#0D1117' : 'var(--vtext2)',
+        color: isStudio ? '#FFFFFF' : 'var(--vtext2)',
         border: isStudio ? 'none' : '1px solid var(--vborder2)',
       }}
     >

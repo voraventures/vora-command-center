@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 import { LayoutDashboard, TrendingUp, Bot, Activity, Landmark, Mic } from 'lucide-react'
 
 const NAV = [
-  { href: '/overview',  label: 'Overview', icon: LayoutDashboard, accent: '#E6EDF3' },
+  { href: '/overview',  label: 'Overview', icon: LayoutDashboard, accent: '#0A0A08' },
   { href: '/revenue',   label: 'Revenue',  icon: TrendingUp,      accent: '#059669' },
   { href: '/agents',    label: 'Agents',   icon: Bot,             accent: '#7C3AED' },
   { href: '/hermes',    label: 'Hermes',   icon: Activity,        accent: '#7C3AED' },
@@ -19,7 +19,7 @@ export function Sidebar() {
   return (
     <aside
       className="w-60 flex-shrink-0 flex flex-col border-r"
-      style={{ background: 'var(--vbg)', borderColor: 'var(--vborder)' }}
+      style={{ background: 'var(--vsurface)', borderColor: 'var(--vborder)' }}
     >
       {/* Logo */}
       <div className="px-5 pt-6 pb-5 border-b" style={{ borderColor: 'var(--vborder)' }}>
@@ -74,8 +74,8 @@ export function Sidebar() {
                 fontWeight: active ? 700 : 400,
                 fontSize: 13,
                 padding: active ? '8px 12px 8px 9px' : '8px 12px',
-                background: active ? 'var(--vsurface2)' : 'transparent',
-                color: active ? 'var(--vtext)' : 'var(--vmuted)',
+                background: active ? 'var(--vtext)' : 'transparent',
+                color: active ? '#FFFFFF' : 'var(--vmuted)',
                 borderLeft: active ? `3px solid ${accent}` : '3px solid transparent',
                 textDecoration: 'none',
               }}
@@ -100,7 +100,7 @@ export function Sidebar() {
       </nav>
 
       {/* User block */}
-      <div className="px-5 py-4 border-t" style={{ borderColor: 'var(--vborder)' }}>
+      <div className="px-5 py-4 border-t" style={{ borderColor: 'var(--vborder)', background: 'var(--vsurface2)' }}>
         <div className="flex items-center gap-2.5">
           <span
             className="block w-2 h-2 rounded-full animate-pulse-dot flex-shrink-0"

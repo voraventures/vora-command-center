@@ -97,13 +97,13 @@ export function RevenueChart({ snapshots }: Props) {
             />
             <Tooltip
               contentStyle={{
-                background: '#1C2333',
-                border: '1px solid #21262D',
+                background: '#FFFFFF',
+                border: '1px solid var(--border)',
                 borderRadius: 8,
                 fontSize: 12,
                 fontFamily: 'var(--font-syne)',
                 padding: '8px 12px',
-                boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
+                boxShadow: '0 4px 16px rgba(10,10,8,0.08)',
               }}
               formatter={(v) => [`$${Number(v ?? 0).toLocaleString()}`, '']}
             />
