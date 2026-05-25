@@ -48,7 +48,7 @@ function StatCell({ label, value, valueColor }: { label: string; value: string; 
         style={{
           fontFamily: 'var(--font-mono)',
           fontSize: 10,
-          color: '#5A6A8A',
+          color: '#A78BFA',
           letterSpacing: '0.2em',
           textTransform: 'uppercase',
           marginBottom: 6,
@@ -167,7 +167,7 @@ export function TokenUsage({ initialRuns }: { initialRuns: AgentRun[] }) {
             fontFamily: 'var(--font-mono)',
             fontSize: 10,
             letterSpacing: '0.25em',
-            color: '#5A6A8A',
+            color: '#A78BFA',
             textTransform: 'uppercase',
           }}
         >
@@ -193,7 +193,7 @@ export function TokenUsage({ initialRuns }: { initialRuns: AgentRun[] }) {
               fontFamily: 'var(--font-mono)',
               fontSize: 9,
               letterSpacing: '0.2em',
-              color: '#3D4F70',
+              color: '#A78BFA',
               textTransform: 'uppercase',
               marginBottom: 12,
             }}
@@ -220,7 +220,7 @@ export function TokenUsage({ initialRuns }: { initialRuns: AgentRun[] }) {
               fontFamily: 'var(--font-mono)',
               fontSize: 9,
               letterSpacing: '0.2em',
-              color: '#3D4F70',
+              color: '#A78BFA',
               textTransform: 'uppercase',
               marginBottom: 12,
             }}
