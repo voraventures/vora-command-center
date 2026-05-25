@@ -59,7 +59,7 @@ export default async function RevenuePage() {
     <div className="space-y-10 max-w-5xl">
 
       {/* SECTION 01 — MRR OVERVIEW */}
-      <section className="space-y-4">
+      <section className="space-y-4 animate-fade-up" style={{ animationDelay: '0ms' }}>
         <SectionHeader n="01" title="MRR Overview" subtitle="Stripe · live revenue" />
         <div className="grid grid-cols-3 gap-4">
           {/* Total MRR */}
@@ -98,7 +98,7 @@ export default async function RevenuePage() {
       </section>
 
       {/* SECTION 02 — REVENUE GROWTH */}
-      <section className="space-y-4">
+      <section className="space-y-4 animate-fade-up" style={{ animationDelay: '100ms' }}>
         <SectionHeader n="02" title="Revenue Growth" subtitle="Historical MRR snapshots" />
         <div style={{ background: 'var(--vsurface)', border: '1px solid var(--vborder)', borderRadius: 12, overflow: 'hidden' }}>
           <div style={{ padding: '12px 20px', borderBottom: '1px solid var(--vsurface2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -110,7 +110,7 @@ export default async function RevenuePage() {
       </section>
 
       {/* SECTION 03 — SUBSCRIBER DISTRIBUTION */}
-      <section className="space-y-4">
+      <section className="space-y-4 animate-fade-up" style={{ animationDelay: '200ms' }}>
         <SectionHeader n="03" title="Subscriber Distribution" subtitle="Across all products" />
         <div className="grid grid-cols-3 gap-4">
           <div className="col-span-1">
@@ -230,7 +230,7 @@ export default async function RevenuePage() {
       </section>
 
       {/* SECTION 04 — FL MOVE TARGET */}
-      <section className="space-y-4">
+      <section className="space-y-4 animate-fade-up" style={{ animationDelay: '300ms' }}>
         <SectionHeader n="04" title="FL Move Target" subtitle="$5,000 MRR Florida trigger" />
         <div style={{ background: 'var(--vsurface)', border: '1px solid var(--vborder)', borderLeft: '3px solid #00E676', borderRadius: 12, padding: '24px 28px' }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 10, color: '#9C6FFF', letterSpacing: '0.15em', marginBottom: 12 }}>FL MOVE PROGRESS</div>
@@ -243,7 +243,7 @@ export default async function RevenuePage() {
 
           {/* Progress track */}
           <div style={{ height: 8, borderRadius: 4, background: '#252D45', position: 'relative', overflow: 'hidden' }}>
-            <div style={{ width: `${pctToTarget}%`, height: '100%', borderRadius: 4, background: 'linear-gradient(90deg, #00E676, #9C6FFF)' }} />
+            <div style={{ width: `${pctToTarget}%`, height: '100%', borderRadius: 4, background: 'linear-gradient(90deg, #00E676, #9C6FFF)', animation: 'progressFill 1200ms cubic-bezier(0.4, 0, 0.2, 1) both' }} />
           </div>
 
           {/* Milestone labels */}

@@ -57,7 +57,7 @@ function AgentCard({
       onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = 'var(--vsurface2)')}
       onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = 'var(--vsurface)')}
     >
-      <span className="w-2 h-2 rounded-full mt-1 flex-shrink-0" style={{ background: agent.color }} />
+      <span className="w-2 h-2 rounded-full mt-1 flex-shrink-0 animate-pulse-dot" style={{ background: agent.color }} />
       <div className="flex-1 min-w-0">
         <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 16, color: 'var(--vtext)' }}>
           {agent.label}
@@ -129,7 +129,7 @@ export default function AgentsPage() {
     <div className="space-y-10 max-w-6xl">
 
       {/* SECTION 01 — MAC STUDIO AGENTS */}
-      <section className="space-y-4">
+      <section className="space-y-4 animate-fade-up" style={{ animationDelay: '0ms' }}>
         <SectionHeader n="01" title="Mac Studio Agents" subtitle="Vora Ventures · 5 agents · port 8001" />
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
           {VORA_AGENTS.map((a, i) => <AgentCard key={a.id} agent={a} delay={i * 40} />)}
@@ -137,7 +137,7 @@ export default function AgentsPage() {
       </section>
 
       {/* SECTION 02 — ORALIVA AGENTS */}
-      <section className="space-y-4">
+      <section className="space-y-4 animate-fade-up" style={{ animationDelay: '100ms' }}>
         <SectionHeader n="02" title="OraLiva Agents" subtitle="Remote · MacBook · 5 agents" />
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
           {ORALIVA_AGENTS.map((a, i) => <AgentCard key={a.id} agent={a} remote delay={i * 40} />)}
@@ -145,7 +145,7 @@ export default function AgentsPage() {
       </section>
 
       {/* SECTION 03 — RUN LOG */}
-      <section className="space-y-4">
+      <section className="space-y-4 animate-fade-up" style={{ animationDelay: '200ms' }}>
         <SectionHeader n="03" title="Run Log" subtitle="Real-time · all machines" />
         <div className="flex items-center justify-between mb-3">
           <div
@@ -244,7 +244,7 @@ export default function AgentsPage() {
                     </span>
                   </td>
                   <td className="px-4 py-3" style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}>
-                    {run.duration_ms != null ? `${run.duration_ms}ms` : '—'}
+                    {run.duration_ms != null && run.duration_ms > 0 ? `${run.duration_ms}ms` : '—'}
                   </td>
                   <td className="px-4 py-3" style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: 'var(--vdim)' }}>
                     {new Date(run.ran_at).toLocaleString()}

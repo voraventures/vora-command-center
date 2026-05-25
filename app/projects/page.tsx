@@ -69,14 +69,15 @@ export default async function ProjectsPage() {
     <div className="space-y-10 max-w-6xl">
 
       {/* SECTION 01 — ACTIVE PROJECTS */}
-      <section className="space-y-4">
+      <section className="space-y-4 animate-fade-up" style={{ animationDelay: '0ms' }}>
         <SectionHeader n="01" title="Active Projects" subtitle="3 products · Vora Ventures" />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {PROJECTS.map((project) => {
+          {PROJECTS.map((project, idx) => {
             const isAguacate = project.id === 'aguacate'
             return (
               <div
                 key={project.id}
+                className="animate-slide-in-left"
                 style={{
                   background: 'var(--vsurface)',
                   border: '1px solid var(--vborder)',
@@ -84,6 +85,7 @@ export default async function ProjectsPage() {
                   borderRadius: 12,
                   position: 'relative',
                   overflow: 'hidden',
+                  animationDelay: `${idx * 80}ms`,
                 }}
               >
                 {isAguacate && (
@@ -165,7 +167,7 @@ export default async function ProjectsPage() {
       </section>
 
       {/* SECTION 02 — PROJECT METRICS */}
-      <section className="space-y-4">
+      <section className="space-y-4 animate-fade-up" style={{ animationDelay: '100ms' }}>
         <SectionHeader n="02" title="Project Metrics" subtitle="Revenue history · all products" />
         <OverviewRevenueChart snapshots={snapshots ?? []} />
       </section>

@@ -100,7 +100,7 @@ function Row({ run, isNew, delay }: { run: AgentRun; isNew?: boolean; delay?: nu
         </span>
       </td>
       <td className="px-3 py-3" style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: '#A78BFA' }}>
-        {run.duration_ms != null ? `${run.duration_ms}ms` : '—'}
+        {run.duration_ms != null && run.duration_ms > 0 ? `${run.duration_ms}ms` : '—'}
       </td>
       <td className="px-3 py-3"><StatusPill status={run.status} /></td>
       <td className="px-3 py-3" style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: '#A78BFA' }}>

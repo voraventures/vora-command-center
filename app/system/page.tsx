@@ -53,13 +53,13 @@ export default function SystemPage() {
       </div>
 
       {/* SECTION 01 — TOKEN USAGE */}
-      <section className="space-y-4">
+      <section className="space-y-4 animate-fade-up" style={{ animationDelay: '0ms' }}>
         <SectionHeader n="01" title="Token Usage" subtitle="API costs · model breakdown" />
         <TokenUsage initialRuns={[]} />
       </section>
 
       {/* SECTION 02 — SERVICE STATUS */}
-      <section className="space-y-4">
+      <section className="space-y-4 animate-fade-up" style={{ animationDelay: '100ms' }}>
         <SectionHeader n="02" title="Service Status" subtitle="Mac Studio · local services" />
         <div style={{ background: 'var(--vsurface)', border: '1px solid var(--vborder)', borderRadius: 12, overflow: 'hidden' }}>
           {/* Table header */}
@@ -84,17 +84,17 @@ export default function SystemPage() {
                 borderBottom: i < SERVICES.length - 1 ? '1px solid var(--vborder)' : undefined,
               }}
             >
-              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 500, fontSize: 13, color: 'var(--vtext)' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 500, fontSize: 13, color: 'var(--vtext2)' }}>
                 {svc.label}
               </span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: 'var(--vtext2)' }}>
                 {svc.detail}
               </span>
               <span
                 className="flex items-center gap-1.5 px-2 py-0.5 rounded"
                 style={{ background: 'rgba(0,230,118,0.1)', fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 10, color: '#00E676' }}
               >
-                <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#00E676' }} />
+                <span className="w-2.5 h-2.5 rounded-full animate-pulse-dot" style={{ background: '#00E676' }} />
                 RUNNING
               </span>
             </div>
@@ -103,7 +103,7 @@ export default function SystemPage() {
       </section>
 
       {/* SECTION 03 — SKILL REGISTRY */}
-      <section className="space-y-4">
+      <section className="space-y-4 animate-fade-up" style={{ animationDelay: '200ms' }}>
         <SectionHeader n="03" title="Skill Registry" subtitle="Mac Studio agent skills" />
         <div style={{ background: 'var(--vsurface)', border: '1px solid var(--vborder)', borderRadius: 12, overflow: 'hidden' }}>
           {/* Table header */}

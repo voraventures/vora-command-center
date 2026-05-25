@@ -56,28 +56,14 @@ function MrrProgressBar({ current, target = 5000, estMonths }: { current: number
       }}
     >
       <div style={{ padding: '24px 28px' }}>
-        <div
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontWeight: 400,
-            fontSize: 10,
-            color: '#A78BFA',
-            letterSpacing: '0.25em',
-          }}
-        >
+        <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 10, color: '#A78BFA', letterSpacing: '0.25em' }}>
           FL MOVE PROGRESS
         </div>
 
         <div style={{ marginTop: 12, display: 'flex', alignItems: 'baseline', gap: 10 }}>
           <span
             className="tabular-nums"
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontWeight: 900,
-              fontSize: 48,
-              color: '#00E676',
-              lineHeight: 1,
-            }}
+            style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 48, color: '#00E676', lineHeight: 1 }}
           >
             ${current.toLocaleString()}
           </span>
@@ -98,10 +84,10 @@ function MrrProgressBar({ current, target = 5000, estMonths }: { current: number
                 width: `${pct}%`,
                 borderRadius: 4,
                 background: 'linear-gradient(90deg, #00E676, #9C6FFF)',
-                animation: 'progressFill 800ms ease-out both',
+                animation: 'progressFill 1200ms cubic-bezier(0.4, 0, 0.2, 1) both',
               }}
             />
-            {milestones.map((m) => (
+            {milestones.map((m, i) => (
               <div
                 key={m.value}
                 style={{
@@ -115,6 +101,7 @@ function MrrProgressBar({ current, target = 5000, estMonths }: { current: number
                   background: current >= m.value ? '#00E676' : '#161B2E',
                   border: `2px solid ${current >= m.value ? '#00E676' : '#2F3A58'}`,
                   zIndex: 1,
+                  animation: `milestoneIn 200ms ease-out ${800 + i * 60}ms both`,
                 }}
               />
             ))}
@@ -130,14 +117,7 @@ function MrrProgressBar({ current, target = 5000, estMonths }: { current: number
                   transform: m.pct === 100 ? 'translateX(-100%)' : m.pct === 0 ? 'none' : 'translateX(-50%)',
                 }}
               >
-                <span
-                  style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontWeight: 400,
-                    fontSize: 10,
-                    color: current >= m.value ? '#00E676' : '#A78BFA',
-                  }}
-                >
+                <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 10, color: current >= m.value ? '#00E676' : '#A78BFA' }}>
                   {m.label}
                 </span>
               </div>
@@ -145,13 +125,9 @@ function MrrProgressBar({ current, target = 5000, estMonths }: { current: number
           </div>
         </div>
 
-        <div
-          style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 12, color: '#A78BFA', marginTop: 20 }}
-        >
+        <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 12, color: '#A78BFA', marginTop: 20 }}>
           {pct.toFixed(1)}% to Florida.{' '}
-          <span style={{ color: '#A8B4D0' }}>
-            ${(target - current).toLocaleString()} remaining.
-          </span>
+          <span style={{ color: '#A8B4D0' }}>${(target - current).toLocaleString()} remaining.</span>
           {estMonths ? ` Est. arrival: ~${estMonths}mo` : ''}
         </div>
       </div>
@@ -199,41 +175,38 @@ export default async function OverviewPage() {
   const subsDelta = totalSubs - prevSubs
   const pctToTarget = Math.min((totalMrr / 5000) * 100, 100)
 
-  const sparkSubs   = latestByProduct.find((x) => x.id === 'sparkcheck')?.latest?.subscriber_count ?? 0
-  const twitterSubs = latestByProduct.find((x) => x.id === 'twitter_growth_optimizer')?.latest?.subscriber_count ?? 0
-
-  // Combined sparkline data (group by date, sum across products)
   const mrrByDate = new Map<string, { mrr: number; subs: number }>()
   for (const s of (snapshots ?? [])) {
     const d = new Date(s.recorded_at).toDateString()
     const curr = mrrByDate.get(d) ?? { mrr: 0, subs: 0 }
     mrrByDate.set(d, { mrr: curr.mrr + s.mrr_usd, subs: curr.subs + s.subscriber_count })
   }
-  const sortedDates  = Array.from(mrrByDate.values())
-  const mrrSparkline = sortedDates.slice(-7).map((d) => d.mrr)
+  const sortedDates   = Array.from(mrrByDate.values())
+  const mrrSparkline  = sortedDates.slice(-7).map((d) => d.mrr)
   const subsSparkline = sortedDates.slice(-7).map((d) => d.subs)
 
-  // Estimate months to $5K FL target
   const mrrGrowthThisPeriod = latestByProduct.reduce((s, { latest, prev }) =>
     s + ((latest?.mrr_usd ?? 0) - (prev?.mrr_usd ?? 0)), 0)
   const remaining = Math.max(0, 5000 - totalMrr)
   const estMonths = mrrGrowthThisPeriod > 0 ? Math.ceil(remaining / mrrGrowthThisPeriod) : null
 
-  // Last run per agent from the already-fetched agentRuns data
   const lastRunByAgent = (agentRuns ?? []).reduce<Record<string, string>>((acc, r) => {
     if (!acc[r.agent_id]) acc[r.agent_id] = r.ran_at
     return acc
   }, {})
 
-  const sparkLatest = latestByProduct.find(x => x.id === 'sparkcheck')?.latest
+  const sparkLatest   = latestByProduct.find(x => x.id === 'sparkcheck')?.latest
   const twitterLatest = latestByProduct.find(x => x.id === 'twitter_growth_optimizer')?.latest
 
   return (
     <div className="space-y-10 max-w-6xl">
-      <style>{`.overview-project-row:hover { background: var(--vsurface2); }`}</style>
+      <style>{`
+        .overview-project-row:hover { background: var(--vsurface2); }
+        .overview-agent-row:hover   { background: var(--vsurface2); }
+      `}</style>
 
       {/* SECTION 01 — REVENUE INTELLIGENCE */}
-      <section className="space-y-4">
+      <section className="space-y-4 animate-fade-up" style={{ animationDelay: '0ms' }}>
         <SectionHeader n="01" title="Revenue Intelligence" subtitle="Florida move progress · MRR tracking" />
         <StatStrip
           totalMrr={totalMrr}
@@ -251,70 +224,97 @@ export default async function OverviewPage() {
       <div style={{ paddingBottom: 12 }} />
 
       {/* SECTION 02 — PROJECTS */}
-      <section className="space-y-4">
+      <section className="space-y-4 animate-fade-up" style={{ animationDelay: '100ms' }}>
         <SectionHeader n="02" title="Projects" subtitle="Active products · 3 total" />
         <div style={{ background: 'var(--vsurface)', border: '1px solid var(--vborder)', borderRadius: 12 }}>
+
           {/* SparkCheck row */}
           <div
-            className="overview-project-row"
-            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', borderBottom: '1px solid var(--vborder)', transition: 'background 0.1s', cursor: 'default' }}
+            className="overview-project-row animate-slide-in-left"
+            style={{
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              padding: '0 20px', minHeight: 52,
+              borderBottom: '1px solid var(--vborder)', transition: 'background 0.15s', cursor: 'default',
+              animationDelay: '120ms',
+            }}
           >
             <div className="flex items-center gap-3">
-              <span className="w-2 h-2 rounded-full" style={{ background: '#FF4D8D', flexShrink: 0 }} />
+              <span className="w-2 h-2 rounded-full animate-pill-pulse" style={{ background: '#FF4D8D', flexShrink: 0 }} />
               <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 15, color: 'var(--vtext)' }}>SparkCheck</span>
               <span className="px-1.5 py-0.5 rounded" style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 9, background: 'rgba(255,77,141,0.12)', color: '#FF4D8D', letterSpacing: '0.1em' }}>ACTIVE</span>
             </div>
-            <div className="flex items-center gap-4">
-              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 500, fontSize: 13, color: '#FF4D8D' }}>
+            <div className="flex items-center gap-3">
+              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 500, fontSize: 13, color: '#FF4D8D', width: 80, textAlign: 'right' }}>
                 ${(sparkLatest?.mrr_usd ?? 0).toLocaleString()}
               </span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)', width: 56, textAlign: 'right' }}>
                 {(sparkLatest?.subscriber_count ?? 0)} subs
               </span>
-              <GitBranch className="w-3.5 h-3.5" style={{ color: 'var(--vmuted)' }} />
-              <ExternalLink className="w-3.5 h-3.5" style={{ color: 'var(--vmuted)' }} />
+              <GitBranch className="w-3.5 h-3.5 overview-icon" />
+              <ExternalLink className="w-3.5 h-3.5 overview-icon ext-link-icon" />
             </div>
           </div>
 
           {/* Twitter Growth row */}
           <div
-            className="overview-project-row"
-            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', borderBottom: '1px solid var(--vborder)', transition: 'background 0.1s', cursor: 'default' }}
+            className="overview-project-row animate-slide-in-left"
+            style={{
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              padding: '0 20px', minHeight: 52,
+              borderBottom: '1px solid var(--vborder)', transition: 'background 0.15s', cursor: 'default',
+              animationDelay: '170ms',
+            }}
           >
             <div className="flex items-center gap-3">
-              <span className="w-2 h-2 rounded-full" style={{ background: '#1D9BF0', flexShrink: 0 }} />
+              <span className="w-2 h-2 rounded-full animate-pill-pulse" style={{ background: '#1D9BF0', flexShrink: 0 }} />
               <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 15, color: 'var(--vtext)' }}>Twitter Growth Optimizer</span>
               <span className="px-1.5 py-0.5 rounded" style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 9, background: 'rgba(29,155,240,0.12)', color: '#1D9BF0', letterSpacing: '0.1em' }}>ACTIVE</span>
             </div>
-            <div className="flex items-center gap-4">
-              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 500, fontSize: 13, color: '#1D9BF0' }}>
+            <div className="flex items-center gap-3">
+              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 500, fontSize: 13, color: '#1D9BF0', width: 80, textAlign: 'right' }}>
                 ${(twitterLatest?.mrr_usd ?? 0).toLocaleString()}
               </span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: 'var(--vmuted)', width: 56, textAlign: 'right' }}>
                 {(twitterLatest?.subscriber_count ?? 0)} subs
               </span>
-              <GitBranch className="w-3.5 h-3.5" style={{ color: 'var(--vmuted)' }} />
-              <ExternalLink className="w-3.5 h-3.5" style={{ color: 'var(--vmuted)' }} />
+              <GitBranch className="w-3.5 h-3.5 overview-icon" />
+              <ExternalLink className="w-3.5 h-3.5 overview-icon ext-link-icon" />
             </div>
           </div>
 
           {/* Aguacate AI row */}
           <div
-            className="overview-project-row"
-            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', borderBottom: '1px solid var(--vborder)', transition: 'background 0.1s', cursor: 'default', opacity: 0.55 }}
+            className="overview-project-row animate-slide-in-left"
+            style={{
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              padding: '0 20px', minHeight: 52,
+              borderBottom: '1px solid var(--vborder)', transition: 'background 0.15s', cursor: 'default', opacity: 0.6,
+              animationDelay: '220ms',
+            }}
           >
             <div className="flex items-center gap-3">
               <span className="w-2 h-2 rounded-full" style={{ background: '#9C6FFF', flexShrink: 0 }} />
               <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 15, color: 'var(--vtext)' }}>Aguacate AI</span>
-              <span className="px-1.5 py-0.5 rounded" style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 9, background: 'rgba(156,111,255,0.12)', color: '#9C6FFF', letterSpacing: '0.1em' }}>COMING SOON</span>
+              <span
+                className="px-2 py-0.5 rounded"
+                style={{
+                  fontFamily: 'var(--font-mono)', fontWeight: 500, fontSize: 9,
+                  background: 'rgba(156,111,255,0.15)', color: '#9C6FFF',
+                  letterSpacing: '0.12em', border: '1px solid rgba(156,111,255,0.25)',
+                }}
+              >
+                IN DEVELOPMENT
+              </span>
             </div>
-            <div className="flex items-center gap-4">
-              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 500, fontSize: 13, color: 'var(--vmuted)' }}>—</span>
+            <div className="flex items-center gap-3">
+              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 500, fontSize: 13, color: 'var(--vmuted)', width: 80, textAlign: 'right' }}>—</span>
+              <span style={{ width: 56 }} />
+              <GitBranch className="w-3.5 h-3.5 overview-icon" />
             </div>
           </div>
 
           {/* Footer */}
-          <div style={{ padding: '12px 20px', borderTop: '1px solid var(--vborder)', display: 'flex', gap: 32 }}>
+          <div style={{ padding: '12px 20px', display: 'flex', gap: 32 }}>
             {['Last deploy: —', 'Last deploy: —', 'Last deploy: —'].map((text, i) => (
               <span key={i} style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 10, color: 'var(--vmuted)' }}>{text}</span>
             ))}
@@ -325,51 +325,75 @@ export default async function OverviewPage() {
       <div style={{ paddingBottom: 12 }} />
 
       {/* SECTION 03 — AGENTS */}
-      <section className="space-y-4">
+      <section className="space-y-4 animate-fade-up" style={{ animationDelay: '200ms' }}>
         <SectionHeader n="03" title="Agents" subtitle="Mac Studio · MacBook remote" />
         <div className="grid grid-cols-2 gap-4">
+
           {/* Mac Studio card */}
           <div style={{ background: 'var(--vsurface)', border: '1px solid var(--vborder)', borderLeft: '3px solid #00E676', borderRadius: 12, overflow: 'hidden' }}>
-            <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--vborder)', fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 10, color: '#00E676', letterSpacing: '0.15em' }}>
+            <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--vborder)', fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 10, color: '#00E676', letterSpacing: '0.15em' }}>
               MAC STUDIO — PORT 8001
             </div>
-            {VORA_AGENTS.map((a) => (
-              <div key={a.id} style={{ padding: '10px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            {VORA_AGENTS.map((a, i) => (
+              <div
+                key={a.id}
+                className="overview-agent-row animate-fade-up"
+                style={{
+                  padding: '0 20px', minHeight: 52,
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                  borderBottom: '1px solid var(--vborder)', transition: 'background 0.15s',
+                  animationDelay: `${220 + i * 40}ms`,
+                }}
+              >
                 <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full" style={{ background: a.color }} />
+                  <span className="w-2 h-2 rounded-full animate-pulse-dot flex-shrink-0" style={{ background: a.color }} />
                   <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 12, color: 'var(--vtext)' }}>{a.label}</span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2.5">
                   <span className="px-1.5 py-0.5 rounded" style={{ border: '1px solid var(--vborder)', background: 'var(--vsurface2)', fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 9, color: 'var(--vmuted)' }}>{a.model}</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 10, color: 'var(--vmuted)' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 10, color: 'var(--vmuted)', width: 44, textAlign: 'right' }}>
                     {lastRunByAgent[a.id] ? new Date(lastRunByAgent[a.id]).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '—'}
                   </span>
                 </div>
               </div>
             ))}
-            <div style={{ padding: '10px 16px', borderTop: '1px solid var(--vborder)', fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 10, color: 'var(--vmuted)' }}>
+            <div style={{ padding: '10px 20px', fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 10, color: 'var(--vmuted)' }}>
               5 agents · Mac Studio M4 Max
             </div>
           </div>
 
           {/* MacBook / OraLiva card */}
           <div style={{ background: 'var(--vsurface)', border: '1px solid var(--vborder)', borderLeft: '3px solid #9C6FFF', borderRadius: 12, overflow: 'hidden', opacity: 0.75 }}>
-            <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--vborder)', fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 10, color: '#9C6FFF', letterSpacing: '0.15em' }}>
+            <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--vborder)', fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 10, color: '#9C6FFF', letterSpacing: '0.15em' }}>
               ORALIVA — MACBOOK — REMOTE
             </div>
-            {ORALIVA_AGENTS.map((a) => (
-              <div key={a.id} style={{ padding: '10px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            {ORALIVA_AGENTS.map((a, i) => (
+              <div
+                key={a.id}
+                className="overview-agent-row animate-fade-up"
+                style={{
+                  padding: '0 20px', minHeight: 52,
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                  borderBottom: '1px solid var(--vborder)', transition: 'background 0.15s',
+                  animationDelay: `${220 + i * 40}ms`,
+                }}
+              >
                 <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full" style={{ background: a.color }} />
+                  <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: a.color }} />
                   <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 12, color: 'var(--vtext)' }}>{a.label}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="px-1.5 py-0.5 rounded" style={{ border: '1px solid var(--vborder)', background: 'var(--vsurface2)', fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 9, color: 'var(--vmuted)' }}>{a.model}</span>
-                  <span className="px-1.5 py-0.5 rounded" style={{ border: '1px solid var(--vborder)', background: 'var(--vsurface2)', fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 9, color: 'var(--vmuted)' }}>REMOTE</span>
+                  <span
+                    className="px-1.5 py-0.5 rounded"
+                    style={{ border: '1px solid var(--vborder2)', background: 'var(--vsurface2)', fontFamily: 'var(--font-mono)', fontWeight: 500, fontSize: 9, color: 'var(--vtext2)', letterSpacing: '0.05em' }}
+                  >
+                    REMOTE
+                  </span>
                 </div>
               </div>
             ))}
-            <div style={{ padding: '10px 16px', borderTop: '1px solid var(--vborder)', fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 10, color: 'var(--vmuted)' }}>
+            <div style={{ padding: '10px 20px', fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 10, color: 'var(--vmuted)' }}>
               5 agents · MacBook
             </div>
           </div>
@@ -379,7 +403,7 @@ export default async function OverviewPage() {
       <div style={{ paddingBottom: 12 }} />
 
       {/* SECTION 04 — INTELLIGENCE */}
-      <section className="space-y-4">
+      <section className="space-y-4 animate-fade-up" style={{ animationDelay: '300ms' }}>
         <SectionHeader n="04" title="Intelligence" subtitle="Live activity · real-time" />
         <div className="grid grid-cols-2 gap-4">
           <AgentLog initial={agentRuns ?? []} limit={5} realtime />
@@ -390,7 +414,7 @@ export default async function OverviewPage() {
       <div style={{ paddingBottom: 12 }} />
 
       {/* SECTION 05 — SYSTEM */}
-      <section className="space-y-4">
+      <section className="space-y-4 animate-fade-up" style={{ animationDelay: '400ms' }}>
         <SectionHeader n="05" title="System" subtitle="Token usage · API costs" />
         <TokenUsage initialRuns={(tokenRuns ?? []) as any} />
         <div className="flex items-center gap-6 flex-wrap" style={{ marginTop: 16, paddingLeft: 4 }}>
@@ -401,8 +425,8 @@ export default async function OverviewPage() {
             'Agent Server · port 8001',
           ].map((text) => (
             <div key={text} className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#00E676' }} />
-              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 10, color: 'var(--vmuted)' }}>{text}</span>
+              <span className="w-2.5 h-2.5 rounded-full animate-pulse-dot flex-shrink-0" style={{ background: '#00E676' }} />
+              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11, color: 'var(--vtext2)' }}>{text}</span>
             </div>
           ))}
         </div>

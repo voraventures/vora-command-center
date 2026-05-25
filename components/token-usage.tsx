@@ -30,9 +30,9 @@ function modelLabel(model: string): { text: string; color: string } {
   return { text: 'QWEN3', color: '#00E676' }
 }
 
-function fmtCost(cents: number): string {
-  if (cents === -1) return '—'
-  return `$${cents.toFixed(4)}`
+function fmtCost(n: number): string {
+  if (n === -1 || n === 0) return '—'
+  return `$${n.toFixed(4)}`
 }
 
 function fmtTokens(n: number): string {

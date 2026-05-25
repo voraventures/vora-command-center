@@ -80,7 +80,7 @@ export default function HermesPage() {
     <div className="space-y-10 max-w-4xl">
 
       {/* SECTION 01 — ACTIVITY STATS */}
-      <section className="space-y-4">
+      <section className="space-y-4 animate-fade-up" style={{ animationDelay: '0ms' }}>
         <SectionHeader n="01" title="Activity Stats" subtitle="Live · rolling windows" />
         <div
           className="grid grid-cols-3 rounded-lg border overflow-hidden animate-fade-up"
@@ -119,7 +119,7 @@ export default function HermesPage() {
       </section>
 
       {/* SECTION 02 — ACTIVITY FEED */}
-      <section className="space-y-4">
+      <section className="space-y-4 animate-fade-up" style={{ animationDelay: '100ms' }}>
         <SectionHeader n="02" title="Activity Feed" subtitle="All products · real-time" />
         <div
           className="rounded-lg border overflow-hidden"

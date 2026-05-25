@@ -239,3 +239,89 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
   transform: translateY(-1px);
 }
+
+/* Stat card hover — scale + border brighten */
+.stat-card-hover {
+  transition: transform 200ms ease-out, border-color 200ms ease-out, box-shadow 200ms ease-out;
+}
+.stat-card-hover:hover {
+  transform: scale(1.02);
+  border-color: var(--vborder2) !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Sidebar slide-in on load */
+@keyframes slideInSidebar {
+  from { transform: translateX(-240px); opacity: 0; }
+  to   { transform: translateX(0);      opacity: 1; }
+}
+.sidebar-enter {
+  animation: slideInSidebar 300ms ease-out both;
+}
+
+/* Sidebar nav link — fill from left on hover */
+.vora-nav-link {
+  color: #A78BFA;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition: color 150ms ease-out;
+}
+.vora-nav-link:hover { color: var(--vtext); }
+.vora-nav-link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--vsurface);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 150ms ease-out;
+  z-index: -1;
+}
+.vora-nav-link:hover::before { transform: scaleX(1); }
+
+/* Milestone dot pop-in */
+@keyframes milestoneIn {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+/* Fade in (skeleton → content) */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.animate-fade-in { animation: fadeIn 300ms ease-out both; }
+
+/* Pill pulse (LIVE / ACTIVE status pills) */
+@keyframes pillPulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.05); }
+}
+.animate-pill-pulse { animation: pillPulse 3s ease-in-out infinite; }
+
+/* Icon hover effects */
+.overview-icon {
+  color: var(--vmuted);
+  transition: color 150ms ease-out;
+  cursor: pointer;
+}
+.overview-icon:hover { color: var(--vtext2); }
+
+.ext-link-icon {
+  display: inline-flex;
+  transition: transform 200ms ease-out, color 150ms ease-out;
+}
+.ext-link-icon:hover { transform: rotate(45deg); color: var(--vtext2) !important; }
+
+/* Button micro-interaction */
+.btn-press { transition: transform 100ms ease-out; }
+.btn-press:active { transform: scale(0.97); }
+
+/* Reduced motion — accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -37,7 +37,9 @@ function MiniSparkline({ data, accent, gradId }: { data: number[]; accent: strin
           strokeWidth={2}
           fill={`url(#${gradId})`}
           dot={false}
-          isAnimationActive={false}
+          isAnimationActive
+          animationDuration={800}
+          animationEasing="ease-out"
         />
       </AreaChart>
     </ResponsiveContainer>
@@ -69,7 +71,7 @@ function StatCard({
 }) {
   return (
     <div
-      className="animate-fade-up"
+      className="animate-fade-up stat-card-hover"
       style={{
         background: '#161B2E',
         border: '1px solid #252D45',

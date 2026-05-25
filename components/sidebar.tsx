@@ -18,7 +18,7 @@ export function Sidebar() {
 
   return (
     <aside
-      className="w-60 flex-shrink-0 flex flex-col border-r"
+      className="w-60 flex-shrink-0 flex flex-col border-r sidebar-enter"
       style={{ background: '#0D1120', borderColor: 'var(--vborder)' }}
     >
       {/* Logo */}
@@ -68,28 +68,16 @@ export function Sidebar() {
             <Link
               key={href}
               href={href}
-              className="flex items-center gap-2.5 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-offset-1 transition-colors duration-100"
+              className={`flex items-center gap-2.5 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-offset-1${active ? '' : ' vora-nav-link'}`}
               style={{
                 fontFamily: 'var(--font-mono)',
                 fontWeight: 500,
                 fontSize: 12,
                 padding: active ? '8px 12px 8px 9px' : '8px 12px',
                 background: active ? accentDim : 'transparent',
-                color: active ? accent : '#A78BFA',
+                color: active ? accent : undefined,
                 borderLeft: active ? `3px solid ${accent}` : '3px solid transparent',
                 textDecoration: 'none',
-              }}
-              onMouseEnter={(e) => {
-                if (!active) {
-                  (e.currentTarget as HTMLElement).style.background = 'var(--vsurface)'
-                  ;(e.currentTarget as HTMLElement).style.color = 'var(--vtext)'
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!active) {
-                  (e.currentTarget as HTMLElement).style.background = 'transparent'
-                  ;(e.currentTarget as HTMLElement).style.color = '#A78BFA'
-                }
               }}
             >
               <Icon className="w-4 h-4 flex-shrink-0" />
