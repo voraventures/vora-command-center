@@ -75,7 +75,7 @@ export function Sidebar() {
                 fontSize: 13,
                 padding: active ? '8px 12px 8px 9px' : '8px 12px',
                 background: active ? 'var(--vtext)' : 'transparent',
-                color: active ? '#FFFFFF' : 'var(--vmuted)',
+                color: active ? '#FFFFFF' : 'var(--vtext2)',
                 borderLeft: active ? `3px solid ${accent}` : '3px solid transparent',
                 textDecoration: 'none',
               }}
@@ -88,7 +88,7 @@ export function Sidebar() {
               onMouseLeave={(e) => {
                 if (!active) {
                   (e.currentTarget as HTMLElement).style.background = 'transparent'
-                  ;(e.currentTarget as HTMLElement).style.color = 'var(--vmuted)'
+                  ;(e.currentTarget as HTMLElement).style.color = 'var(--vtext2)'
                 }
               }}
             >

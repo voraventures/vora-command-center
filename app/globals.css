@@ -38,7 +38,7 @@
   --radius-md: var(--radius);
   --radius-lg: calc(var(--radius) * 1.5);
 
-  /* Vora light palette as Tailwind utilities */
+  /* Vora palette as Tailwind utilities */
   --color-vbg: var(--vbg);
   --color-vsurface: var(--vsurface);
   --color-vsurface2: var(--vsurface2);
@@ -59,80 +59,94 @@
 }
 
 :root {
-  /* Canonical light palette */
-  --bg: #F5F5F0;
-  --surface: #FFFFFF;
-  --surface2: #F0F0EB;
-  --border: #E2E2DC;
-  --border2: #CECEC8;
-  --text: #0A0A08;
-  --text2: #3A3A35;
-  --muted: #888880;
-  --dim: #C0C0B8;
+  /*
+   * Vora design tokens — ALL direct hex values.
+   * Never alias through shadcn-reserved names (--muted, --accent, --border, etc.)
+   * because shadcn's compat block below will overwrite the shared name, causing
+   * color values to resolve to shadcn background tints instead of text colors.
+   */
 
-  --spark: #E8194B;
-  --spark-bg: rgba(232, 25, 75, 0.06);
-  --twitter: #0066FF;
+  /* Surfaces */
+  --vbg:       #F5F5F0;
+  --vsurface:  #FFFFFF;
+  --vsurface2: #F0F0EB;
+
+  /* Borders */
+  --vborder:  #E2E2DC;
+  --vborder2: #CECEC8;
+
+  /* Text hierarchy — all dark and readable on light backgrounds */
+  --vtext:  #0A0A08;   /* near-black body/heading */
+  --vtext2: #3A3A35;   /* dark secondary text */
+  --vmuted: #6B6B63;   /* medium gray — labels, metadata */
+  --vdim:   #9A9A92;   /* lighter gray — timestamps, hints */
+
+  /* Accent palette */
+  --spark:      #E8194B;
+  --spark-bg:   rgba(232, 25, 75, 0.06);
+  --twitter:    #0066FF;
+  --twitterblue:#0066FF;
   --twitter-bg: rgba(0, 102, 255, 0.06);
-  --hermes: #7C3AED;
-  --hermes-bg: rgba(124, 58, 237, 0.06);
-  --finance: #059669;
+  --hermes:     #7C3AED;
+  --hermes-bg:  rgba(124, 58, 237, 0.06);
+  --finance:    #059669;
   --finance-bg: rgba(5, 150, 105, 0.06);
-  --speech: #D97706;
-  --speech-bg: rgba(217, 119, 6, 0.06);
-  --green: #059669;
-  --green-bg: rgba(5, 150, 105, 0.06);
-  --red: #DC2626;
-  --yellow: #D97706;
+  --speech:     #D97706;
+  --speech-bg:  rgba(217, 119, 6, 0.06);
+  --green:      #059669;
+  --green-bg:   rgba(5, 150, 105, 0.06);
+  --vgreen:     #059669;
+  --red:        #DC2626;
+  --vred:       #DC2626;
+  --yellow:     #D97706;
+  --vyellow:    #D97706;
 
-  /* Component aliases — keep all existing var(--v*) references working */
-  --vbg: var(--bg);
-  --vsurface: var(--surface);
-  --vsurface2: var(--surface2);
-  --vborder: var(--border);
-  --vborder2: var(--border2);
-  --vtext: var(--text);
-  --vtext2: var(--text2);
-  --vmuted: var(--muted);
-  --vdim: var(--dim);
-  --twitterblue: var(--twitter);
-  --vgreen: var(--green);
-  --vred: var(--red);
-  --vyellow: var(--yellow);
+  /* Canonical short aliases (do not chain through shadcn names) */
+  --bg:      #F5F5F0;
+  --surface: #FFFFFF;
+  --surface2:#F0F0EB;
+  --border:  #E2E2DC;
+  --border2: #CECEC8;
+  --text:    #0A0A08;
+  --text2:   #3A3A35;
 
-  /* shadcn compatibility */
-  --background: #F5F5F0;
-  --foreground: #0A0A08;
-  --card: #FFFFFF;
-  --card-foreground: #0A0A08;
-  --popover: #FFFFFF;
+  /*
+   * shadcn compat — self-contained, uses shadcn's own naming conventions.
+   * --muted here is a BACKGROUND tint (shadcn convention), not a text color.
+   * Our text muted is --vmuted above.
+   */
+  --background:         #F5F5F0;
+  --foreground:         #0A0A08;
+  --card:               #FFFFFF;
+  --card-foreground:    #0A0A08;
+  --popover:            #FFFFFF;
   --popover-foreground: #0A0A08;
-  --primary: #0A0A08;
+  --primary:            #0A0A08;
   --primary-foreground: #FFFFFF;
-  --secondary: #F0F0EB;
+  --secondary:          #F0F0EB;
   --secondary-foreground: #0A0A08;
-  --muted: #F0F0EB;
-  --muted-foreground: #888880;
-  --accent: #F0F0EB;
-  --accent-foreground: #0A0A08;
-  --destructive: #DC2626;
-  --border: #E2E2DC;
-  --input: #E2E2DC;
-  --ring: #CECEC8;
-  --chart-1: #E8194B;
-  --chart-2: #059669;
-  --chart-3: #0066FF;
-  --chart-4: #7C3AED;
-  --chart-5: #D97706;
-  --radius: 0.5rem;
-  --sidebar: #FFFFFF;
+  --muted:              #F0F0EB;
+  --muted-foreground:   #6B6B63;
+  --accent:             #F0F0EB;
+  --accent-foreground:  #0A0A08;
+  --destructive:        #DC2626;
+  --border:             #E2E2DC;
+  --input:              #E2E2DC;
+  --ring:               #CECEC8;
+  --chart-1:            #E8194B;
+  --chart-2:            #059669;
+  --chart-3:            #0066FF;
+  --chart-4:            #7C3AED;
+  --chart-5:            #D97706;
+  --radius:             0.5rem;
+  --sidebar:            #FFFFFF;
   --sidebar-foreground: #0A0A08;
-  --sidebar-primary: #0A0A08;
+  --sidebar-primary:    #0A0A08;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #F0F0EB;
+  --sidebar-accent:     #F0F0EB;
   --sidebar-accent-foreground: #0A0A08;
-  --sidebar-border: #E2E2DC;
-  --sidebar-ring: #CECEC8;
+  --sidebar-border:     #E2E2DC;
+  --sidebar-ring:       #CECEC8;
 }
 
 @layer base {
@@ -140,8 +154,8 @@
     @apply border-border outline-ring/50;
   }
   body {
-    background-color: var(--bg);
-    color: var(--text);
+    background-color: var(--vbg);
+    color: var(--vtext);
     font-family: var(--font-syne), system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
@@ -182,20 +196,12 @@
 }
 
 /* Animation utility classes */
-.animate-fade-up {
-  animation: fadeUp 0.4s ease-out both;
-}
-.animate-slide-down {
-  animation: slideDown 0.3s ease-out both;
-}
-.animate-slide-in-left {
-  animation: slideInLeft 0.35s ease-out both;
-}
-.animate-pulse-dot {
-  animation: pulseDot 2s ease-in-out infinite;
-}
+.animate-fade-up        { animation: fadeUp 0.4s ease-out both; }
+.animate-slide-down     { animation: slideDown 0.3s ease-out both; }
+.animate-slide-in-left  { animation: slideInLeft 0.35s ease-out both; }
+.animate-pulse-dot      { animation: pulseDot 2s ease-in-out infinite; }
 
-/* Skeleton shimmer */
+/* Skeleton shimmer — light gray tones */
 .skeleton {
   background: linear-gradient(90deg, #F0F0EB 25%, #E5E5E0 50%, #F0F0EB 75%);
   background-size: 400px 100%;
@@ -204,10 +210,10 @@
 }
 
 /* Scrollbar */
-::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+::-webkit-scrollbar         { width: 4px; height: 4px; }
+::-webkit-scrollbar-track   { background: transparent; }
+::-webkit-scrollbar-thumb   { background: var(--vborder2); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--vmuted); }
 
 /* Product card hover */
 .product-card {
