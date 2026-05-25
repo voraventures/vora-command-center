@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Vora Command Center
 
-## Getting Started
+Internal dashboard for Vora Ventures. Tracks MRR, agent runs, and Hermes activity in real-time.
 
-First, run the development server:
+## Setup
+
+### 1. Supabase
+
+1. Create a project at https://supabase.com
+2. Go to SQL Editor and run `supabase/migrations/001_init.sql`
+3. In Table Editor, enable Realtime on: `agent_runs`, `hermes_log`, `mrr_snapshots`
+4. Get your API keys from: Settings → API
+
+### 2. Environment Variables
+
+Copy `.env.local` and fill in:
+- `NEXT_PUBLIC_SUPABASE_URL` — from Supabase project settings
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` — from Supabase project settings
+- `SUPABASE_SERVICE_ROLE_KEY` — from Supabase project settings (keep secret!)
+- `VORA_WEBHOOK_SECRET` — any secure random string (use: `openssl rand -hex 32`)
+
+### 3. Local dev
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 4. Deploy to Vercel
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+vercel --org voraventures --project vora-command-center
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Add all env vars in Vercel dashboard under Settings → Environment Variables.
 
-## Learn More
+## API Endpoints
 
-To learn more about Next.js, take a look at the following resources:
+All endpoints require `Authorization: Bearer <VORA_WEBHOOK_SECRET>` header.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### POST /api/agent-run
+```json
+{
+  "agent_id": "hermes-v1",
+  "agent_label": "Hermes Orchestrator",
+  "machine": "mac_studio",
+  "model": "qwen3:14b",
+  "input_summary": "Summarize tweets",
+  "output_summary": "Done — 12 tweets processed",
+  "duration_ms": 4200,
+  "status": "success"
+}
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### POST /api/hermes-log
+```json
+{
+  "action": "tweet_scheduled",
+  "detail": "Scheduled 3 tweets for @voraventures",
+  "product": "twitter_growth_optimizer"
+}
+```
 
-## Deploy on Vercel
+### POST /api/mrr
+```json
+{
+  "product": "sparkcheck",
+  "mrr_usd": 340,
+  "subscriber_count": 23
+}
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### GET /api/mrr
+Returns latest MRR snapshot per product.
